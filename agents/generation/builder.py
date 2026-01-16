@@ -295,16 +295,16 @@ class BusinessData:
         # Phone link
         self.phone_link = f"tel:{phone_clean}"
         
-        # Google Maps embed
+        # Google Maps embed - use coordinate-based embed (no API key needed)
         if self.latitude and self.longitude:
             self.maps_embed_url = (
                 f"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d{self.longitude}!3d{self.latitude}"
                 f"!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z{self.latitude}!5e0!3m2!1ses!2spy!4v1"
             )
         else:
-            # Fallback: search by name
+            # Fallback: use search-based embed (no API key needed)
             query = quote_plus(f"{self.name} {self.city} Paraguay")
-            self.maps_embed_url = f"https://www.google.com/maps/embed/v1/place?key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8&q={query}"
+            self.maps_embed_url = f"https://www.google.com/maps?q={query}&output=embed"
         
         # Hero image
         if self.photo_urls and len(self.photo_urls) > 0:

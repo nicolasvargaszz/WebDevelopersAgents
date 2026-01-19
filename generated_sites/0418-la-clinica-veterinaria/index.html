@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Somos La Clinica Veterinaria, su mejor opción en Veterinario en Luque. Con años de experiencia y dedicación, nos comprometemos a brindarle la mejor atención y c">
+    <meta name="description" content="En La Clinica Veterinaria, amamos a las mascotas tanto como tú. Desde 2023, nuestro equipo de veterinarios apasionados brinda atención médica integral con el ca">
     <meta name="robots" content="index, follow">
     
     <!-- Open Graph -->
     <meta property="og:title" content="La Clinica Veterinaria">
-    <meta property="og:description" content="Somos La Clinica Veterinaria, su mejor opción en Veterinario en Luque. Con años de experiencia y dedicación, nos comprometemos a brindarle la mejor atención y c">
-    <meta property="og:image" content="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyZeokSTFPu7oeB5c4NKCw_WKF8V4Xlu1SOSly9D9nEks35huA1GjoOUru2dNzFfOTs2INUm9Lk2J1fezpPAJtHtsUFHy0Sz9hU7Mb5pHg-HeagR_CzLXVRe7IgKAmm3UN3bMI=w408-h544-k-no">
+    <meta property="og:description" content="Tu satisfacción es nuestra prioridad y nuestro mayor orgullo">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=1920&amp;q=80">
     <meta property="og:type" content="website">
     
     <title>La Clinica Veterinaria | Veterinario</title>
@@ -20,7 +20,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
     <!-- Tailwind Config -->
     <script>
@@ -29,13 +29,22 @@
                 extend: {
                     fontFamily: {
                         'sans': ['Inter', 'system-ui', 'sans-serif'],
-                        'display': ['Playfair Display', 'serif'],
+                        'serif': ['Playfair Display', 'Georgia', 'serif'],
                     },
                     animation: {
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'slide-up': 'slideUp 0.8s ease-out forwards',
                         'float': 'float 6s ease-in-out infinite',
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     },
                     keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(30px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
                             '50%': { transform: 'translateY(-10px)' },
@@ -47,442 +56,633 @@
     </script>
     
     <style>
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1f2937; }
-        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
         
-        /* Hero overlay gradient */
-        .hero-overlay {
-            background: linear-gradient(
-                180deg,
-                rgba(0,0,0,0.7) 0%,
-                rgba(0,0,0,0.4) 50%,
-                rgba(0,0,0,0.8) 100%
-            );
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: #1a1a1a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 5px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
+        
+        /* Masonry grid */
+        .masonry-grid {
+            column-count: 2;
+            column-gap: 1rem;
+        }
+        @media (min-width: 768px) {
+            .masonry-grid { column-count: 3; }
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1rem;
         }
         
-        /* Glass effect */
+        /* Glass morphism */
         .glass {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-light {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 0, 0, 0.1);
         }
         
-        /* Glow effect */
-        .glow {
-            box-shadow: 0 0 40px rgba(255, 255, 255, 0.1);
-        }
+        /* Animation delays */
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
     </style>
 </head>
 
-<body class="bg-gray-950 text-white antialiased">
+<body class="bg-white font-sans">
     
-    <!-- ============================================ -->
-    <!-- HERO SECTION                                 -->
-    <!-- ============================================ -->
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <!-- Background Image -->
-        <div class="absolute inset-0">
-            <img 
-                src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyZeokSTFPu7oeB5c4NKCw_WKF8V4Xlu1SOSly9D9nEks35huA1GjoOUru2dNzFfOTs2INUm9Lk2J1fezpPAJtHtsUFHy0Sz9hU7Mb5pHg-HeagR_CzLXVRe7IgKAmm3UN3bMI=w408-h544-k-no" 
-                alt="La Clinica Veterinaria"
-                class="w-full h-full object-cover"
-                loading="eager"
-            >
-            <div class="hero-overlay absolute inset-0"></div>
+    <!-- ==================== STICKY NAVBAR ==================== -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo / Brand -->
+                <a href="#hero" class="flex items-center space-x-3">
+                    <span class="font-sans text-2xl font-bold text-slate-900">
+                        La Clinica Veterinaria
+                    </span>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#hero" class="text-slate-600 hover:text-emerald-600 transition-colors text-sm font-medium tracking-wide uppercase">Inicio</a>
+                    <a href="#services" class="text-slate-600 hover:text-emerald-600 transition-colors text-sm font-medium tracking-wide uppercase">Servicios</a>
+                    <a href="#gallery" class="text-slate-600 hover:text-emerald-600 transition-colors text-sm font-medium tracking-wide uppercase">Galería</a>
+                    <a href="#contact" class="text-slate-600 hover:text-emerald-600 transition-colors text-sm font-medium tracking-wide uppercase">Contacto</a>
+                    <a href="https://wa.me/+595972922464?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+La+Clinica+Veterinaria" target="_blank" 
+                       class="px-6 py-2.5 bg-emerald-600 text-white font-semibold rounded-full hover:bg-emerald-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        WhatsApp
+                    </a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-slate-900">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
         </div>
         
-        <!-- Floating Elements (decorative) -->
-        <div class="absolute top-20 left-10 w-64 h-64 bg-emerald-600/20 rounded-full blur-3xl animate-float"></div>
-        <div class="absolute bottom-20 right-10 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl animate-float" style="animation-delay: -3s;"></div>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-white/10">
+            <div class="px-6 py-4 space-y-4">
+                <a href="#hero" class="block text-slate-600 hover:text-emerald-600 text-lg">Inicio</a>
+                <a href="#services" class="block text-slate-600 hover:text-emerald-600 text-lg">Servicios</a>
+                <a href="#gallery" class="block text-slate-600 hover:text-emerald-600 text-lg">Galería</a>
+                <a href="#contact" class="block text-slate-600 hover:text-emerald-600 text-lg">Contacto</a>
+                <a href="https://wa.me/+595972922464?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+La+Clinica+Veterinaria" target="_blank" 
+                   class="block w-full text-center px-6 py-3 bg-emerald-600 text-white font-semibold rounded-full">
+                    WhatsApp
+                </a>
+            </div>
+        </div>
+    </nav>
+    
+    
+    <!-- ==================== HERO SECTION (Full Viewport) ==================== -->
+    <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <img src="https://images.unsplash.com/photo-1548767797-d8c844163c4c?w=1920&amp;q=80" 
+                 alt="La Clinica Veterinaria" 
+                 class="w-full h-full object-cover"
+                 loading="eager">
+            <!-- Dark Overlay -->
+            <div class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/40 to-black/60"></div>
+        </div>
         
         <!-- Hero Content -->
-        <div class="relative z-10 text-center px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
-            
+        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
             <!-- Category Badge -->
-            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass mb-8 animate-pulse-slow">
-                <span class="w-2 h-2 bg-green-400 rounded-full"></span>
-                <span class="text-sm font-medium uppercase tracking-wider text-gray-300">
+            <div class="inline-flex items-center px-4 py-2 rounded-full glass mb-8 animate-fade-in">
+                <span class="text-emerald-600 text-sm font-semibold tracking-widest uppercase">
                     Veterinario
                 </span>
             </div>
             
-            <!-- Main Headline -->
-            <h1 class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-black mb-6 leading-tight">
-                <span class="text-white drop-shadow-2xl">Bienvenidos a La Clinica Veterinaria</span>
+            <!-- Main Headline - Massive Typography -->
+            <h1 class="font-sans text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 animate-slide-up leading-tight">
+                Donde la Confianza se Construye
             </h1>
             
-            <!-- Subheadline -->
-            <p class="text-xl sm:text-2xl text-gray-300 max-w-3xl mx-auto mb-10 leading-relaxed">
-                Somos La Clinica Veterinaria, su mejor opción en Veterinario en Luque. Con años de experiencia y dedicación, nos comprometemos a brindarle la mejor atención y calidad que usted merece.
+            <!-- Tagline -->
+            <p class="text-xl md:text-2xl text-white/80 mb-10 max-w-2xl mx-auto animate-slide-up delay-100">
+                Tu satisfacción es nuestra prioridad y nuestro mayor orgullo
             </p>
             
+            <!-- Rating Badge -->
+            
+            <div class="flex items-center justify-center space-x-4 mb-10 animate-slide-up delay-200">
+                <div class="flex items-center space-x-1">
+                    
+                    <svg class="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    
+                    <svg class="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    
+                    <svg class="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    
+                    <svg class="w-6 h-6 text-white/30" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    
+                    <svg class="w-6 h-6 text-white/30" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    
+                </div>
+                <span class="text-white/80 font-medium">3.9 / 5</span>
+                <span class="text-white/50">•</span>
+                <span class="text-white/60">7 reseñas</span>
+            </div>
+            
+            
             <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                <!-- WhatsApp Button (Primary) -->
-                <a 
-                    href="https://wa.me/+595972922464?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+La+Clinica+Veterinaria" 
-                    target="_blank"
-                    class="group inline-flex items-center gap-3 bg-green-500 hover:bg-green-400 text-white font-bold text-lg px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-2xl hover:shadow-green-500/30"
-                >
-                    <svg class="w-6 h-6 transition-transform group-hover:scale-110" fill="currentColor" viewBox="0 0 24 24">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up delay-300">
+                <a href="https://wa.me/+595972922464?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+La+Clinica+Veterinaria" target="_blank" 
+                   class="group flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-bold rounded-full shadow-2xl hover:shadow-emerald-600/30 transition-all transform hover:-translate-y-1">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                    </svg>
+                    <span>Contáctanos Ahora</span>
+                </a>
+                <a href="#contact" 
+                   class="flex items-center space-x-2 px-8 py-4 glass text-white font-semibold rounded-full hover:bg-white/10 transition-all">
+                    <span>Ver Ubicación</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-float">
+            <div class="flex flex-col items-center space-y-2">
+                <span class="text-white/50 text-sm tracking-widest uppercase">Scroll</span>
+                <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+            </div>
+        </div>
+    </section>
+    
+    
+    <!-- ==================== FEATURES / SERVICES SECTION ==================== -->
+    <section id="services" class="py-24 lg:py-32 bg-green-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-20">
+                <span class="text-emerald-600 text-sm font-bold tracking-widest uppercase mb-4 block">
+                    Por Qué Elegirnos
+                </span>
+                <h2 class="font-sans text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6">
+                    Nuestros Servicios
+                </h2>
+                <p class="text-slate-600 text-lg md:text-xl max-w-3xl mx-auto">
+                    En La Clinica Veterinaria, amamos a las mascotas tanto como tú. Desde 2023, nuestro equipo de veterinarios apasionados brinda atención médica integral con el cariño y profesionalismo que tu compañero peludo merece.
+                </p>
+            </div>
+            
+            <!-- Service Cards (Rich Content) -->
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+                
+                <div class="group relative p-8 bg-white rounded-3xl border border-emerald-200 hover:border-emerald-600/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 overflow-hidden">
+                    <!-- Gradient Overlay on Hover -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-600 to-green-600 opacity-0 group-hover:opacity-5 transition-opacity"></div>
+                    
+                    <!-- Icon -->
+                    <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-green-600 text-white mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
+                    </div>
+                    
+                    <!-- Title -->
+                    <h3 class="relative font-sans text-2xl font-bold text-slate-900 mb-4">
+                        Consultas &amp; Vacunación
+                    </h3>
+                    
+                    <!-- Description -->
+                    <p class="relative text-slate-600 leading-relaxed text-base">
+                        Exámenes generales completos, planes de vacunación personalizados, desparasitación y medicina preventiva. Mantenemos a tu mascota sana y feliz.
+                    </p>
+                </div>
+                
+                <div class="group relative p-8 bg-white rounded-3xl border border-emerald-200 hover:border-emerald-600/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 overflow-hidden">
+                    <!-- Gradient Overlay on Hover -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-600 to-green-600 opacity-0 group-hover:opacity-5 transition-opacity"></div>
+                    
+                    <!-- Icon -->
+                    <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-green-600 text-white mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </div>
+                    
+                    <!-- Title -->
+                    <h3 class="relative font-sans text-2xl font-bold text-slate-900 mb-4">
+                        Cirugía &amp; Emergencias
+                    </h3>
+                    
+                    <!-- Description -->
+                    <p class="relative text-slate-600 leading-relaxed text-base">
+                        Quirófano equipado para cirugías programadas y de emergencia. Esterilizaciones, traumatología y procedimientos especializados con los más altos estándares.
+                    </p>
+                </div>
+                
+                <div class="group relative p-8 bg-white rounded-3xl border border-emerald-200 hover:border-emerald-600/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 overflow-hidden">
+                    <!-- Gradient Overlay on Hover -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-emerald-600 to-green-600 opacity-0 group-hover:opacity-5 transition-opacity"></div>
+                    
+                    <!-- Icon -->
+                    <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-emerald-600 to-green-600 text-white mb-6 group-hover:scale-110 transition-transform">
+                        <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>
+                    </div>
+                    
+                    <!-- Title -->
+                    <h3 class="relative font-sans text-2xl font-bold text-slate-900 mb-4">
+                        Peluquería &amp; Spa
+                    </h3>
+                    
+                    <!-- Description -->
+                    <p class="relative text-slate-600 leading-relaxed text-base">
+                        Baño, corte, limpieza de oídos y uñas. Tu mascota no solo estará sana, también lucirá hermosa. Productos hipoalergénicos para pieles sensibles.
+                    </p>
+                </div>
+                
+            </div>
+            
+            
+            <!-- Customer Promise / Social Proof -->
+            
+            <div class="mt-16 text-center">
+                <div class="inline-flex items-center px-8 py-4 rounded-full bg-white border border-emerald-200">
+                    <svg class="w-6 h-6 text-emerald-600 mr-3" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                    </svg>
+                    <span class="text-slate-900 font-medium text-lg">Con 3.9 estrellas, somos la elección de los que más aman a sus mascotas</span>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    
+    
+    <!-- ==================== GALLERY SECTION (Google Photos) ==================== -->
+    
+    <section id="gallery" class="py-24 lg:py-32 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <span class="text-emerald-600 text-sm font-bold tracking-widest uppercase mb-4 block">
+                    Nuestro Espacio
+                </span>
+                <h2 class="font-sans text-4xl md:text-5xl lg:text-6xl font-bold text-slate-900 mb-6">
+                    Galería de Fotos
+                </h2>
+                <p class="text-slate-600 text-lg">
+                    Conoce nuestras instalaciones y ambiente
+                </p>
+            </div>
+            
+            <!-- Masonry Grid -->
+            <div class="masonry-grid">
+                
+                <div class="masonry-item group relative overflow-hidden rounded-2xl shadow-xl">
+                    <img src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSyZeokSTFPu7oeB5c4NKCw_WKF8V4Xlu1SOSly9D9nEks35huA1GjoOUru2dNzFfOTs2INUm9Lk2J1fezpPAJtHtsUFHy0Sz9hU7Mb5pHg-HeagR_CzLXVRe7IgKAmm3UN3bMI=w408-h544-k-no" 
+                         alt="La Clinica Veterinaria - Foto 1"
+                         class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
+                         loading="lazy">
+                    <!-- Overlay on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                        <span class="text-white font-medium">La Clinica Veterinaria</span>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    <!-- ==================== FAQ SECTION ==================== -->
+    
+    <section id="faq" class="py-24 lg:py-32 bg-green-50">
+        <div class="max-w-4xl mx-auto px-6 lg:px-8">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
+                <span class="text-emerald-600 text-sm font-bold tracking-widest uppercase mb-4 block">
+                    Resolvemos tus Dudas
+                </span>
+                <h2 class="font-sans text-4xl md:text-5xl font-bold text-slate-900 mb-6">
+                    Preguntas Frecuentes
+                </h2>
+                <p class="text-slate-600 text-lg">
+                    Encuentra respuestas a las consultas más comunes
+                </p>
+            </div>
+            
+            <!-- FAQ Accordion -->
+            <div class="space-y-4">
+                
+                <div class="group bg-white rounded-2xl border border-emerald-200 overflow-hidden">
+                    <details class="faq-item">
+                        <summary class="flex items-center justify-between p-6 cursor-pointer text-slate-900 hover:text-emerald-600 transition-colors">
+                            <span class="font-semibold text-lg pr-4">¿Atienden emergencias 24 horas?</span>
+                            <svg class="w-6 h-6 flex-shrink-0 transform transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </summary>
+                        <div class="px-6 pb-6 text-slate-600 leading-relaxed">
+                            Contamos con servicio de emergencias. Para urgencias fuera de horario, llama a nuestro número de WhatsApp y te indicaremos cómo proceder.
+                        </div>
+                    </details>
+                </div>
+                
+                <div class="group bg-white rounded-2xl border border-emerald-200 overflow-hidden">
+                    <details class="faq-item">
+                        <summary class="flex items-center justify-between p-6 cursor-pointer text-slate-900 hover:text-emerald-600 transition-colors">
+                            <span class="font-semibold text-lg pr-4">¿Qué documentos necesito para la primera consulta?</span>
+                            <svg class="w-6 h-6 flex-shrink-0 transform transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </summary>
+                        <div class="px-6 pb-6 text-slate-600 leading-relaxed">
+                            Trae el carnet de vacunación si lo tienes. Si es primera vez, crearemos un historial médico completo para tu mascota.
+                        </div>
+                    </details>
+                </div>
+                
+                <div class="group bg-white rounded-2xl border border-emerald-200 overflow-hidden">
+                    <details class="faq-item">
+                        <summary class="flex items-center justify-between p-6 cursor-pointer text-slate-900 hover:text-emerald-600 transition-colors">
+                            <span class="font-semibold text-lg pr-4">¿Tienen servicio de internación?</span>
+                            <svg class="w-6 h-6 flex-shrink-0 transform transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </summary>
+                        <div class="px-6 pb-6 text-slate-600 leading-relaxed">
+                            Sí, contamos con área de hospitalización con monitoreo constante para pacientes que requieren cuidados especiales.
+                        </div>
+                    </details>
+                </div>
+                
+            </div>
+            
+            <!-- Additional Help CTA -->
+            <div class="mt-12 text-center">
+                <p class="text-slate-500 mb-4">¿No encontraste lo que buscabas?</p>
+                <a href="https://wa.me/+595972922464?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+La+Clinica+Veterinaria" target="_blank" 
+                   class="inline-flex items-center space-x-2 text-emerald-600 hover:underline font-medium">
+                    <span>Escríbenos por WhatsApp</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    
+    
+    <!-- ==================== CTA SECTION ==================== -->
+    <section class="py-24 lg:py-32 bg-gradient-to-r from-emerald-600 to-green-600 relative overflow-hidden">
+        <!-- Background Pattern -->
+        <div class="absolute inset-0 opacity-10">
+            <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <defs>
+                    <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+                        <path d="M 10 0 L 0 0 0 10" fill="none" stroke="white" stroke-width="0.5"/>
+                    </pattern>
+                </defs>
+                <rect width="100%" height="100%" fill="url(#grid)"/>
+            </svg>
+        </div>
+        
+        <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
+            <h2 class="font-sans text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
+                ¿Listo para comenzar?
+            </h2>
+            <p class="text-xl text-white/80 mb-10 max-w-2xl mx-auto">
+                Contáctanos ahora y descubre por qué somos la mejor opción en Luque
+            </p>
+            
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="https://wa.me/+595972922464?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+La+Clinica+Veterinaria" target="_blank" 
+                   class="group flex items-center space-x-3 px-10 py-5 bg-white text-slate-900 font-bold text-lg rounded-full shadow-2xl hover:shadow-white/30 transition-all transform hover:-translate-y-1">
+                    <svg class="w-7 h-7 text-green-600" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                     </svg>
                     <span>Escribir por WhatsApp</span>
                 </a>
-                
-                <!-- Call Button (Secondary) -->
-                <a 
-                    href="tel:+595972922464" 
-                    class="group inline-flex items-center gap-3 glass hover:bg-white/20 text-white font-semibold text-lg px-8 py-4 rounded-full transition-all duration-300 transform hover:scale-105"
-                >
-                    <svg class="w-6 h-6 transition-transform group-hover:rotate-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <a href="tel:0972 922464" 
+                   class="flex items-center space-x-2 px-10 py-5 border-2 border-white text-white font-bold text-lg rounded-full hover:bg-white/10 transition-all">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                     </svg>
                     <span>Llamar Ahora</span>
                 </a>
             </div>
         </div>
-        
-        <!-- Scroll Indicator -->
-        <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-            </svg>
-        </div>
     </section>
     
     
-    <!-- ============================================ -->
-    <!-- TRUST BAR                                    -->
-    <!-- ============================================ -->
-    <section class="relative bg-gradient-to-r from-emerald-900 via-teal-900 to-green-900 py-8 border-y border-white/10">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center justify-center gap-8 md:gap-16">
+    <!-- ==================== CONTACT / MAP SECTION ==================== -->
+    <section id="contact" class="py-24 lg:py-32 bg-green-50">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                 
-                <!-- Rating Stars -->
-                <div class="flex items-center gap-3">
-                    <div class="flex">
-                        
-                        <svg class="w-7 h-7 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                        </svg>
-                        
-                        <svg class="w-7 h-7 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                        </svg>
-                        
-                        <svg class="w-7 h-7 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                        </svg>
-                        
-                        <svg class="w-7 h-7 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                        </svg>
-                        
-                        <svg class="w-7 h-7 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                        </svg>
-                        
-                    </div>
-                    <span class="text-3xl font-bold text-white">3.9</span>
-                </div>
-                
-                <!-- Divider -->
-                <div class="hidden md:block w-px h-12 bg-white/20"></div>
-                
-                <!-- Review Count -->
-                <div class="text-center">
-                    <span class="text-4xl font-bold text-white">7</span>
-                    <span class="block text-sm text-gray-400 uppercase tracking-wider">Reseñas en Google</span>
-                </div>
-                
-                <!-- Divider -->
-                <div class="hidden md:block w-px h-12 bg-white/20"></div>
-                
-                <!-- Verified Badge -->
-                <div class="flex items-center gap-2">
-                    <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
-                    </svg>
-                    <span class="text-lg font-semibold text-white">Negocio Verificado</span>
-                </div>
-            </div>
-        </div>
-    </section>
-    
-    
-    <!-- ============================================ -->
-    <!-- INFO & SERVICES SECTION                      -->
-    <!-- ============================================ -->
-    <section class="py-20 lg:py-28 bg-gray-900">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-                
-                <!-- Left Column: Services -->
+                <!-- Contact Info -->
                 <div>
-                    <span class="inline-block px-4 py-1 rounded-full bg-emerald-600/20 text-emerald-400 text-sm font-semibold uppercase tracking-wider mb-4">
-                        Nuestros Servicios
+                    <span class="text-emerald-600 text-sm font-bold tracking-widest uppercase mb-4 block">
+                        Encuéntranos
                     </span>
-                    <h2 class="font-display text-4xl sm:text-5xl font-bold text-white mb-8">
-                        ¿Por qué elegirnos?
+                    <h2 class="font-sans text-4xl md:text-5xl font-bold text-slate-900 mb-8">
+                        Información de Contacto
                     </h2>
                     
                     <div class="space-y-6">
-                        
-                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-gray-800/50 hover:bg-gray-800 transition-colors duration-300 group">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-600/20 flex items-center justify-center group-hover:bg-emerald-600/30 transition-colors">
-                                <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-white">Atención personalizada</h3>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-gray-800/50 hover:bg-gray-800 transition-colors duration-300 group">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-600/20 flex items-center justify-center group-hover:bg-emerald-600/30 transition-colors">
-                                <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-white">Profesionales capacitados</h3>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-gray-800/50 hover:bg-gray-800 transition-colors duration-300 group">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-600/20 flex items-center justify-center group-hover:bg-emerald-600/30 transition-colors">
-                                <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-white">Precios competitivos</h3>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-gray-800/50 hover:bg-gray-800 transition-colors duration-300 group">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-600/20 flex items-center justify-center group-hover:bg-emerald-600/30 transition-colors">
-                                <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-white">Ubicación conveniente</h3>
-                            </div>
-                        </div>
-                        
-                        <div class="flex items-start gap-4 p-4 rounded-2xl bg-gray-800/50 hover:bg-gray-800 transition-colors duration-300 group">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-600/20 flex items-center justify-center group-hover:bg-emerald-600/30 transition-colors">
-                                <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                                </svg>
-                            </div>
-                            <div>
-                                <h3 class="text-lg font-semibold text-white">Horarios flexibles</h3>
-                            </div>
-                        </div>
-                        
-                    </div>
-                </div>
-                
-                <!-- Right Column: Contact Card -->
-                <div class="lg:sticky lg:top-8">
-                    <div class="bg-gradient-to-br from-gray-800 to-gray-900 rounded-3xl p-8 shadow-2xl border border-gray-700/50 glow">
-                        <h3 class="text-2xl font-bold text-white mb-6">Información de Contacto</h3>
-                        
                         <!-- Address -->
-                        <div class="flex items-start gap-4 mb-6">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-600/20 flex items-center justify-center">
-                                <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-emerald-600/10 text-emerald-600 flex-shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
                                 </svg>
                             </div>
                             <div>
-                                <span class="text-sm text-gray-400 uppercase tracking-wider">Dirección</span>
-                                <p class="text-white mt-1">
+                                <h4 class="font-semibold text-slate-900 mb-1">Dirección</h4>
+                                <p class="text-slate-600">
 PGH5+WQ7, Balderrama, Luque 110930</p>
-                                <p class="text-gray-400">Luque, Paraguay</p>
+                                <p class="text-slate-500">Luque, Paraguay</p>
                             </div>
                         </div>
                         
+                        
                         <!-- Phone -->
-                        <div class="flex items-start gap-4 mb-8">
-                            <div class="flex-shrink-0 w-12 h-12 rounded-xl bg-emerald-600/20 flex items-center justify-center">
-                                <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-emerald-600/10 text-emerald-600 flex-shrink-0">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                 </svg>
                             </div>
                             <div>
-                                <span class="text-sm text-gray-400 uppercase tracking-wider">Teléfono</span>
-                                <p class="text-white text-xl font-semibold mt-1">0972 922464</p>
+                                <h4 class="font-semibold text-slate-900 mb-1">Teléfono</h4>
+                                <a href="tel:+595972922464" class="text-emerald-600 hover:underline text-lg">
+                                    0972 922464
+                                </a>
                             </div>
                         </div>
                         
-                        <!-- CTA Buttons -->
-                        <div class="space-y-4">
-                            <!-- WhatsApp (Big) -->
-                            <a 
-                                href="https://wa.me/+595972922464?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+La+Clinica+Veterinaria" 
-                                target="_blank"
-                                class="w-full flex items-center justify-center gap-3 bg-green-500 hover:bg-green-400 text-white font-bold text-lg py-4 rounded-2xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-xl hover:shadow-green-500/20"
-                            >
+                        
+                        <!-- WhatsApp -->
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-green-500/10 text-green-500 flex-shrink-0">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                                 </svg>
-                                Enviar Mensaje
-                            </a>
-                            
-                            <!-- Call Button -->
-                            <a 
-                                href="tel:+595972922464" 
-                                class="w-full flex items-center justify-center gap-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-lg py-4 rounded-2xl transition-all duration-300 transform hover:scale-[1.02]"
-                            >
-                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                                </svg>
-                                Llamar Ahora
-                            </a>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-slate-900 mb-1">WhatsApp</h4>
+                                <a href="https://wa.me/+595972922464?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+La+Clinica+Veterinaria" target="_blank" class="text-green-500 hover:underline text-lg">
+                                    Enviar mensaje
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Business Hours -->
+                    <div class="mt-10 p-6 bg-white rounded-2xl border border-emerald-200">
+                        <h4 class="font-semibold text-slate-900 mb-4 flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span>Horario de Atención</span>
+                        </h4>
+                        <div class="space-y-2 text-slate-600">
+                            <div class="flex justify-between">
+                                <span>Lunes - Viernes</span>
+                                <span class="text-slate-900">08:00 - 18:00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Sábado</span>
+                                <span class="text-slate-900">08:00 - 13:00</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Domingo</span>
+                                <span class="text-slate-500">Cerrado</span>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
-    
-    
-    <!-- ============================================ -->
-    <!-- MAP SECTION                                  -->
-    <!-- ============================================ -->
-    <section class="py-20 lg:py-28 bg-gray-950">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-12">
-                <span class="inline-block px-4 py-1 rounded-full bg-emerald-600/20 text-emerald-400 text-sm font-semibold uppercase tracking-wider mb-4">
-                    Ubicación
-                </span>
-                <h2 class="font-display text-4xl sm:text-5xl font-bold text-white mb-4">
-                    Encuéntranos
-                </h2>
-                <p class="text-xl text-gray-400 max-w-2xl mx-auto">
-                    Visítanos en nuestra ubicación en Luque
-                </p>
-            </div>
-            
-            <!-- Map Container -->
-            <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-gray-800">
-                <!-- Map iframe -->
-                <iframe
-                    src="https://www.google.com/maps?q=-25.3353429,-57.5975026&z=16&output=embed"
-                    width="100%"
-                    height="450"
-                    style="border:0;"
-                    allowfullscreen=""
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                    class="w-full"
-                ></iframe>
                 
-                <!-- Overlay Card -->
-                <div class="absolute bottom-6 left-6 right-6 sm:right-auto sm:max-w-sm">
-                    <div class="bg-gray-900/95 backdrop-blur-sm rounded-2xl p-6 border border-gray-700">
-                        <h3 class="font-bold text-white text-lg mb-2">La Clinica Veterinaria</h3>
-                        <p class="text-gray-400 text-sm mb-4">
-PGH5+WQ7, Balderrama, Luque 110930</p>
-                        <a 
-                            href="https://www.google.com/maps/search/?api=1&query=-25.3353429,-57.5975026"
-                            target="_blank"
-                            class="inline-flex items-center gap-2 text-emerald-600 hover:text-green-400 font-semibold transition-colors"
-                        >
-                            <span>Abrir en Google Maps</span>
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
-                            </svg>
-                        </a>
-                    </div>
+                <!-- Map -->
+                <div class="h-[500px] rounded-3xl overflow-hidden shadow-2xl border border-emerald-200">
+                    <iframe 
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d-57.5975026!3d-25.3353429!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z-25.3353429!5e0!3m2!1ses!2spy!4v1"
+                        width="100%" 
+                        height="100%" 
+                        style="border:0;" 
+                        allowfullscreen="" 
+                        loading="lazy" 
+                        referrerpolicy="no-referrer-when-downgrade"
+                        class="grayscale hover:grayscale-0 transition-all duration-500">
+                    </iframe>
                 </div>
             </div>
         </div>
     </section>
     
     
-    <!-- ============================================ -->
-    <!-- FINAL CTA SECTION                            -->
-    <!-- ============================================ -->
-    <section class="relative py-24 lg:py-32 overflow-hidden">
-        <!-- Background Gradient -->
-        <div class="absolute inset-0 bg-gradient-to-r from-emerald-900 via-teal-900 to-green-900"></div>
-        <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.03\"%3E%3Cpath d=\"M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
-        
-        <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-            <h2 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-white mb-6">
-                ¿Listo para contactarnos?
-            </h2>
-            <p class="text-xl text-gray-300 mb-10 max-w-2xl mx-auto">
-                Estamos aquí para ayudarte. Contáctanos hoy y descubre por qué somos la mejor opción en Luque.
-            </p>
-            
-            <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                <a 
-                    href="https://wa.me/+595972922464?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+La+Clinica+Veterinaria" 
-                    target="_blank"
-                    class="group inline-flex items-center justify-center gap-3 bg-white text-gray-900 font-bold text-lg px-10 py-5 rounded-full transition-all duration-300 transform hover:scale-105 hover:shadow-2xl"
-                >
-                    <svg class="w-6 h-6 text-green-600" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-                    </svg>
-                    <span>Contáctanos Ahora</span>
-                </a>
+    <!-- ==================== FOOTER ==================== -->
+    <footer class="bg-white border-t border-emerald-200">
+        <div class="max-w-7xl mx-auto px-6 py-12">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="mb-6 md:mb-0">
+                    <span class="font-sans text-2xl font-bold text-slate-900">
+                        La Clinica Veterinaria
+                    </span>
+                    <p class="text-slate-500 mt-2">
+                        Luque, Paraguay
+                    </p>
+                </div>
                 
-                <a 
-                    href="tel:+595972922464" 
-                    class="inline-flex items-center justify-center gap-3 border-2 border-white/30 hover:border-white/60 text-white font-bold text-lg px-10 py-5 rounded-full transition-all duration-300 transform hover:scale-105"
-                >
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                    </svg>
-                    <span>0972 922464</span>
-                </a>
+                <div class="flex items-center space-x-6">
+                    <a href="https://wa.me/+595972922464?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+La+Clinica+Veterinaria" target="_blank" 
+                       class="w-12 h-12 flex items-center justify-center rounded-full bg-green-50 text-slate-600 hover:text-emerald-600 transition-colors">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                        </svg>
+                    </a>
+                    <a href="tel:+595972922464" 
+                       class="w-12 h-12 flex items-center justify-center rounded-full bg-green-50 text-slate-600 hover:text-emerald-600 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                        </svg>
+                    </a>
+                </div>
             </div>
-        </div>
-    </section>
-    
-    
-    <!-- ============================================ -->
-    <!-- FOOTER                                       -->
-    <!-- ============================================ -->
-    <footer class="bg-gray-950 border-t border-gray-800 py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-                <p class="text-gray-500 text-sm">
-                    © La Clinica Veterinaria — Todos los derechos reservados
-                </p>
-                <p class="text-gray-600 text-xs">
-                    Página creada con ❤️ por <a href="#" class="hover:text-white transition-colors">WebDevelopers Agents</a>
+            
+            <div class="mt-8 pt-8 border-t border-emerald-200 text-center">
+                <p class="text-slate-500 text-sm">
+                    © 2026 La Clinica Veterinaria. Todos los derechos reservados.
                 </p>
             </div>
         </div>
     </footer>
     
     
-    <!-- ============================================ -->
-    <!-- FLOATING WHATSAPP BUTTON                     -->
-    <!-- ============================================ -->
-    <a 
-        href="https://wa.me/+595972922464?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+La+Clinica+Veterinaria" 
-        target="_blank"
-        class="fixed bottom-6 right-6 z-50 w-16 h-16 bg-green-500 hover:bg-green-400 rounded-full shadow-lg shadow-green-500/30 flex items-center justify-center transition-all duration-300 transform hover:scale-110 animate-pulse-slow"
-        aria-label="Contactar por WhatsApp"
-    >
-        <svg class="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
+    <!-- ==================== FLOATING WHATSAPP BUTTON ==================== -->
+    <a href="https://wa.me/+595972922464?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+La+Clinica+Veterinaria" target="_blank" 
+       class="fixed bottom-6 right-6 z-50 w-16 h-16 flex items-center justify-center bg-green-500 text-white rounded-full shadow-2xl hover:bg-green-600 transition-all transform hover:scale-110 animate-float">
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
         </svg>
     </a>
-
+    
+    
+    <!-- ==================== SCRIPTS ==================== -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Navbar background on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
+        });
+    </script>
 </body>
 </html>

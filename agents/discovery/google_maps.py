@@ -44,7 +44,7 @@ SOCIAL_MEDIA_DOMAINS = [
     "youtube.com", "youtu.be",
 ]
 
-# Selectors for Google Maps (updated January 2026)
+# Selectors for Google Maps (updated January 2026 - ULTRA Deep Data Extraction)
 SELECTORS = {
     "search_input": '#UGojuc, input.UGojuc, input[name="q"]',
     "search_button": 'button.mL3xi, button[aria-label="Búsqueda"], button[aria-label="Search"]',
@@ -55,12 +55,79 @@ SELECTORS = {
     "business_name": 'h1.DUwDvf, div.qBF1Pd.fontHeadlineSmall',
     "rating_stars": 'span.ZkP5Je',  # aria-label="4,6 estrellas 206 reseñas"
     "rating_value": 'span.MW4etd',  # "4,6"
-    "review_count": 'span.UY7F9',   # "(206)"
-    "category": 'button.DkEaL, div.W4Efsd span:first-child',
-    "address": 'button[data-item-id="address"], div.rogA2c, div.Io6YTe',
+    "review_count": 'div.fontBodySmall',  # "236 reseñas"
+    "review_count_alt": 'span.UY7F9',   # "(206)" - fallback
+    "category": 'button[jsaction*="category"], button.DkEaL',
+    "address": 'button[data-item-id="address"] div.Io6YTe, button[data-item-id="address"], div.rogA2c',
     "phone": 'button[data-item-id*="phone"], a[href^="tel:"]',
-    "website": 'a[data-item-id="authority"], a[aria-label*="sitio web"]',
-    "hours": 'div[data-hide-tooltip-on-mouse-move] span.ZDu9vd',
+    "website": 'a[data-item-id="authority"]',
+    
+    # === PRICE DATA ===
+    "price_range": 'span.mgr77e span, span.mgr77e',
+    "price_per_person": 'div.MNVeJb div',  # "₲ 20.000-40.000 por persona"
+    "price_voters": 'div.BfVpR',  # "Notificado por 79 personas"
+    "price_histogram": 'table[aria-label*="Histograma"] tr',  # Price distribution rows
+    "price_histogram_range": 'td.fsAi0e',  # "₲ 20.000-40.000"
+    "price_histogram_percent": 'span.xYsBQe',  # style="width: 42%;"
+    
+    # === SERVICE OPTIONS ===
+    "service_options": 'div.E0DTEd div.LTs0Rc[role="group"], div.LTs0Rc[aria-label]',
+    "accessibility": 'span.wmQCje[aria-label]',  # "Accesible con silla de ruedas"
+    
+    # === OPENING HOURS ===
+    "hours_table": 'table.eK4R0e tbody tr.y0skZc',
+    "hours_row_day": 'td.ylH6lf div',
+    "hours_row_time": 'td.mxowUb',
+    "open_status": 'span.ZDu9vd span',  # "Cerrado" / "Abierto"
+    
+    # === POPULAR TIMES (HORAS PUNTA) ===
+    "popular_times_container": 'div.UmE4Qe[aria-label*="Horas punta"]',
+    "popular_times_bars": 'div.dpoVLd[role="img"]',  # aria-label="Nivel de ocupación: 57 % (hora: 12 p. m.)"
+    "popular_times_day_selector": 'button.e2moi span.uEubGf',  # "domingos"
+    
+    # === THIRD-PARTY LINKS ===
+    "order_link": 'a[data-item-id="action:4"]',
+    "menu_link": 'a[data-item-id="menu"], button[aria-label="Carta"]',
+    "reserve_link": 'a[data-item-id="reserve"], a[aria-label*="reserva"]',
+    
+    # === PLUS CODE ===
+    "plus_code": 'button[data-item-id="oloc"] div.Io6YTe',  # "MCX9+73 Asunción"
+    
+    # === PHOTO CATEGORIES ===
+    "photo_categories": 'div.fp2VUc button.K4UgGe',  # aria-label="Carta", "Ambiente", etc.
+    "photo_category_label": 'span.zaTlhd',  # Label text inside photo buttons
+    
+    # === REVIEW TOPICS/KEYWORDS ===
+    "review_topics": 'div[role="radiogroup"] button.e2moi[aria-label]',  # "sandwiches, mencionado en 15 reseñas"
+    "review_topic_count": 'span.bC3Nkc',  # " 15" count inside topic button
+    
+    # === RATING DISTRIBUTION ===
+    "rating_distribution": 'tr.BHOKXe',  # aria-label="5 estrellas, 196 reseñas"
+    
+    # === INDIVIDUAL REVIEWS ===
+    "review_cards": 'div.jftiEf[data-review-id]',
+    "review_author": 'div.d4r55',  # Reviewer name
+    "review_author_info": 'div.RfnDt',  # "Local Guide · 70 reseñas · 519 fotos"
+    "review_author_avatar": 'img.NBa7we',  # Author profile photo
+    "review_author_profile": 'button.al6Kxe[data-href]',  # Profile link button
+    "review_rating": 'span.kvMYJc',  # aria-label="5 estrellas"
+    "review_date": 'span.rsqaWe',  # "Hace 2 meses"
+    "review_text": 'span.wiI7pd',  # Review content
+    "review_photos": 'button.Tya61d',  # Review photo buttons (background-image style)
+    "review_expand": 'button.w8nwRe',  # "Más" button to expand review
+    
+    # === CUSTOMER UPDATES ===
+    "customer_updates": 'button.wjCxie',  # Customer update cards
+    "update_text": 'div.ZXMsO',  # Update text content
+    "update_date": 'div.jrtH8d',  # "Hace un año"
+    
+    # === INFORMATION TAB (Business Attributes) ===
+    "info_tab": 'button[aria-label*="Información sobre"]',  # Tab button
+    "info_section": 'div.iP2t7d.fontBodyMedium',  # Each attribute section
+    "info_section_title": 'h2.iL3Qke.fontTitleSmall',  # Section title (Accesibilidad, Pagos, etc.)
+    "info_items_list": 'ul.ZQ6we',  # Items list
+    "info_item": 'li.hpLkke',  # Individual item
+    "info_item_text": 'span[aria-label]',  # Item text with aria-label
 }
 
 
@@ -70,7 +137,7 @@ SELECTORS = {
 
 @dataclass
 class ScrapedBusiness:
-    """Raw business data from Google Maps"""
+    """Raw business data from Google Maps - ULTRA Deep Data Version"""
     name: str
     google_place_id: Optional[str] = None
     category: Optional[str] = None
@@ -87,6 +154,60 @@ class ScrapedBusiness:
     has_website: bool = False
     website_url: Optional[str] = None
     website_status: str = "none"  # none, social_only, dead, active
+    
+    # Price Data
+    price_range: Optional[str] = None  # e.g., "₲ 20.000-40.000"
+    price_level: int = 0  # 1-4 ($, $$, $$$, $$$$)
+    price_per_person: Optional[str] = None  # "₲ 20.000-40.000 por persona"
+    price_voters: int = 0  # "Notificado por 79 personas"
+    price_histogram: dict = field(default_factory=dict)  # {"₲ 1-20.000": 0, "₲ 20.000-40.000": 42, ...}
+    
+    # Service options
+    service_options: dict = field(default_factory=dict)  # {dine_in, takeout, delivery}
+    accessibility: list = field(default_factory=list)  # ["wheelchair_accessible", ...]
+    
+    # Business Attributes from "Información" tab
+    offerings: list = field(default_factory=list)  # ["Café", ...]
+    dining_options: list = field(default_factory=list)  # ["Desayunos", ...]
+    amenities: list = field(default_factory=list)  # ["Sanitario", ...]
+    planning: list = field(default_factory=list)  # ["Visita rápida", ...]
+    payments: list = field(default_factory=list)  # ["Tarjetas de crédito", "NFC", ...]
+    parking: list = field(default_factory=list)  # ["Estacionamiento gratuito", ...]
+    
+    # Opening hours - structured
+    opening_hours: dict = field(default_factory=dict)  # {"monday": "07:00-20:00", ...}
+    is_open_now: Optional[bool] = None
+    open_status_text: Optional[str] = None  # "Cerrado · Abre a las 7 a. m. del lun"
+    
+    # Popular Times (Horas Punta) - hourly busyness by day
+    popular_times: dict = field(default_factory=dict)  # {"monday": {"6": 0, "7": 14, ...}, ...}
+    
+    # Third-party links
+    order_link: Optional[str] = None  # PedidosYa, UberEats, etc.
+    order_provider: Optional[str] = None  # "pedidosya", "ubereats", etc.
+    menu_link: Optional[str] = None
+    reserve_link: Optional[str] = None
+    
+    # Social media (separate from website)
+    social_media: dict = field(default_factory=dict)  # {instagram, facebook, tiktok}
+    
+    # Plus Code for precise location
+    plus_code: Optional[str] = None  # "MCX9+73 Asunción"
+    
+    # Photo Categories
+    photo_categories: list = field(default_factory=list)  # ["Carta", "Ambiente", "Comida y bebida", ...]
+    
+    # Review Topics/Keywords mentioned in reviews
+    review_topics: dict = field(default_factory=dict)  # {"sandwiches": 15, "calidad": 13, "café": 9, ...}
+    
+    # Rating Distribution
+    rating_distribution: dict = field(default_factory=dict)  # {"5": 196, "4": 25, "3": 8, "2": 2, "1": 5}
+    
+    # Top Reviews (actual customer reviews)
+    reviews: list = field(default_factory=list)  # [{"author", "rating", "text", "date", "photos"}, ...]
+    
+    # Customer Updates (posts from the business or customers)
+    customer_updates: list = field(default_factory=list)  # [{"text", "date"}, ...]
     
     # Metadata
     latitude: Optional[float] = None
@@ -110,8 +231,48 @@ class ScrapedBusiness:
             "has_website": self.has_website,
             "website_url": self.website_url,
             "website_status": self.website_status,
+            # Price Data
+            "price_range": self.price_range,
+            "price_level": self.price_level,
+            "price_per_person": self.price_per_person,
+            "price_voters": self.price_voters,
+            "price_histogram": self.price_histogram,
+            # Services & Accessibility
+            "service_options": self.service_options,
+            "accessibility": self.accessibility,
+            # Business Attributes
+            "offerings": self.offerings,
+            "dining_options": self.dining_options,
+            "amenities": self.amenities,
+            "planning": self.planning,
+            "payments": self.payments,
+            "parking": self.parking,
+            # Hours & Status
+            "opening_hours": self.opening_hours,
+            "is_open_now": self.is_open_now,
+            "open_status_text": self.open_status_text,
+            # Popular Times
+            "popular_times": self.popular_times,
+            # Third-party Links
+            "order_link": self.order_link,
+            "order_provider": self.order_provider,
+            "menu_link": self.menu_link,
+            "reserve_link": self.reserve_link,
+            # Social Media
+            "social_media": self.social_media,
+            # Location
+            "plus_code": self.plus_code,
             "latitude": self.latitude,
             "longitude": self.longitude,
+            # Photos
+            "photo_categories": self.photo_categories,
+            # Reviews & Topics
+            "review_topics": self.review_topics,
+            "rating_distribution": self.rating_distribution,
+            "reviews": self.reviews,
+            # Updates
+            "customer_updates": self.customer_updates,
+            # Meta
             "scraped_at": self.scraped_at.isoformat(),
         }
 
@@ -187,6 +348,178 @@ class MapsScraper:
             return any(social in domain for social in SOCIAL_MEDIA_DOMAINS)
         except Exception:
             return False
+    
+    def _classify_social_media(self, url: str) -> Optional[str]:
+        """Classify which social media platform a URL belongs to"""
+        if not url:
+            return None
+        url_lower = url.lower()
+        if "instagram.com" in url_lower or "instagr.am" in url_lower:
+            return "instagram"
+        elif "facebook.com" in url_lower or "fb.com" in url_lower or "fb.me" in url_lower:
+            return "facebook"
+        elif "tiktok.com" in url_lower:
+            return "tiktok"
+        elif "twitter.com" in url_lower or "x.com" in url_lower:
+            return "twitter"
+        elif "youtube.com" in url_lower or "youtu.be" in url_lower:
+            return "youtube"
+        elif "linkedin.com" in url_lower:
+            return "linkedin"
+        elif "wa.me" in url_lower or "whatsapp.com" in url_lower:
+            return "whatsapp"
+        return None
+    
+    def _clean_price_range(self, text: str) -> str:
+        """Clean price range text removing hidden characters and normalizing"""
+        if not text:
+            return ""
+        # Remove non-breaking spaces and other hidden chars
+        cleaned = text.replace('\xa0', ' ').replace('\u200b', '').strip()
+        # Normalize spaces
+        cleaned = ' '.join(cleaned.split())
+        return cleaned
+    
+    def _estimate_price_level(self, price_text: str) -> int:
+        """Estimate price level (1-4) from price range text"""
+        if not price_text:
+            return 0
+        # Count currency symbols or check for ranges
+        dollar_count = price_text.count('$') + price_text.count('₲')
+        if dollar_count >= 4:
+            return 4
+        elif dollar_count >= 3:
+            return 3
+        elif dollar_count >= 2:
+            return 2
+        elif dollar_count >= 1:
+            return 1
+        
+        # Try to parse numeric range for Guaraníes
+        numbers = re.findall(r'[\d\.]+', price_text.replace('.', ''))
+        if numbers:
+            try:
+                max_price = max(int(n) for n in numbers if n)
+                if max_price > 200000:
+                    return 4
+                elif max_price > 100000:
+                    return 3
+                elif max_price > 50000:
+                    return 2
+                else:
+                    return 1
+            except (ValueError, TypeError):
+                pass
+        return 0
+    
+    def _parse_hours_text(self, day: str, time_text: str) -> tuple[str, str]:
+        """Parse day and time text into normalized format"""
+        # Normalize day names to English keys
+        day_map = {
+            'lunes': 'monday', 'monday': 'monday',
+            'martes': 'tuesday', 'tuesday': 'tuesday',
+            'miércoles': 'wednesday', 'miercoles': 'wednesday', 'wednesday': 'wednesday',
+            'jueves': 'thursday', 'thursday': 'thursday',
+            'viernes': 'friday', 'friday': 'friday',
+            'sábado': 'saturday', 'sabado': 'saturday', 'saturday': 'saturday',
+            'domingo': 'sunday', 'sunday': 'sunday',
+        }
+        
+        day_key = day_map.get(day.lower().strip(), day.lower().strip())
+        
+        # Handle "Cerrado" / "Closed"
+        if 'cerrado' in time_text.lower() or 'closed' in time_text.lower():
+            return day_key, 'closed'
+        
+        # Handle "Abierto 24 horas" / "Open 24 hours"
+        if '24' in time_text and ('hora' in time_text.lower() or 'hour' in time_text.lower()):
+            return day_key, '00:00-24:00'
+        
+        # Parse time range like "7 a. m. a 8 p. m." or "7:00-20:00"
+        time_text = time_text.strip()
+        
+        # Try to extract start and end times
+        # Pattern for "7 a. m. a 8 p. m." format
+        am_pm_pattern = r'(\d{1,2})(?::(\d{2}))?\s*(?:a\.?\s*m\.?|AM)\s*(?:a|to|-|–)\s*(\d{1,2})(?::(\d{2}))?\s*(?:p\.?\s*m\.?|PM)'
+        match = re.search(am_pm_pattern, time_text, re.IGNORECASE)
+        if match:
+            start_h = int(match.group(1))
+            start_m = match.group(2) or '00'
+            end_h = int(match.group(3)) + 12  # PM
+            end_m = match.group(4) or '00'
+            return day_key, f"{start_h:02d}:{start_m}-{end_h:02d}:{end_m}"
+        
+        # Pattern for "7:00 - 20:00" format
+        time_24_pattern = r'(\d{1,2}):(\d{2})\s*(?:a|to|-|–)\s*(\d{1,2}):(\d{2})'
+        match = re.search(time_24_pattern, time_text)
+        if match:
+            return day_key, f"{int(match.group(1)):02d}:{match.group(2)}-{int(match.group(3)):02d}:{match.group(4)}"
+        
+        # Return original if can't parse
+        return day_key, time_text
+    
+    def _parse_popular_times_label(self, aria_label: str) -> tuple[int, int]:
+        """Parse popular times from aria-label like 'Nivel de ocupación: 57 % (hora: 12 p. m.)'"""
+        if not aria_label:
+            return 0, 0
+        
+        # Extract percentage
+        percent_match = re.search(r'(\d+)\s*%', aria_label)
+        percent = int(percent_match.group(1)) if percent_match else 0
+        
+        # Extract hour
+        hour_match = re.search(r'hora:\s*(\d+)\s*(a\.?\s*m\.?|p\.?\s*m\.?)', aria_label, re.IGNORECASE)
+        if hour_match:
+            hour = int(hour_match.group(1))
+            period = hour_match.group(2).lower().replace('.', '').replace(' ', '')
+            if 'pm' in period and hour != 12:
+                hour += 12
+            elif 'am' in period and hour == 12:
+                hour = 0
+            return hour, percent
+        
+        return 0, percent
+    
+    def _parse_review_topic(self, aria_label: str) -> tuple[str, int]:
+        """Parse review topic from aria-label like 'sandwiches, mencionado en 15 reseñas'"""
+        if not aria_label:
+            return "", 0
+        
+        # Pattern: "topic, mencionado en N reseñas"
+        match = re.search(r'^([^,]+),?\s*mencionado en\s*(\d+)', aria_label, re.IGNORECASE)
+        if match:
+            return match.group(1).strip(), int(match.group(2))
+        return aria_label, 0
+    
+    def _parse_rating_distribution(self, aria_label: str) -> tuple[int, int]:
+        """Parse rating from aria-label like '5 estrellas, 196 reseñas'"""
+        if not aria_label:
+            return 0, 0
+        
+        stars_match = re.search(r'(\d+)\s*estrellas?', aria_label)
+        count_match = re.search(r'(\d+)\s*rese\u00f1as?', aria_label)
+        
+        stars = int(stars_match.group(1)) if stars_match else 0
+        count = int(count_match.group(1)) if count_match else 0
+        
+        return stars, count
+    
+    def _classify_order_provider(self, url: str) -> str:
+        """Classify which delivery service a URL belongs to"""
+        if not url:
+            return ""
+        url_lower = url.lower()
+        if "pedidosya" in url_lower:
+            return "pedidosya"
+        elif "ubereats" in url_lower:
+            return "ubereats"
+        elif "rappi" in url_lower:
+            return "rappi"
+        elif "deliveroo" in url_lower:
+            return "deliveroo"
+        elif "doordash" in url_lower:
+            return "doordash"
+        return "other"
     
     def _extract_place_id(self, url: str) -> Optional[str]:
         """Extract Google Place ID from URL"""
@@ -416,7 +749,7 @@ class MapsScraper:
         return collected[:target_count]
     
     async def _extract_business_details(self, element, location: str) -> Optional[ScrapedBusiness]:
-        """Extract details from a business listing"""
+        """Extract details from a business listing - ULTRA DEEP DATA VERSION"""
         try:
             # Click on the business to open details panel
             await element.click()
@@ -447,11 +780,10 @@ class MapsScraper:
             rating_el = await self.page.query_selector('span.ZkP5Je')
             if rating_el:
                 aria_label = await rating_el.get_attribute("aria-label") or ""
-                # Parse "4,6 estrellas 206 reseñas"
                 rating_match = re.search(r'([\d,\.]+)\s*estrellas?', aria_label)
                 if rating_match:
                     rating = self._parse_rating(rating_match.group(1))
-                review_match = re.search(r'([\d\.]+)\s*reseñas?', aria_label.replace(".", ""))
+                review_match = re.search(r'([\d\.]+)\s*rese\u00f1as?', aria_label.replace(".", ""))
                 if review_match:
                     review_count = int(review_match.group(1))
             
@@ -461,6 +793,17 @@ class MapsScraper:
                 if rating_val:
                     rating = self._parse_rating(await rating_val.inner_text())
             
+            # Better review count extraction from "236 reseñas" div
+            if review_count == 0:
+                review_divs = await self.page.query_selector_all('div.fontBodySmall')
+                for div in review_divs:
+                    text = await div.inner_text()
+                    if 'rese\u00f1a' in text.lower():
+                        review_count = self._parse_review_count(text)
+                        if review_count > 0:
+                            break
+            
+            # Fallback to span.UY7F9
             if review_count == 0:
                 review_el = await self.page.query_selector('span.UY7F9')
                 if review_el:
@@ -469,15 +812,22 @@ class MapsScraper:
             
             # Extract category
             category = None
-            cat_el = await self.page.query_selector('button[jsaction*="category"]')
-            if cat_el:
-                category = await cat_el.inner_text()
+            for cat_sel in ['button[jsaction*="category"]', 'button.DkEaL']:
+                cat_el = await self.page.query_selector(cat_sel)
+                if cat_el:
+                    category = await cat_el.inner_text()
+                    if category:
+                        break
             
             # Extract address
             address = None
-            addr_el = await self.page.query_selector('button[data-item-id="address"]')
+            addr_el = await self.page.query_selector('button[data-item-id="address"] div.Io6YTe')
             if addr_el:
                 address = await addr_el.inner_text()
+            if not address:
+                addr_el = await self.page.query_selector('button[data-item-id="address"]')
+                if addr_el:
+                    address = await addr_el.inner_text()
             
             # Extract phone
             phone = None
@@ -486,25 +836,383 @@ class MapsScraper:
                 phone = await phone_el.inner_text()
                 phone = re.sub(r'[^\d+\-\s()]', '', phone)
             
-            # Check for website
+            # ========================================
+            # ULTRA DEEP DATA EXTRACTION
+            # ========================================
+            
+            # 1. PRICE DATA (range, per person, voters, histogram)
+            price_range = None
+            price_level = 0
+            price_per_person = None
+            price_voters = 0
+            price_histogram = {}
+            
+            # Basic price range from header
+            for price_sel in ['span.mgr77e span', 'span.mgr77e']:
+                price_el = await self.page.query_selector(price_sel)
+                if price_el:
+                    price_text = await price_el.inner_text()
+                    price_range = self._clean_price_range(price_text)
+                    price_level = self._estimate_price_level(price_range)
+                    if price_range:
+                        break
+            
+            # Price per person with voters ("₲ 20.000-40.000 por persona" + "Notificado por 79 personas")
+            price_per_person_el = await self.page.query_selector('div.MNVeJb div')
+            if price_per_person_el:
+                ppp_text = await price_per_person_el.inner_text()
+                if 'por persona' in ppp_text.lower():
+                    price_per_person = self._clean_price_range(ppp_text.split('por persona')[0])
+            
+            voters_el = await self.page.query_selector('div.BfVpR')
+            if voters_el:
+                voters_text = await voters_el.inner_text()
+                voters_match = re.search(r'(\d+)\s*personas?', voters_text)
+                if voters_match:
+                    price_voters = int(voters_match.group(1))
+            
+            # Price histogram
+            histogram_rows = await self.page.query_selector_all('table[aria-label*="Histograma"] tr, table.rqRH4d tr')
+            for row in histogram_rows:
+                range_el = await row.query_selector('td.fsAi0e')
+                percent_el = await row.query_selector('span.xYsBQe')
+                if range_el:
+                    range_text = self._clean_price_range(await range_el.inner_text())
+                    percent = 0
+                    if percent_el:
+                        style = await percent_el.get_attribute("style") or ""
+                        percent_match = re.search(r'width:\s*(\d+)%', style)
+                        if percent_match:
+                            percent = int(percent_match.group(1))
+                    price_histogram[range_text] = percent
+            
+            # 2. SERVICE OPTIONS (dine_in, takeout, delivery)
+            service_options = {"dine_in": False, "takeout": False, "delivery": False, "curbside_pickup": False}
+            service_label_map = {
+                "consumo en el lugar": "dine_in", "comer en el lugar": "dine_in",
+                "comida para llevar": "takeout", "para llevar": "takeout",
+                "entrega a domicilio": "delivery", "env\u00edo a domicilio": "delivery",
+                "recogida en la acera": "curbside_pickup",
+            }
+            
+            service_els = await self.page.query_selector_all('div.LTs0Rc[role="group"], div.E0DTEd div.LTs0Rc')
+            for el in service_els:
+                aria = await el.get_attribute("aria-label") or ""
+                aria_lower = aria.lower()
+                for label_text, service_key in service_label_map.items():
+                    if label_text in aria_lower:
+                        service_options[service_key] = "ofrece" in aria_lower
+            
+            # 3. ACCESSIBILITY
+            accessibility = []
+            access_els = await self.page.query_selector_all('span.wmQCje[aria-label]')
+            for el in access_els:
+                aria = await el.get_attribute("aria-label") or ""
+                if "silla de ruedas" in aria.lower() or "wheelchair" in aria.lower():
+                    accessibility.append("wheelchair_accessible")
+            
+            # 4. OPENING HOURS
+            opening_hours = {}
+            hours_rows = await self.page.query_selector_all('table.eK4R0e tbody tr.y0skZc')
+            for row in hours_rows:
+                day_el = await row.query_selector('td.ylH6lf div')
+                time_el = await row.query_selector('td.mxowUb')
+                if day_el and time_el:
+                    day_text = await day_el.inner_text()
+                    time_text = (await time_el.get_attribute("aria-label")) or (await time_el.inner_text())
+                    if day_text and time_text:
+                        day_key, hours_value = self._parse_hours_text(day_text, time_text)
+                        opening_hours[day_key] = hours_value
+            
+            # Open/Closed status
+            is_open_now = None
+            open_status_text = None
+            status_el = await self.page.query_selector('span.ZDu9vd')
+            if status_el:
+                open_status_text = await status_el.inner_text()
+                is_open_now = "abierto" in open_status_text.lower() if open_status_text else None
+            
+            # 5. POPULAR TIMES (Horas Punta)
+            popular_times = {}
+            pop_times_container = await self.page.query_selector('div.UmE4Qe[aria-label*="punta"]')
+            if pop_times_container:
+                # Get all the bar charts for each day
+                day_charts = await self.page.query_selector_all('div.g2BVhd')
+                day_names = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+                
+                for i, chart in enumerate(day_charts):
+                    if i < len(day_names):
+                        day_key = day_names[i]
+                        popular_times[day_key] = {}
+                        bars = await chart.query_selector_all('div.dpoVLd[role="img"]')
+                        for bar in bars:
+                            aria = await bar.get_attribute("aria-label") or ""
+                            hour, percent = self._parse_popular_times_label(aria)
+                            if hour is not None:
+                                popular_times[day_key][str(hour)] = percent
+            
+            # 6. ORDER LINK
+            order_link = None
+            order_provider = None
+            order_el = await self.page.query_selector('a[data-item-id="action:4"]')
+            if order_el:
+                order_link = await order_el.get_attribute("href")
+                order_provider = self._classify_order_provider(order_link)
+            
+            # 7. MENU LINK
+            menu_link = None
+            menu_el = await self.page.query_selector('a[data-item-id="menu"], button[aria-label="Carta"]')
+            if menu_el:
+                menu_link = await menu_el.get_attribute("href")
+            
+            # 8. RESERVE LINK
+            reserve_link = None
+            reserve_el = await self.page.query_selector('a[data-item-id="reserve"]')
+            if reserve_el:
+                reserve_link = await reserve_el.get_attribute("href")
+            
+            # 9. PLUS CODE
+            plus_code = None
+            plus_el = await self.page.query_selector('button[data-item-id="oloc"] div.Io6YTe')
+            if plus_el:
+                plus_code = await plus_el.inner_text()
+            
+            # 10. WEBSITE & SOCIAL MEDIA
             website_url = None
             website_status = "none"
             has_website = False
+            social_media = {}
             
             website_el = await self.page.query_selector('a[data-item-id="authority"]')
             if website_el:
-                website_url = await website_el.get_attribute("href")
-                
-                if website_url:
-                    if self._is_social_media_url(website_url):
+                link_url = await website_el.get_attribute("href")
+                if link_url:
+                    social_platform = self._classify_social_media(link_url)
+                    if social_platform:
+                        social_media[social_platform] = link_url
                         website_status = "social_only"
-                        has_website = False
                     else:
-                        # Could add dead link check here
+                        website_url = link_url
                         website_status = "active"
                         has_website = True
             
-            # Extract photos count
+            # 11. PHOTO CATEGORIES
+            photo_categories = []
+            photo_cat_els = await self.page.query_selector_all('div.fp2VUc button.K4UgGe')
+            for el in photo_cat_els:
+                label = await el.get_attribute("aria-label")
+                if label and label not in ['Foto siguiente', 'Foto anterior']:
+                    photo_categories.append(label)
+            
+            # Also get from span.zaTlhd inside photo buttons
+            if not photo_categories:
+                cat_labels = await self.page.query_selector_all('div.ofKBgf span.zaTlhd')
+                for el in cat_labels:
+                    text = await el.inner_text()
+                    if text and text not in photo_categories:
+                        photo_categories.append(text)
+            
+            # 12. REVIEW TOPICS/KEYWORDS
+            review_topics = {}
+            topic_els = await self.page.query_selector_all('div[role="radiogroup"] button.e2moi[aria-label]')
+            for el in topic_els:
+                aria = await el.get_attribute("aria-label") or ""
+                if "mencionado en" in aria.lower():
+                    topic, count = self._parse_review_topic(aria)
+                    if topic and count > 0:
+                        review_topics[topic] = count
+            
+            # 13. RATING DISTRIBUTION
+            rating_distribution = {}
+            dist_rows = await self.page.query_selector_all('tr.BHOKXe')
+            for row in dist_rows:
+                aria = await row.get_attribute("aria-label") or ""
+                stars, count = self._parse_rating_distribution(aria)
+                if stars > 0:
+                    rating_distribution[str(stars)] = count
+            
+            # 14. TOP REVIEWS (max 10 for rich content)
+            reviews = []
+            review_cards = await self.page.query_selector_all('div.jftiEf[data-review-id]')
+            for card in review_cards[:10]:
+                try:
+                    # Get review ID
+                    review_id = await card.get_attribute("data-review-id") or ""
+                    
+                    # Author name
+                    author_el = await card.query_selector('div.d4r55')
+                    author = await author_el.inner_text() if author_el else "Anónimo"
+                    
+                    # Author profile info: "Local Guide · 70 reseñas · 519 fotos"
+                    author_info_el = await card.query_selector('div.RfnDt')
+                    author_info = await author_info_el.inner_text() if author_info_el else ""
+                    
+                    # Parse author stats
+                    is_local_guide = "local guide" in author_info.lower()
+                    author_reviews = 0
+                    author_photos = 0
+                    
+                    reviews_match = re.search(r'(\d+)\s*reseñas?', author_info)
+                    if reviews_match:
+                        author_reviews = int(reviews_match.group(1))
+                    
+                    photos_match = re.search(r'(\d+)\s*fotos?', author_info)
+                    if photos_match:
+                        author_photos = int(photos_match.group(1))
+                    
+                    # Author profile URL
+                    profile_btn = await card.query_selector('button.al6Kxe[data-href]')
+                    author_profile_url = ""
+                    if profile_btn:
+                        author_profile_url = await profile_btn.get_attribute("data-href") or ""
+                    
+                    # Author avatar photo
+                    avatar_el = await card.query_selector('img.NBa7we')
+                    author_avatar = ""
+                    if avatar_el:
+                        author_avatar = await avatar_el.get_attribute("src") or ""
+                    
+                    # Rating stars
+                    rating_el = await card.query_selector('span.kvMYJc')
+                    review_rating = 0
+                    if rating_el:
+                        aria = await rating_el.get_attribute("aria-label") or ""
+                        stars_match = re.search(r'(\d+)\s*estrellas?', aria)
+                        if stars_match:
+                            review_rating = int(stars_match.group(1))
+                    
+                    # Date
+                    date_el = await card.query_selector('span.rsqaWe')
+                    review_date = await date_el.inner_text() if date_el else ""
+                    
+                    # Review text
+                    text_el = await card.query_selector('span.wiI7pd')
+                    review_text = await text_el.inner_text() if text_el else ""
+                    
+                    # Review photos (up to 5)
+                    review_photos = []
+                    photo_btns = await card.query_selector_all('button.Tya61d')
+                    for btn in photo_btns[:5]:
+                        style = await btn.get_attribute("style") or ""
+                        url_match = re.search(r'url\(["\']?([^"\']+)["\']?\)', style)
+                        if url_match:
+                            review_photos.append(url_match.group(1))
+                    
+                    reviews.append({
+                        "review_id": review_id,
+                        "author": author,
+                        "author_avatar": author_avatar,
+                        "author_profile_url": author_profile_url,
+                        "is_local_guide": is_local_guide,
+                        "author_reviews_count": author_reviews,
+                        "author_photos_count": author_photos,
+                        "rating": review_rating,
+                        "date": review_date,
+                        "text": review_text[:800],  # More text for richer content
+                        "photos": review_photos
+                    })
+                except Exception as e:
+                    logger.debug(f"Error parsing review: {e}")
+                    continue
+            
+            # 15. CUSTOMER UPDATES
+            customer_updates = []
+            update_els = await self.page.query_selector_all('button.wjCxie')
+            for el in update_els[:2]:
+                try:
+                    text_el = await el.query_selector('div.ZXMsO')
+                    date_el = await el.query_selector('div.jrtH8d')
+                    
+                    update_text = await text_el.inner_text() if text_el else ""
+                    update_date = await date_el.inner_text() if date_el else ""
+                    
+                    if update_text:
+                        customer_updates.append({
+                            "text": update_text[:300],
+                            "date": update_date
+                        })
+                except Exception:
+                    continue
+            
+            # 16. BUSINESS ATTRIBUTES FROM "INFORMACIÓN" TAB
+            # These are structured attributes like Accessibility, Payments, Parking, etc.
+            offerings = []
+            dining_options = []
+            amenities = []
+            planning = []
+            payments = []
+            parking = []
+            
+            # Try to click on the "Información" tab to load these attributes
+            try:
+                info_tab = await self.page.query_selector('button[aria-label*="Información sobre"], button[data-tab-index="3"]')
+                if info_tab:
+                    await info_tab.click()
+                    await self._random_delay(0.5)
+                    
+                    # Wait for info content to load
+                    await self.page.wait_for_selector('div.iP2t7d.fontBodyMedium', timeout=3000)
+                    
+                    # Extract all attribute sections
+                    info_sections = await self.page.query_selector_all('div.iP2t7d.fontBodyMedium')
+                    
+                    for section in info_sections:
+                        # Get section title
+                        title_el = await section.query_selector('h2.iL3Qke')
+                        if not title_el:
+                            continue
+                        title = (await title_el.inner_text()).lower()
+                        
+                        # Get all items in this section
+                        items = []
+                        item_els = await section.query_selector_all('li.hpLkke span[aria-label]')
+                        for item_el in item_els:
+                            # Get the visible text (shorter version)
+                            item_text = await item_el.inner_text()
+                            if item_text:
+                                items.append(item_text.strip())
+                        
+                        # Map section to appropriate field
+                        if 'accesibilidad' in title:
+                            accessibility.extend(items)
+                        elif 'opciones de servicio' in title:
+                            # Already handled by service_options, but add any extras
+                            for item in items:
+                                item_lower = item.lower()
+                                if 'domicilio' in item_lower or 'delivery' in item_lower:
+                                    service_options['delivery'] = True
+                                elif 'llevar' in item_lower or 'takeout' in item_lower:
+                                    service_options['takeout'] = True
+                                elif 'consumo' in item_lower or 'lugar' in item_lower or 'dine' in item_lower:
+                                    service_options['dine_in'] = True
+                                elif 'retiro' in item_lower:
+                                    service_options['curbside_pickup'] = True
+                        elif 'qué ofrece' in title or 'que ofrece' in title:
+                            offerings.extend(items)
+                        elif 'opciones del local' in title:
+                            dining_options.extend(items)
+                        elif 'servicios' in title:
+                            amenities.extend(items)
+                        elif 'planificación' in title or 'planificacion' in title:
+                            planning.extend(items)
+                        elif 'pagos' in title:
+                            payments.extend(items)
+                        elif 'estacionamiento' in title:
+                            parking.extend(items)
+                    
+                    # Go back to overview tab
+                    overview_tab = await self.page.query_selector('button[data-tab-index="0"]')
+                    if overview_tab:
+                        await overview_tab.click()
+                        await self._random_delay(0.3)
+                        
+            except Exception as e:
+                logger.debug(f"Could not extract Info tab: {e}")
+            
+            # ========================================
+            # EXTRACT PHOTOS AND COORDINATES
+            # ========================================
+            
             photo_count = 0
             photo_urls = []
             photos_btn = await self.page.query_selector('button[jsaction*="photos"]')
@@ -514,19 +1222,22 @@ class MapsScraper:
                 if photo_match:
                     photo_count = int(photo_match.group(1))
             
-            # Get thumbnail images
             img_elements = await self.page.query_selector_all('button[jsaction*="heroHeaderImage"] img, img[decoding="async"]')
             for img in img_elements[:5]:
                 src = await img.get_attribute("src")
                 if src and "googleusercontent" in src:
                     photo_urls.append(src)
             
-            # Extract coordinates from URL
+            # Coordinates from URL
             lat, lng = None, None
             coord_match = re.search(r'@(-?\d+\.\d+),(-?\d+\.\d+)', current_url)
             if coord_match:
                 lat = float(coord_match.group(1))
                 lng = float(coord_match.group(2))
+            
+            # ========================================
+            # BUILD BUSINESS OBJECT
+            # ========================================
             
             business = ScrapedBusiness(
                 name=name.strip(),
@@ -543,9 +1254,50 @@ class MapsScraper:
                 has_website=has_website,
                 website_url=website_url,
                 website_status=website_status,
+                # Price Data
+                price_range=price_range,
+                price_level=price_level,
+                price_per_person=price_per_person,
+                price_voters=price_voters,
+                price_histogram=price_histogram,
+                # Services & Accessibility
+                service_options=service_options,
+                accessibility=accessibility,
+                # Business Attributes
+                offerings=offerings,
+                dining_options=dining_options,
+                amenities=amenities,
+                planning=planning,
+                payments=payments,
+                parking=parking,
+                # Hours & Status
+                opening_hours=opening_hours,
+                is_open_now=is_open_now,
+                open_status_text=open_status_text,
+                # Popular Times
+                popular_times=popular_times,
+                # Third-party Links
+                order_link=order_link,
+                order_provider=order_provider,
+                menu_link=menu_link,
+                reserve_link=reserve_link,
+                # Social Media
+                social_media=social_media,
+                # Location
+                plus_code=plus_code,
                 latitude=lat,
                 longitude=lng,
+                # Photos
+                photo_categories=photo_categories,
+                # Reviews & Topics
+                review_topics=review_topics,
+                rating_distribution=rating_distribution,
+                reviews=reviews,
+                # Updates
+                customer_updates=customer_updates,
             )
+            
+            logger.debug(f"ULTRA deep data: price_histogram={len(price_histogram)}, reviews={len(reviews)}, topics={len(review_topics)}, popular_times={len(popular_times)}")
             
             # Close panel and go back
             await self.page.keyboard.press("Escape")

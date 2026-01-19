@@ -284,5 +284,219 @@
             "Envío a domicilio",
             "Plantas de interior"
         ]
+    },
+    "tire_shop": {
+        "name": "Tire Shop",
+        "name_es": "Gomería",
+        "google_search_terms": [
+            "gomería",
+            "gomas",
+            "neumáticos",
+            "llantas",
+            "cambio de gomas"
+        ],
+        "conversion_weight": 1.1,
+        "default_template": "services/automotive",
+        "suggested_services": [
+            "Venta de neumáticos",
+            "Cambio de gomas",
+            "Balanceo y alineación",
+            "Reparación de pinchazos",
+            "Neumáticos nuevos y usados"
+        ]
+    },
+    "window_tinting": {
+        "name": "Window Tinting",
+        "name_es": "Polarizados",
+        "google_search_terms": [
+            "polarizados",
+            "polarizado de autos",
+            "window tinting",
+            "láminas de seguridad"
+        ],
+        "conversion_weight": 1.1,
+        "default_template": "services/automotive",
+        "suggested_services": [
+            "Polarizado automotriz",
+            "Polarizado residencial",
+            "Láminas de seguridad",
+            "Protección UV",
+            "Garantía en instalación"
+        ]
+    },
+    "car_detailing": {
+        "name": "Car Detailing",
+        "name_es": "Detailing / Lavadero de Autos",
+        "google_search_terms": [
+            "detailing",
+            "car detailing",
+            "lavadero de autos",
+            "lavado de autos",
+            "limpieza automotriz"
+        ],
+        "conversion_weight": 1.0,
+        "default_template": "services/automotive",
+        "suggested_services": [
+            "Lavado completo",
+            "Detailing interior",
+            "Pulido y encerado",
+            "Limpieza de tapizados",
+            "Tratamiento cerámico"
+        ]
+    },
+    "motorcycle_parts": {
+        "name": "Motorcycle Parts",
+        "name_es": "Repuestos de Motos",
+        "google_search_terms": [
+            "repuestos de motos",
+            "accesorios para motos",
+            "venta de repuestos motos",
+            "motorepuestos"
+        ],
+        "conversion_weight": 1.0,
+        "default_template": "retail/boutique",
+        "suggested_services": [
+            "Repuestos originales",
+            "Accesorios para motos",
+            "Lubricantes y aceites",
+            "Cascos y equipamiento",
+            "Instalación de accesorios"
+        ]
+    },
+    "car_rental": {
+        "name": "Car Rental",
+        "name_es": "Alquiler de Vehículos",
+        "google_search_terms": [
+            "alquiler de autos",
+            "rent a car",
+            "alquiler de vehículos",
+            "renta de autos"
+        ],
+        "conversion_weight": 1.2,
+        "default_template": "services/professional",
+        "suggested_services": [
+            "Alquiler diario y semanal",
+            "Vehículos con chofer",
+            "Traslados al aeropuerto",
+            "Flota de vehículos nuevos",
+            "Seguro incluido"
+        ]
+    },
+    "event_venue": {
+        "name": "Event Venue",
+        "name_es": "Salón de Eventos",
+        "google_search_terms": [
+            "salón de eventos",
+            "salón de fiestas",
+            "eventos",
+            "quinceañeras",
+            "bodas"
+        ],
+        "conversion_weight": 1.3,
+        "default_template": "services/professional",
+        "suggested_services": [
+            "Salón climatizado",
+            "Catering incluido",
+            "Decoración personalizada",
+            "Sonido e iluminación",
+            "Estacionamiento privado"
+        ]
+    },
+    "party_rental": {
+        "name": "Party Rental",
+        "name_es": "Alquiler de Sillas y Mesas",
+        "google_search_terms": [
+            "alquiler de sillas",
+            "alquiler de mesas",
+            "alquiler para eventos",
+            "mobiliario para fiestas"
+        ],
+        "conversion_weight": 1.0,
+        "default_template": "services/home-services",
+        "suggested_services": [
+            "Sillas y mesas",
+            "Manteles y decoración",
+            "Vajilla y cristalería",
+            "Carpas y toldos",
+            "Entrega y retiro incluido"
+        ]
+    },
+    "catering": {
+        "name": "Catering",
+        "name_es": "Servicio de Catering",
+        "google_search_terms": [
+            "catering",
+            "servicio de catering",
+            "confitería",
+            "lunch para eventos",
+            "comida para fiestas"
+        ],
+        "conversion_weight": 1.2,
+        "default_template": "restaurant/modern-food",
+        "suggested_services": [
+            "Menús personalizados",
+            "Servicio completo",
+            "Mozos profesionales",
+            "Bocaditos y canapés",
+            "Tortas y postres"
+        ]
+    },
+    "daycare": {
+        "name": "Daycare",
+        "name_es": "Guardería / Jardín de Infantes",
+        "google_search_terms": [
+            "guardería",
+            "jardín de infantes",
+            "maternal",
+            "cuidado de niños",
+            "pre-escolar"
+        ],
+        "conversion_weight": 1.3,
+        "default_template": "services/professional",
+        "suggested_services": [
+            "Cuidado diario",
+            "Estimulación temprana",
+            "Personal capacitado",
+            "Alimentación incluida",
+            "Horario extendido"
+        ]
+    },
+    "driving_school": {
+        "name": "Driving School",
+        "name_es": "Escuela de Manejo",
+        "google_search_terms": [
+            "escuela de manejo",
+            "autoescuela",
+            "clases de manejo",
+            "licencia de conducir"
+        ],
+        "conversion_weight": 1.1,
+        "default_template": "services/professional",
+        "suggested_services": [
+            "Clases teóricas",
+            "Clases prácticas",
+            "Vehículos con doble comando",
+            "Trámites de licencia",
+            "Horarios flexibles"
+        ]
+    },
+    "senior_residence": {
+        "name": "Senior Residence",
+        "name_es": "Residencia de Adultos Mayores",
+        "google_search_terms": [
+            "residencia adultos mayores",
+            "hogar de ancianos",
+            "geriátrico",
+            "casa de reposo"
+        ],
+        "conversion_weight": 1.4,
+        "default_template": "services/professional",
+        "suggested_services": [
+            "Atención 24/7",
+            "Personal médico",
+            "Actividades recreativas",
+            "Alimentación especializada",
+            "Habitaciones privadas"
+        ]
     }
 }

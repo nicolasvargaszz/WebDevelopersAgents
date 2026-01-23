@@ -17,6 +17,7 @@ import json
 import os
 import re
 import shutil
+import glob
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional, List, Dict
@@ -36,6 +37,7 @@ BASE_DIR = Path(__file__).parent.parent.parent
 TEMPLATES_DIR = BASE_DIR / "templates"
 OUTPUT_DIR = BASE_DIR / "generated_sites"
 DATA_FILE = BASE_DIR / "leads.json"
+INTAKE_DATA_DIR = BASE_DIR / "intake_data"
 
 
 # ===========================================
@@ -726,6 +728,18 @@ class BusinessData:
     faqs: list = field(default_factory=list)
     cta_text: str = "Reservar Ahora"
     
+    # Intake data - Client personalization
+    intake_data: dict = field(default_factory=dict)
+    brand_colors: dict = field(default_factory=dict)
+    business_identity: dict = field(default_factory=dict)
+    custom_services: list = field(default_factory=list)
+    promotions: list = field(default_factory=list)
+    social_media: dict = field(default_factory=dict)
+    contact_preferences: dict = field(default_factory=dict)
+    logo_url: str = ""
+    custom_photos: list = field(default_factory=list)
+    video_url: str = ""
+    
     # Computed
     whatsapp_link: str = ""
     phone_link: str = ""
@@ -734,15 +748,112 @@ class BusinessData:
     gallery_images: list = field(default_factory=list)
     theme: dict = field(default_factory=dict)
     icons: dict = field(default_factory=dict)
+    custom_css: str = ""
     
     def __post_init__(self):
+        self._apply_intake_data()
         self._compute_links()
         self._select_theme()
+        self._apply_custom_colors()
         self._select_hero_image()
         self._prepare_gallery()
         self._generate_content()
         self._select_features()
         self.icons = SVG_ICONS
+    
+    def _apply_intake_data(self):
+        """Apply intake form data to business properties"""
+        if not self.intake_data:
+            return
+        
+        # Brand colors
+        self.brand_colors = self.intake_data.get('brand_colors', {})
+        
+        # Business identity (vision, mission, values, etc.)
+        self.business_identity = self.intake_data.get('business_identity', {})
+        
+        # Custom services from intake
+        self.custom_services = self.intake_data.get('custom_services', [])
+        
+        # Promotions
+        offers = self.intake_data.get('special_offers', {})
+        self.promotions = offers.get('current_promotions', [])
+        
+        # Media assets
+        media = self.intake_data.get('media_assets', {})
+        self.logo_url = media.get('logo_url') or ''
+        self.custom_photos = media.get('custom_photos', [])
+        self.video_url = media.get('video_url') or ''
+        
+        # Social media
+        self.social_media = {
+            'instagram': media.get('instagram_handle') or '',
+            'facebook': media.get('facebook_page') or '',
+            'tiktok': media.get('tiktok_handle') or '',
+        }
+        
+        # Contact preferences
+        self.contact_preferences = self.intake_data.get('contact_preferences', {})
+        
+        # Override phone with WhatsApp number if provided
+        if self.contact_preferences.get('whatsapp_number'):
+            self.phone = self.contact_preferences['whatsapp_number']
+    
+    def _apply_custom_colors(self):
+        """Generate custom CSS variables from brand colors and override theme colors"""
+        if not self.brand_colors:
+            return
+        
+        primary = self.brand_colors.get('primary', '')
+        secondary = self.brand_colors.get('secondary', '')
+        accent = self.brand_colors.get('accent', '')
+        
+        if primary or secondary or accent:
+            # Create CSS with both variables and direct overrides for key elements
+            self.custom_css = f"""
+    :root {{
+        --color-primary: {primary or '#2563eb'};
+        --color-secondary: {secondary or '#7c3aed'};
+        --color-accent: {accent or '#f59e0b'};
+    }}
+    
+    /* Brand Color Utility Classes */
+    .btn-custom {{ background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)) !important; }}
+    .text-custom-primary {{ color: var(--color-primary) !important; }}
+    .text-custom-accent {{ color: var(--color-accent) !important; }}
+    .border-custom {{ border-color: var(--color-primary) !important; }}
+    .bg-custom-gradient {{ background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)) !important; }}
+    .bg-custom-primary {{ background-color: var(--color-primary) !important; }}
+    .bg-custom-accent {{ background-color: var(--color-accent) !important; }}
+    
+    /* Override Theme Accent Colors with Brand Colors */
+    .bg-violet-500, .bg-violet-600, .bg-emerald-500, .bg-emerald-600, 
+    .bg-amber-500, .bg-amber-600, .bg-rose-500, .bg-rose-600,
+    .bg-blue-500, .bg-blue-600, .bg-cyan-500, .bg-cyan-600 {{
+        background-color: var(--color-primary) !important;
+    }}
+    
+    .from-violet-500, .from-emerald-500, .from-amber-500, .from-rose-500, .from-blue-500, .from-cyan-500 {{
+        --tw-gradient-from: var(--color-primary) !important;
+    }}
+    
+    .to-purple-600, .to-teal-600, .to-orange-600, .to-pink-600, .to-indigo-600, .to-blue-600 {{
+        --tw-gradient-to: var(--color-secondary) !important;
+    }}
+    
+    .text-violet-400, .text-emerald-400, .text-amber-400, .text-rose-400, .text-blue-400, .text-cyan-400 {{
+        color: var(--color-primary) !important;
+    }}
+    
+    .border-violet-500\\/30, .border-emerald-500\\/30, .border-amber-500\\/30, 
+    .border-rose-500\\/30, .border-blue-500\\/30, .border-cyan-500\\/30 {{
+        border-color: color-mix(in srgb, var(--color-primary) 30%, transparent) !important;
+    }}
+    
+    .hover\\:border-violet-500\\/50:hover, .hover\\:border-emerald-500\\/50:hover {{
+        border-color: color-mix(in srgb, var(--color-primary) 50%, transparent) !important;
+    }}
+    """
     
     def _compute_links(self):
         """Generate WhatsApp, phone, and maps links"""
@@ -794,18 +905,34 @@ class BusinessData:
         self.hero_image = STOCK_IMAGES["default"]
     
     def _prepare_gallery(self):
-        """Prepare Google photos for gallery section"""
+        """Prepare Google photos for gallery section, prioritizing custom photos"""
+        gallery = []
+        
+        # First add custom photos from intake (priority)
+        if self.custom_photos:
+            gallery.extend(self.custom_photos[:4])
+        
+        # Then add Google Maps photos
         if self.photo_urls:
-            # Get up to 6 photos in higher resolution
-            self.gallery_images = [
+            google_photos = [
                 url.replace('w80-', 'w600-').replace('h142-', 'h400-')
                 for url in self.photo_urls[:6]
             ]
+            gallery.extend(google_photos)
+        
+        # Limit to 8 images total
+        self.gallery_images = gallery[:8]
     
     def _generate_content(self):
-        """Generate fallback content if not provided by CopyWriter"""
-        # Use backstory as description if we have it
-        if self.backstory and not self.description:
+        """Generate fallback content if not provided by CopyWriter or Intake"""
+        # Priority: Intake vision > backstory > generated
+        if self.business_identity.get('vision') and not self.tagline:
+            self.tagline = self.business_identity['vision']
+        
+        # Use founding story or backstory as description
+        if self.business_identity.get('founding_story'):
+            self.description = self.business_identity['founding_story']
+        elif self.backstory and not self.description:
             self.description = self.backstory
         
         if not self.headline:
@@ -837,10 +964,27 @@ class BusinessData:
                 f"en {self.city}. Con años de experiencia y un equipo comprometido, garantizamos "
                 f"una experiencia excepcional para cada uno de nuestros clientes."
             )
+        
+        # Add mission if available
+        if self.business_identity.get('mission'):
+            self.customer_promise = self.business_identity['mission']
     
     def _select_features(self):
-        """Select category-appropriate features - only if services not provided"""
-        # If we have services from CopyWriter, convert them to features format
+        """Select features - prioritizing custom services from intake"""
+        # Priority 1: Custom services from intake form
+        if self.custom_services:
+            self.features = [
+                {
+                    "icon": "star",
+                    "title": s.get("name", "Servicio"),
+                    "desc": s.get("description", "")[:100],
+                    "price": s.get("price", "")
+                }
+                for s in self.custom_services[:6]
+            ]
+            return
+        
+        # Priority 2: Services from CopyWriter
         if self.services:
             self.features = [
                 {"icon": s.get("icon", "star"), "title": s["title"], "desc": s["description"][:100]}
@@ -848,6 +992,7 @@ class BusinessData:
             ]
             return
         
+        # Priority 3: Category-based default features
         category_lower = (self.category or '').lower()
         
         for key, features in CATEGORY_FEATURES.items():
@@ -894,6 +1039,14 @@ def create_app(business: BusinessData = None) -> Flask:
 # LEAD DATA LOADING
 # ===========================================
 
+def slugify(text: str) -> str:
+    """Convert text to URL-friendly slug"""
+    text = text.lower().strip()
+    text = re.sub(r'[^\w\s-]', '', text)
+    text = re.sub(r'[-\s]+', '-', text)
+    return text[:50]
+
+
 def load_leads() -> list:
     """Load leads from JSON file"""
     if not DATA_FILE.exists():
@@ -901,6 +1054,75 @@ def load_leads() -> list:
     
     with open(DATA_FILE, 'r', encoding='utf-8') as f:
         return json.load(f)
+
+
+def load_intake_data(filepath: Path = None, business_name: str = None, google_place_id: str = None) -> Optional[dict]:
+    """
+    Load intake form data for a business.
+    
+    Args:
+        filepath: Direct path to intake JSON file
+        business_name: Business name to search for in intake_data folder
+        google_place_id: Google Place ID to search for in intake files
+    
+    Returns:
+        Intake data dict or None if not found
+    """
+    if filepath:
+        if filepath.exists():
+            with open(filepath, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        return None
+    
+    if not INTAKE_DATA_DIR.exists():
+        return None
+    
+    # Search by google_place_id first (most accurate)
+    if google_place_id:
+        for intake_file in INTAKE_DATA_DIR.glob("*.json"):
+            try:
+                with open(intake_file, 'r', encoding='utf-8') as f:
+                    data = json.load(f)
+                    if data.get('business_id') == google_place_id:
+                        return data
+            except:
+                continue
+    
+    # Fallback: search by business name
+    if business_name:
+        safe_name = slugify(business_name)
+        matches = list(INTAKE_DATA_DIR.glob(f"*{safe_name}*.json"))
+        
+        if matches:
+            # Return most recent file
+            latest = max(matches, key=lambda p: p.stat().st_mtime)
+            with open(latest, 'r', encoding='utf-8') as f:
+                return json.load(f)
+    
+    return None
+
+
+def find_lead_by_name(name: str) -> Optional[dict]:
+    """Find a lead by business name (partial match)"""
+    leads = load_leads()
+    name_lower = name.lower()
+    
+    for lead in leads:
+        if name_lower in lead.get('name', '').lower():
+            return lead
+    
+    return None
+
+
+def find_lead_by_google_id(google_place_id: str) -> Optional[dict]:
+    """Find a lead by Google Place ID"""
+    leads = load_leads()
+    
+    for lead in leads:
+        if lead.get('google_place_id') == google_place_id:
+            return lead
+    
+    return None
 
 
 # Global CopyWriter instance
@@ -914,14 +1136,27 @@ def get_copy_writer() -> CopyWriter:
     return _copy_writer
 
 
-def create_business_from_lead(lead: dict) -> BusinessData:
-    """Convert a lead dict to BusinessData object with rich AI-generated content"""
+def create_business_from_lead(lead: dict, intake_data: dict = None) -> BusinessData:
+    """
+    Convert a lead dict to BusinessData object with rich AI-generated content.
+    
+    Args:
+        lead: Business data from Google Maps scraper
+        intake_data: Optional client intake form data for personalization
+    
+    Returns:
+        BusinessData object ready for template rendering
+    """
     address = lead.get('address') or ''
     phone = lead.get('phone') or ''
     
     # Generate rich content using CopyWriter
     writer = get_copy_writer()
     content = writer.generate_content(lead)
+    
+    # Try to auto-load intake data if not provided
+    if not intake_data:
+        intake_data = load_intake_data(business_name=lead.get('name'))
     
     return BusinessData(
         name=lead.get('name') or 'Mi Negocio',
@@ -942,7 +1177,53 @@ def create_business_from_lead(lead: dict) -> BusinessData:
         customer_promise=content.get('customer_promise', ''),
         faqs=content.get('faqs', []),
         cta_text=content.get('cta_text', 'Contáctanos'),
+        # Intake data for personalization
+        intake_data=intake_data or {},
     )
+
+
+def create_business_from_intake(intake_filepath: Path) -> BusinessData:
+    """
+    Create BusinessData primarily from intake form, supplementing with leads data.
+    
+    Args:
+        intake_filepath: Path to intake JSON file
+    
+    Returns:
+        BusinessData object with intake data as primary source
+    """
+    with open(intake_filepath, 'r', encoding='utf-8') as f:
+        intake_data = json.load(f)
+    
+    business_name = intake_data.get('business_name', '')
+    google_place_id = intake_data.get('business_id')  # This is the google_place_id
+    
+    # Try to find matching lead data (prioritize google_place_id)
+    lead = None
+    if google_place_id:
+        lead = find_lead_by_google_id(google_place_id)
+    
+    if not lead and business_name:
+        lead = find_lead_by_name(business_name)
+    
+    if lead:
+        # Use lead as base, apply intake on top
+        return create_business_from_lead(lead, intake_data)
+    else:
+        # Create from intake only
+        return BusinessData(
+            name=business_name or 'Mi Negocio',
+            category=intake_data.get('category', ''),
+            address='',
+            city='Asunción',
+            phone='',
+            rating=0,
+            review_count=0,
+            photo_urls=[],
+            latitude=-25.2867,
+            longitude=-57.647,
+            intake_data=intake_data,
+        )
 
 
 # ===========================================
@@ -967,14 +1248,6 @@ def generate_static_site(business: BusinessData, output_path: Path) -> Path:
         f.write(html_content)
     
     return output_path
-
-
-def slugify(text: str) -> str:
-    """Convert text to URL-friendly slug"""
-    text = text.lower().strip()
-    text = re.sub(r'[^\w\s-]', '', text)
-    text = re.sub(r'[-\s]+', '-', text)
-    return text[:50]
 
 
 def generate_all_sites(limit: int = None) -> int:
@@ -1009,39 +1282,142 @@ def generate_all_sites(limit: int = None) -> int:
 def main():
     import argparse
     
-    parser = argparse.ArgumentParser(description='Generate premium landing pages')
+    parser = argparse.ArgumentParser(
+        description='Generate premium landing pages for businesses',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Examples:
+  # Preview a business by index
+  python -m agents.generation.builder --preview --business-id 0x945da89f7ce6aed5:0
+  
+  # Generate site using intake form data
+  python -m agents.generation.builder --intake-file intake_data/intake_maison-mint.json
+  
+  # Generate and preview with intake data
+  python -m agents.generation.builder --intake-file intake_data/example.json --preview
+  
+  # Generate all sites (first N)
+  python -m agents.generation.builder --generate-all 10
+        """
+    )
     parser.add_argument('--preview', action='store_true', help='Launch preview server')
     parser.add_argument('--generate-all', type=int, metavar='N', help='Generate N static sites')
-    parser.add_argument('--business-id', type=int, help='Preview specific business by index')
+    parser.add_argument('--generate', action='store_true', help='Generate static site (use with --intake-file or --business-id)')
+    parser.add_argument('--business-id', type=str, help='Google Place ID from discovered_businesses.json')
+    parser.add_argument('--intake-file', type=str, help='Path to intake form JSON file')
     parser.add_argument('--port', type=int, default=5001, help='Preview server port')
+    parser.add_argument('--output', type=str, help='Custom output directory for generated site')
     
     args = parser.parse_args()
     
+    # ===========================================
+    # MODE 1: Generate from intake file
+    # ===========================================
+    if args.intake_file:
+        intake_path = Path(args.intake_file)
+        
+        if not intake_path.exists():
+            print(f"❌ Intake file not found: {intake_path}")
+            return
+        
+        print(f"\n📋 Loading intake data from: {intake_path}")
+        business = create_business_from_intake(intake_path)
+        
+        # Show intake data status
+        has_colors = bool(business.brand_colors)
+        has_identity = bool(business.business_identity.get('vision') or business.business_identity.get('mission'))
+        has_services = bool(business.custom_services)
+        has_promos = bool(business.promotions)
+        has_social = any(business.social_media.values())
+        
+        print(f"   ✓ Business: {business.name}")
+        print(f"   ✓ Category: {business.category}")
+        print(f"   {'✓' if has_colors else '○'} Custom Colors: {'Yes' if has_colors else 'Default'}")
+        print(f"   {'✓' if has_identity else '○'} Vision/Mission: {'Yes' if has_identity else 'No'}")
+        print(f"   {'✓' if has_services else '○'} Custom Services: {len(business.custom_services)} items")
+        print(f"   {'✓' if has_promos else '○'} Promotions: {len(business.promotions)} active")
+        print(f"   {'✓' if has_social else '○'} Social Media: {'Yes' if has_social else 'No'}")
+        
+        if args.generate or not args.preview:
+            # Generate static site
+            slug = slugify(business.name)
+            output_path = Path(args.output) if args.output else OUTPUT_DIR / f"custom-{slug}"
+            
+            generate_static_site(business, output_path)
+            print(f"\n✅ Generated: {business.name}")
+            print(f"   Output: {output_path}")
+            print(f"   Open: file://{output_path}/index.html")
+        
+        if args.preview:
+            print(f"\n🚀 Starting preview server for: {business.name}")
+            print(f"   Theme: {business.theme.get('mode', 'unknown')} mode")
+            print(f"   Custom CSS: {'Yes' if business.custom_css else 'No'}")
+            print(f"   URL: http://localhost:{args.port}\n")
+            
+            app = create_app(business)
+            app.run(debug=True, port=args.port, host='0.0.0.0')
+        
+        return
+    
+    # ===========================================
+    # MODE 2: Generate all sites
+    # ===========================================
     if args.generate_all:
         generate_all_sites(args.generate_all)
+        return
     
-    elif args.preview or args.business_id is not None:
+    # ===========================================
+    # MODE 3: Preview/Generate from leads.json
+    # ===========================================
+    if args.preview or args.business_id is not None or args.generate:
         leads = load_leads()
         if not leads:
-            print("❌ No leads found in leads.json")
+            print("❌ No leads found in discovered_businesses.json")
             return
         
-        idx = args.business_id if args.business_id is not None else 0
-        if idx >= len(leads):
-            print(f"❌ Business ID {idx} out of range (max: {len(leads)-1})")
-            return
+        # Find business by google_place_id or use first one
+        if args.business_id:
+            lead = find_lead_by_google_id(args.business_id)
+            if not lead:
+                print(f"❌ Business with Google Place ID '{args.business_id}' not found")
+                print(f"   Example ID format: 0x945da89f7ce6aed5:0")
+                return
+        else:
+            lead = leads[0]
         
-        business = create_business_from_lead(leads[idx])
-        print(f"\n🚀 Starting preview server for: {business.name}")
-        print(f"   Category: {business.category}")
-        print(f"   Theme: {business.theme.get('mode', 'unknown')} mode")
-        print(f"   URL: http://localhost:{args.port}\n")
+        # Check if there's matching intake data (prioritize google_place_id)
+        google_id = lead.get('google_place_id')
+        intake_data = load_intake_data(google_place_id=google_id, business_name=lead.get('name'))
+        if intake_data:
+            print(f"✓ Found matching intake data for {lead.get('name')}")
         
-        app = create_app(business)
-        app.run(debug=True, port=args.port, host='0.0.0.0')
+        business = create_business_from_lead(lead, intake_data)
+        
+        if args.generate:
+            slug = slugify(business.name)
+            # Use truncated google_place_id for uniqueness
+            google_id_short = lead.get('google_place_id', 'unknown')[:16].replace(':', '-')
+            output_path = Path(args.output) if args.output else OUTPUT_DIR / f"{google_id_short}-{slug}"
+            
+            generate_static_site(business, output_path)
+            print(f"\n✅ Generated: {business.name}")
+            print(f"   Output: {output_path}")
+            print(f"   Open: file://{output_path}/index.html")
+        
+        if args.preview or not args.generate:
+            print(f"\n🚀 Starting preview server for: {business.name}")
+            print(f"   Category: {business.category}")
+            print(f"   Theme: {business.theme.get('mode', 'unknown')} mode")
+            print(f"   Intake data: {'Yes' if intake_data else 'No'}")
+            print(f"   URL: http://localhost:{args.port}\n")
+            
+            app = create_app(business)
+            app.run(debug=True, port=args.port, host='0.0.0.0')
+        
+        return
     
-    else:
-        parser.print_help()
+    # No valid arguments
+    parser.print_help()
 
 
 if __name__ == '__main__':

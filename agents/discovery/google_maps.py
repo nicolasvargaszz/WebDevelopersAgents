@@ -146,7 +146,6 @@ class ScrapedBusiness:
     neighborhood: Optional[str] = None
     phone: Optional[str] = None
     rating: float = 0.0
-    review_count: int = 0
     photo_urls: list = field(default_factory=list)
     photo_count: int = 0
     
@@ -225,7 +224,6 @@ class ScrapedBusiness:
             "neighborhood": self.neighborhood,
             "phone": self.phone,
             "rating": self.rating,
-            "review_count": self.review_count,
             "photo_urls": self.photo_urls,
             "photo_count": self.photo_count,
             "has_website": self.has_website,
@@ -776,26 +774,41 @@ class MapsScraper:
             rating = 0.0
             review_count = 0
             
-            # Try to get from aria-label "4,6 estrellas 206 reseñas"
-            rating_el = await self.page.query_selector('span.ZkP5Je')
+            # Try to get from aria-label "4,6 estrellas 206 reseñas" - use FIRST match only
+            # The key is to get the rating element that's inside the main panel, not sidebar
+            rating_el = await self.page.query_selector('div[role="main"] span.ZkP5Je')
+            if not rating_el:
+                rating_el = await self.page.query_selector('span.ZkP5Je')
+            
             if rating_el:
                 aria_label = await rating_el.get_attribute("aria-label") or ""
                 rating_match = re.search(r'([\d,\.]+)\s*estrellas?', aria_label)
                 if rating_match:
                     rating = self._parse_rating(rating_match.group(1))
-                review_match = re.search(r'([\d\.]+)\s*rese\u00f1as?', aria_label.replace(".", ""))
+                # Clean the string and extract review count
+                clean_label = aria_label.replace(".", "").replace(",", "")
+                review_match = re.search(r'(\d+)\s*rese\u00f1as?', clean_label)
                 if review_match:
                     review_count = int(review_match.group(1))
             
-            # Fallback to individual elements
+            # Fallback to individual elements - prefer main panel
             if rating == 0:
-                rating_val = await self.page.query_selector('span.MW4etd')
+                rating_val = await self.page.query_selector('div[role="main"] span.MW4etd')
+                if not rating_val:
+                    rating_val = await self.page.query_selector('span.MW4etd')
                 if rating_val:
                     rating = self._parse_rating(await rating_val.inner_text())
             
-            # Better review count extraction from "236 reseñas" div
+            # Better review count extraction - ONLY from main panel
             if review_count == 0:
-                review_divs = await self.page.query_selector_all('div.fontBodySmall')
+                # Try the reviews button which has exact count
+                review_btn = await self.page.query_selector('div[role="main"] button[jsaction*="reviews"]')
+                if review_btn:
+                    btn_text = await review_btn.inner_text()
+                    review_count = self._parse_review_count(btn_text)
+            
+            if review_count == 0:
+                review_divs = await self.page.query_selector_all('div[role="main"] div.fontBodySmall')
                 for div in review_divs:
                     text = await div.inner_text()
                     if 'rese\u00f1a' in text.lower():
@@ -1210,11 +1223,13 @@ class MapsScraper:
                 logger.debug(f"Could not extract Info tab: {e}")
             
             # ========================================
-            # EXTRACT PHOTOS AND COORDINATES
+            # EXTRACT PHOTOS AND COORDINATES - ENHANCED
             # ========================================
             
             photo_count = 0
             photo_urls = []
+            
+            # Get total photo count from button
             photos_btn = await self.page.query_selector('button[jsaction*="photos"]')
             if photos_btn:
                 photos_text = await photos_btn.inner_text()
@@ -1222,11 +1237,84 @@ class MapsScraper:
                 if photo_match:
                     photo_count = int(photo_match.group(1))
             
-            img_elements = await self.page.query_selector_all('button[jsaction*="heroHeaderImage"] img, img[decoding="async"]')
-            for img in img_elements[:5]:
-                src = await img.get_attribute("src")
-                if src and "googleusercontent" in src:
-                    photo_urls.append(src)
+            # Try to click on photos to get more images
+            try:
+                if photos_btn and photo_count > 0:
+                    await photos_btn.click()
+                    await self._random_delay(1.5)
+                    
+                    # Wait for photo gallery to load
+                    await self.page.wait_for_selector('div[data-photo-index], img.U39Pmb, div.p0Jrsd img', timeout=5000)
+                    
+                    # Get all photo URLs from the gallery - multiple selectors
+                    photo_selectors = [
+                        'div.p0Jrsd img[src*="googleusercontent"]',
+                        'img.U39Pmb[src*="googleusercontent"]',
+                        'button[data-photo-index] img[src*="googleusercontent"]',
+                        'img[decoding="async"][src*="googleusercontent"]',
+                        'div[style*="background-image"]'
+                    ]
+                    
+                    seen_urls = set()
+                    for selector in photo_selectors:
+                        img_elements = await self.page.query_selector_all(selector)
+                        for img in img_elements:
+                            src = None
+                            if 'style' in selector:
+                                style = await img.get_attribute("style") or ""
+                                url_match = re.search(r'url\(["\']?([^"\']+googleusercontent[^"\']+)["\']?\)', style)
+                                if url_match:
+                                    src = url_match.group(1)
+                            else:
+                                src = await img.get_attribute("src")
+                            
+                            if src and "googleusercontent" in src and src not in seen_urls:
+                                # Convert to higher resolution
+                                high_res = src.replace('=w80-', '=w800-').replace('=w100-', '=w800-').replace('=w200-', '=w800-')
+                                high_res = re.sub(r'=w\d+-h\d+', '=w800-h600', high_res)
+                                seen_urls.add(high_res)
+                                photo_urls.append(high_res)
+                                
+                                if len(photo_urls) >= 15:  # Get up to 15 photos
+                                    break
+                        if len(photo_urls) >= 15:
+                            break
+                    
+                    # Go back to details view
+                    back_btn = await self.page.query_selector('button[aria-label*="Atrás"], button[jsaction*="back"]')
+                    if back_btn:
+                        await back_btn.click()
+                        await self._random_delay(0.5)
+                    else:
+                        # Press Escape to close
+                        await self.page.keyboard.press("Escape")
+                        await self._random_delay(0.5)
+                        
+            except Exception as e:
+                logger.debug(f"Could not extract photo gallery: {e}")
+            
+            # Fallback: Get photos from main view
+            if len(photo_urls) < 3:
+                img_elements = await self.page.query_selector_all('button[jsaction*="heroHeaderImage"] img, img[decoding="async"][src*="googleusercontent"], div.p0Jrsd img')
+                for img in img_elements[:10]:
+                    src = await img.get_attribute("src")
+                    if src and "googleusercontent" in src and src not in [p for p in photo_urls]:
+                        # Convert to higher resolution
+                        high_res = src.replace('=w80-', '=w800-').replace('=w100-', '=w800-').replace('=w200-', '=w800-')
+                        high_res = re.sub(r'=w\d+-h\d+', '=w800-h600', high_res)
+                        photo_urls.append(high_res)
+            
+            # Also get photos from reviews
+            review_photo_btns = await self.page.query_selector_all('button.Tya61d')
+            for btn in review_photo_btns[:5]:
+                style = await btn.get_attribute("style") or ""
+                url_match = re.search(r'url\(["\']?([^"\']+googleusercontent[^"\']+)["\']?\)', style)
+                if url_match:
+                    src = url_match.group(1)
+                    if src not in photo_urls:
+                        high_res = src.replace('=w80-', '=w800-').replace('=w100-', '=w800-').replace('=w200-', '=w800-')
+                        high_res = re.sub(r'=w\d+-h\d+', '=w800-h600', high_res)
+                        photo_urls.append(high_res)
             
             # Coordinates from URL
             lat, lng = None, None
@@ -1248,7 +1336,6 @@ class MapsScraper:
                 neighborhood=location.split(",")[0].strip() if "," in location else None,
                 phone=phone,
                 rating=rating,
-                review_count=review_count,
                 photo_urls=photo_urls,
                 photo_count=photo_count or len(photo_urls),
                 has_website=has_website,
@@ -1468,100 +1555,303 @@ async def main():
         headless=False,  # Set True for production
         delay_min=2.0,
         delay_max=4.0,
-        max_results_per_search=15,
+        max_results_per_search=25,  # Increased to get more per search
     )
     
     # ALL POSSIBLE SEARCHES - organized by category and location
-    # We'll skip any that were already done based on existing results
+    # FOCUSED: Only Asunción (all neighborhoods) and Fernando de la Mora
+    # Target: 2000 businesses total
     all_searches = [
-        # === ALREADY COMPLETED (will be skipped if businesses found) ===
-        # ("salón de belleza", "Villa Morra, Asunción"),
-        # ("barbería", "Villa Morra, Asunción"),
-        # ("restaurante", "Carmelitas, Asunción"),
-        # ("dentista", "Centro, Asunción"),
-        # ("veterinaria", "San Lorenzo"),
+        # === CLOTHING & FASHION ===
+        ("tienda de ropa", "Villa Morra, Asunción"),
+        ("tienda de ropa", "Carmelitas, Asunción"),
+        ("tienda de ropa", "Centro, Asunción"),
+        ("tienda de ropa", "Recoleta, Asunción"),
+        ("tienda de ropa", "Sajonia, Asunción"),
+        ("tienda de ropa", "Las Mercedes, Asunción"),
+        ("tienda de ropa", "Fernando de la Mora, Paraguay"),
+        ("boutique", "Villa Morra, Asunción"),
+        ("boutique", "Carmelitas, Asunción"),
+        ("boutique", "Centro, Asunción"),
+        ("boutique", "Recoleta, Asunción"),
+        ("boutique", "Fernando de la Mora, Paraguay"),
+        ("moda mujer", "Villa Morra, Asunción"),
+        ("moda mujer", "Centro, Asunción"),
+        ("moda mujer", "Fernando de la Mora, Paraguay"),
+        ("ropa de hombre", "Centro, Asunción"),
+        ("ropa de hombre", "Villa Morra, Asunción"),
+        ("ropa de niños", "Villa Morra, Asunción"),
+        ("ropa de niños", "Centro, Asunción"),
+        ("ropa de niños", "Fernando de la Mora, Paraguay"),
+        ("ropa deportiva", "Centro, Asunción"),
+        ("ropa deportiva", "Villa Morra, Asunción"),
+        ("ropa deportiva", "Fernando de la Mora, Paraguay"),
+        ("zapatería", "Centro, Asunción"),
+        ("zapatería", "Villa Morra, Asunción"),
+        ("zapatería", "Fernando de la Mora, Paraguay"),
+        ("calzados", "Centro, Asunción"),
+        ("calzados", "Fernando de la Mora, Paraguay"),
+        ("joyería", "Centro, Asunción"),
+        ("joyería", "Villa Morra, Asunción"),
+        ("accesorios de moda", "Villa Morra, Asunción"),
+        ("accesorios de moda", "Centro, Asunción"),
+        ("lencería", "Centro, Asunción"),
+        ("lencería", "Villa Morra, Asunción"),
+        ("trajes", "Centro, Asunción"),
+        ("vestidos", "Villa Morra, Asunción"),
+        ("vestidos", "Centro, Asunción"),
         
-        # === NEW SEARCHES - Asunción zones ===
-        ("peluquería", "Centro, Asunción"),
-        ("gimnasio", "Villa Morra, Asunción"),
-        ("cafetería", "Carmelitas, Asunción"),
-        ("panadería", "Centro, Asunción"),
-        ("taller mecánico", "San Lorenzo"),
-        ("clínica médica", "Villa Morra, Asunción"),
-        ("farmacia", "Centro, Asunción"),
-        ("ferretería", "San Lorenzo"),
-        ("librería", "Centro, Asunción"),
-        ("óptica", "Centro, Asunción"),
+        # === ELECTRONICS & TECHNOLOGY ===
+        ("celulares", "Centro, Asunción"),
+        ("celulares", "Villa Morra, Asunción"),
+        ("celulares", "Fernando de la Mora, Paraguay"),
+        ("electrónica", "Centro, Asunción"),
+        ("electrónica", "Fernando de la Mora, Paraguay"),
+        ("computadoras", "Centro, Asunción"),
+        ("computadoras", "Villa Morra, Asunción"),
+        ("tecnología", "Villa Morra, Asunción"),
+        ("tecnología", "Centro, Asunción"),
+        ("reparación de celulares", "Centro, Asunción"),
+        ("reparación de celulares", "Fernando de la Mora, Paraguay"),
         
-        # === Recoleta ===
-        ("restaurante", "Recoleta, Asunción"),
-        ("dentista", "Recoleta, Asunción"),
-        ("peluquería", "Recoleta, Asunción"),
-        ("veterinaria", "Recoleta, Asunción"),
-        ("gimnasio", "Recoleta, Asunción"),
+        # === FURNITURE & HOME ===
+        ("mueblería", "Centro, Asunción"),
+        ("mueblería", "Fernando de la Mora, Paraguay"),
+        ("muebles", "Fernando de la Mora, Paraguay"),
+        ("muebles", "Centro, Asunción"),
+        ("decoración del hogar", "Villa Morra, Asunción"),
+        ("decoración", "Centro, Asunción"),
+        ("colchonería", "Centro, Asunción"),
+        ("colchonería", "Fernando de la Mora, Paraguay"),
+        ("electrodomésticos", "Centro, Asunción"),
+        ("electrodomésticos", "Fernando de la Mora, Paraguay"),
         
-        # === Las Mercedes ===
-        ("restaurante", "Las Mercedes, Asunción"),
+        # === BEAUTY & WELLNESS ===
+        ("salón de belleza", "Villa Morra, Asunción"),
+        ("salón de belleza", "Carmelitas, Asunción"),
+        ("salón de belleza", "Centro, Asunción"),
+        ("salón de belleza", "Recoleta, Asunción"),
+        ("salón de belleza", "Sajonia, Asunción"),
         ("salón de belleza", "Las Mercedes, Asunción"),
-        ("barbería", "Las Mercedes, Asunción"),
-        ("dentista", "Las Mercedes, Asunción"),
-        
-        # === Sajonia ===
-        ("restaurante", "Sajonia, Asunción"),
-        ("taller mecánico", "Sajonia, Asunción"),
-        ("ferretería", "Sajonia, Asunción"),
-        
-        # === Luque (Gran Asunción) ===
-        ("restaurante", "Luque, Paraguay"),
-        ("dentista", "Luque, Paraguay"),
-        ("veterinaria", "Luque, Paraguay"),
-        ("taller mecánico", "Luque, Paraguay"),
-        ("peluquería", "Luque, Paraguay"),
-        ("panadería", "Luque, Paraguay"),
-        ("gimnasio", "Luque, Paraguay"),
-        
-        # === Fernando de la Mora ===
-        ("restaurante", "Fernando de la Mora, Paraguay"),
-        ("dentista", "Fernando de la Mora, Paraguay"),
-        ("veterinaria", "Fernando de la Mora, Paraguay"),
+        ("salón de belleza", "Fernando de la Mora, Paraguay"),
+        ("peluquería", "Centro, Asunción"),
+        ("peluquería", "Villa Morra, Asunción"),
+        ("peluquería", "Recoleta, Asunción"),
+        ("peluquería", "Fernando de la Mora, Paraguay"),
+        ("barbería", "Villa Morra, Asunción"),
+        ("barbería", "Centro, Asunción"),
+        ("barbería", "Recoleta, Asunción"),
         ("barbería", "Fernando de la Mora, Paraguay"),
-        ("taller mecánico", "Fernando de la Mora, Paraguay"),
-        
-        # === Lambaré ===
-        ("restaurante", "Lambaré, Paraguay"),
-        ("dentista", "Lambaré, Paraguay"),
-        ("veterinaria", "Lambaré, Paraguay"),
-        ("salón de belleza", "Lambaré, Paraguay"),
-        ("panadería", "Lambaré, Paraguay"),
-        
-        # === Mariano Roque Alonso ===
-        ("restaurante", "Mariano Roque Alonso, Paraguay"),
-        ("veterinaria", "Mariano Roque Alonso, Paraguay"),
-        ("taller mecánico", "Mariano Roque Alonso, Paraguay"),
-        ("ferretería", "Mariano Roque Alonso, Paraguay"),
-        
-        # === Capiatá ===
-        ("restaurante", "Capiatá, Paraguay"),
-        ("dentista", "Capiatá, Paraguay"),
-        ("veterinaria", "Capiatá, Paraguay"),
-        ("taller mecánico", "Capiatá, Paraguay"),
-        
-        # === Ñemby ===
-        ("restaurante", "Ñemby, Paraguay"),
-        ("dentista", "Ñemby, Paraguay"),
-        ("peluquería", "Ñemby, Paraguay"),
-        
-        # === More specific Asunción searches ===
-        ("abogado", "Centro, Asunción"),
-        ("contador", "Centro, Asunción"),
-        ("inmobiliaria", "Villa Morra, Asunción"),
         ("spa", "Carmelitas, Asunción"),
-        ("floristería", "Centro, Asunción"),
-        ("lavadero de autos", "San Lorenzo"),
+        ("spa", "Villa Morra, Asunción"),
+        ("spa", "Recoleta, Asunción"),
+        ("manicure", "Villa Morra, Asunción"),
+        ("manicure", "Centro, Asunción"),
+        ("uñas", "Centro, Asunción"),
+        ("uñas", "Villa Morra, Asunción"),
+        ("estética", "Villa Morra, Asunción"),
+        ("estética", "Centro, Asunción"),
+        ("estética", "Fernando de la Mora, Paraguay"),
+        
+        # === RESTAURANTS & FOOD ===
+        ("restaurante", "Carmelitas, Asunción"),
+        ("restaurante", "Villa Morra, Asunción"),
+        ("restaurante", "Centro, Asunción"),
+        ("restaurante", "Recoleta, Asunción"),
+        ("restaurante", "Las Mercedes, Asunción"),
+        ("restaurante", "Sajonia, Asunción"),
+        ("restaurante", "Fernando de la Mora, Paraguay"),
         ("pizzería", "Villa Morra, Asunción"),
+        ("pizzería", "Centro, Asunción"),
+        ("pizzería", "Fernando de la Mora, Paraguay"),
+        ("cafetería", "Carmelitas, Asunción"),
+        ("cafetería", "Villa Morra, Asunción"),
+        ("cafetería", "Centro, Asunción"),
+        ("cafetería", "Fernando de la Mora, Paraguay"),
         ("heladería", "Carmelitas, Asunción"),
+        ("heladería", "Villa Morra, Asunción"),
+        ("heladería", "Centro, Asunción"),
+        ("parrilla", "Villa Morra, Asunción"),
+        ("parrilla", "Centro, Asunción"),
+        ("parrilla", "Fernando de la Mora, Paraguay"),
+        ("sushi", "Villa Morra, Asunción"),
+        ("hamburguesas", "Centro, Asunción"),
+        ("hamburguesas", "Villa Morra, Asunción"),
+        ("hamburguesas", "Fernando de la Mora, Paraguay"),
+        ("comida rápida", "Centro, Asunción"),
+        ("comida rápida", "Fernando de la Mora, Paraguay"),
+        ("empanadas", "Centro, Asunción"),
+        ("empanadas", "Fernando de la Mora, Paraguay"),
+        ("lomitería", "Centro, Asunción"),
+        ("lomitería", "Fernando de la Mora, Paraguay"),
+        
+        # === BAKERIES & PASTRIES ===
+        ("panadería", "Centro, Asunción"),
+        ("panadería", "Villa Morra, Asunción"),
+        ("panadería", "Recoleta, Asunción"),
+        ("panadería", "Sajonia, Asunción"),
+        ("panadería", "Fernando de la Mora, Paraguay"),
+        ("pastelería", "Villa Morra, Asunción"),
+        ("pastelería", "Centro, Asunción"),
+        ("pastelería", "Fernando de la Mora, Paraguay"),
+        ("confitería", "Centro, Asunción"),
+        ("tortas", "Centro, Asunción"),
+        ("tortas", "Villa Morra, Asunción"),
+        
+        # === HEALTH & MEDICAL ===
+        ("dentista", "Centro, Asunción"),
+        ("dentista", "Villa Morra, Asunción"),
+        ("dentista", "Recoleta, Asunción"),
+        ("dentista", "Las Mercedes, Asunción"),
+        ("dentista", "Sajonia, Asunción"),
+        ("dentista", "Fernando de la Mora, Paraguay"),
+        ("clínica dental", "Centro, Asunción"),
+        ("clínica dental", "Villa Morra, Asunción"),
+        ("clínica dental", "Fernando de la Mora, Paraguay"),
+        ("clínica médica", "Villa Morra, Asunción"),
+        ("clínica médica", "Centro, Asunción"),
+        ("clínica médica", "Fernando de la Mora, Paraguay"),
+        ("farmacia", "Centro, Asunción"),
+        ("farmacia", "Villa Morra, Asunción"),
+        ("farmacia", "Fernando de la Mora, Paraguay"),
+        ("óptica", "Centro, Asunción"),
+        ("óptica", "Villa Morra, Asunción"),
+        ("laboratorio clínico", "Centro, Asunción"),
+        ("laboratorio clínico", "Fernando de la Mora, Paraguay"),
+        ("fisioterapia", "Villa Morra, Asunción"),
+        ("fisioterapia", "Centro, Asunción"),
+        
+        # === VETERINARY & PET ===
+        ("veterinaria", "Villa Morra, Asunción"),
+        ("veterinaria", "Recoleta, Asunción"),
+        ("veterinaria", "Centro, Asunción"),
+        ("veterinaria", "Sajonia, Asunción"),
+        ("veterinaria", "Fernando de la Mora, Paraguay"),
+        ("pet shop", "Villa Morra, Asunción"),
+        ("pet shop", "Centro, Asunción"),
+        ("pet shop", "Fernando de la Mora, Paraguay"),
+        ("tienda de mascotas", "Centro, Asunción"),
+        ("tienda de mascotas", "Fernando de la Mora, Paraguay"),
+        
+        # === FITNESS & SPORTS ===
+        ("gimnasio", "Villa Morra, Asunción"),
+        ("gimnasio", "Centro, Asunción"),
+        ("gimnasio", "Recoleta, Asunción"),
+        ("gimnasio", "Sajonia, Asunción"),
+        ("gimnasio", "Fernando de la Mora, Paraguay"),
+        ("gym", "Villa Morra, Asunción"),
+        ("gym", "Fernando de la Mora, Paraguay"),
+        ("crossfit", "Villa Morra, Asunción"),
+        ("crossfit", "Centro, Asunción"),
+        ("pilates", "Villa Morra, Asunción"),
+        ("yoga", "Villa Morra, Asunción"),
+        ("yoga", "Centro, Asunción"),
+        ("tienda deportiva", "Centro, Asunción"),
+        ("tienda deportiva", "Fernando de la Mora, Paraguay"),
+        
+        # === AUTOMOTIVE ===
+        ("taller mecánico", "Sajonia, Asunción"),
+        ("taller mecánico", "Centro, Asunción"),
+        ("taller mecánico", "Fernando de la Mora, Paraguay"),
+        ("gomería", "Centro, Asunción"),
+        ("gomería", "Fernando de la Mora, Paraguay"),
+        ("lavadero de autos", "Centro, Asunción"),
+        ("lavadero de autos", "Fernando de la Mora, Paraguay"),
+        ("car wash", "Villa Morra, Asunción"),
+        ("repuestos de autos", "Centro, Asunción"),
+        ("repuestos de autos", "Fernando de la Mora, Paraguay"),
+        
+        # === PROFESSIONAL SERVICES ===
+        ("abogado", "Centro, Asunción"),
+        ("abogado", "Villa Morra, Asunción"),
+        ("contador", "Centro, Asunción"),
+        ("contador", "Villa Morra, Asunción"),
+        ("notaría", "Centro, Asunción"),
+        ("inmobiliaria", "Villa Morra, Asunción"),
+        ("inmobiliaria", "Centro, Asunción"),
+        ("agencia de viajes", "Centro, Asunción"),
+        ("agencia de viajes", "Villa Morra, Asunción"),
+        ("seguro", "Centro, Asunción"),
+        ("seguro", "Villa Morra, Asunción"),
+        
+        # === HOME SERVICES ===
+        ("ferretería", "Centro, Asunción"),
+        ("ferretería", "Sajonia, Asunción"),
+        ("ferretería", "Fernando de la Mora, Paraguay"),
+        ("cerrajería", "Centro, Asunción"),
+        ("cerrajería", "Fernando de la Mora, Paraguay"),
+        ("electricista", "Centro, Asunción"),
+        ("plomero", "Centro, Asunción"),
+        ("pinturería", "Centro, Asunción"),
+        ("pinturería", "Fernando de la Mora, Paraguay"),
+        ("vidriería", "Centro, Asunción"),
+        ("vidriería", "Fernando de la Mora, Paraguay"),
+        
+        # === FLOWERS & GIFTS ===
+        ("floristería", "Centro, Asunción"),
+        ("floristería", "Villa Morra, Asunción"),
+        ("flores", "Centro, Asunción"),
+        ("flores", "Villa Morra, Asunción"),
+        ("regalos", "Villa Morra, Asunción"),
+        ("regalos", "Centro, Asunción"),
+        ("librería", "Centro, Asunción"),
+        ("librería", "Villa Morra, Asunción"),
+        ("juguetería", "Centro, Asunción"),
+        ("juguetería", "Fernando de la Mora, Paraguay"),
+        
+        # === MEAT & GROCERIES ===
         ("carnicería", "Centro, Asunción"),
-        ("cerrajería", "San Lorenzo"),
+        ("carnicería", "Fernando de la Mora, Paraguay"),
+        ("supermercado", "Centro, Asunción"),
+        ("supermercado", "Fernando de la Mora, Paraguay"),
+        ("verdulería", "Centro, Asunción"),
+        ("verdulería", "Fernando de la Mora, Paraguay"),
+        ("despensa", "Centro, Asunción"),
+        ("despensa", "Fernando de la Mora, Paraguay"),
+        
+        # === EVENTS & RENTALS ===
+        ("salón de eventos", "Centro, Asunción"),
+        ("salón de eventos", "Fernando de la Mora, Paraguay"),
+        ("alquiler de sillas", "Centro, Asunción"),
+        ("eventos", "Centro, Asunción"),
+        ("eventos", "Villa Morra, Asunción"),
+        ("fotografía", "Centro, Asunción"),
+        ("fotografía", "Villa Morra, Asunción"),
+        
+        # === MOTORCYCLE ===
+        ("taller de motos", "Centro, Asunción"),
+        ("taller de motos", "Fernando de la Mora, Paraguay"),
+        ("repuestos de motos", "Centro, Asunción"),
+        
+        # === EDUCATION ===
+        ("academia", "Centro, Asunción"),
+        ("academia", "Villa Morra, Asunción"),
+        ("instituto", "Centro, Asunción"),
+        ("clases particulares", "Villa Morra, Asunción"),
+        ("idiomas", "Centro, Asunción"),
+        ("idiomas", "Villa Morra, Asunción"),
+        
+        # === ADDITIONAL SERVICES ===
+        ("imprenta", "Centro, Asunción"),
+        ("imprenta", "Fernando de la Mora, Paraguay"),
+        ("tintorería", "Villa Morra, Asunción"),
+        ("tintorería", "Centro, Asunción"),
+        ("lavandería", "Centro, Asunción"),
+        ("lavandería", "Fernando de la Mora, Paraguay"),
+        ("relojería", "Centro, Asunción"),
+        ("sastrería", "Centro, Asunción"),
+        ("costura", "Centro, Asunción"),
+        ("costura", "Fernando de la Mora, Paraguay"),
+        ("peluquería canina", "Villa Morra, Asunción"),
+        ("peluquería canina", "Fernando de la Mora, Paraguay"),
+        ("guardería", "Villa Morra, Asunción"),
+        ("guardería", "Fernando de la Mora, Paraguay"),
+        ("copias", "Centro, Asunción"),
+        ("papelería", "Centro, Asunción"),
+        ("papelería", "Fernando de la Mora, Paraguay"),
+        ("kiosco", "Centro, Asunción"),
+        ("minimarket", "Centro, Asunción"),
+        ("minimarket", "Fernando de la Mora, Paraguay"),
     ]
     
     # Track new results
@@ -1580,7 +1870,7 @@ async def main():
                 results = await scraper.search_businesses(
                     query=query,
                     location=location,
-                    max_results=12
+                    max_results=20  # Get 20 results per search
                 )
                 
                 # Only add truly new businesses

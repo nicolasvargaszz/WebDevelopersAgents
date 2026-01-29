@@ -498,5 +498,127 @@
             "Alimentación especializada",
             "Habitaciones privadas"
         ]
+    },
+    "clothing_store": {
+        "name": "Clothing Store",
+        "name_es": "Tienda de Ropa",
+        "google_search_terms": [
+            "tienda de ropa",
+            "ropa",
+            "boutique de ropa",
+            "moda",
+            "indumentaria",
+            "clothing store",
+            "fashion"
+        ],
+        "conversion_weight": 1.5,
+        "default_template": "retail/boutique",
+        "suggested_services": [
+            "Ropa de moda",
+            "Colecciones exclusivas",
+            "Envío a domicilio",
+            "Apartado disponible",
+            "Personal shopper"
+        ]
+    },
+    "shoes_store": {
+        "name": "Shoe Store",
+        "name_es": "Zapatería",
+        "google_search_terms": [
+            "zapatería",
+            "zapatos",
+            "calzados",
+            "shoe store",
+            "tienda de calzado"
+        ],
+        "conversion_weight": 1.3,
+        "default_template": "retail/boutique",
+        "suggested_services": [
+            "Calzado de calidad",
+            "Todas las tallas",
+            "Marcas exclusivas",
+            "Reparación de calzado",
+            "Accesorios"
+        ]
+    },
+    "jewelry_store": {
+        "name": "Jewelry Store",
+        "name_es": "Joyería",
+        "google_search_terms": [
+            "joyería",
+            "joyas",
+            "jewelry",
+            "accesorios",
+            "bijouterie"
+        ],
+        "conversion_weight": 1.4,
+        "default_template": "retail/boutique",
+        "suggested_services": [
+            "Joyas finas",
+            "Reparación de joyas",
+            "Grabados personalizados",
+            "Diseños exclusivos",
+            "Anillos de compromiso"
+        ]
+    },
+    "electronics_store": {
+        "name": "Electronics Store",
+        "name_es": "Tienda de Electrónica",
+        "google_search_terms": [
+            "electrónica",
+            "celulares",
+            "tecnología",
+            "computadoras",
+            "electronics"
+        ],
+        "conversion_weight": 1.4,
+        "default_template": "retail/boutique",
+        "suggested_services": [
+            "Celulares y tablets",
+            "Accesorios tecnológicos",
+            "Reparación de equipos",
+            "Garantía extendida",
+            "Asesoría técnica"
+        ]
+    },
+    "furniture_store": {
+        "name": "Furniture Store",
+        "name_es": "Mueblería",
+        "google_search_terms": [
+            "mueblería",
+            "muebles",
+            "furniture",
+            "decoración del hogar",
+            "amoblamientos"
+        ],
+        "conversion_weight": 1.3,
+        "default_template": "retail/boutique",
+        "suggested_services": [
+            "Muebles de calidad",
+            "Diseño personalizado",
+            "Entrega e instalación",
+            "Financiamiento disponible",
+            "Decoración integral"
+        ]
+    },
+    "sports_store": {
+        "name": "Sports Store",
+        "name_es": "Tienda Deportiva",
+        "google_search_terms": [
+            "tienda deportiva",
+            "deportes",
+            "sports",
+            "ropa deportiva",
+            "artículos deportivos"
+        ],
+        "conversion_weight": 1.2,
+        "default_template": "retail/boutique",
+        "suggested_services": [
+            "Equipamiento deportivo",
+            "Ropa deportiva",
+            "Calzado especializado",
+            "Suplementos",
+            "Accesorios fitness"
+        ]
     }
 }

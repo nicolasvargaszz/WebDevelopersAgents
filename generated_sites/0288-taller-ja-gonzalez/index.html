@@ -8,7 +8,7 @@
     
     <!-- Open Graph -->
     <meta property="og:title" content="Taller J.A Gonzalez">
-    <meta property="og:description" content="Servicio automotriz integral donde la confianza se construye">
+    <meta property="og:description" content="Mecánicos especializados, diagnóstico preciso y reparaciones garantizadas">
     <meta property="og:image" content="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=1920&amp;q=80">
     <meta property="og:type" content="website">
     
@@ -21,9 +21,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- AOS Animation Library -->
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     
     <!-- Tailwind Config -->
     <script>
@@ -38,8 +35,6 @@
                         'fade-in': 'fadeIn 0.8s ease-out forwards',
                         'slide-up': 'slideUp 0.8s ease-out forwards',
                         'float': 'float 6s ease-in-out infinite',
-                        'pulse-slow': 'pulse 3s ease-in-out infinite',
-                        'bounce-slow': 'bounce 2s infinite',
                     },
                     keyframes: {
                         fadeIn: {
@@ -97,51 +92,23 @@
             border: 1px solid rgba(0, 0, 0, 0.1);
         }
         
-        /* Reviews carousel */
-        .reviews-track {
-            display: flex;
-            gap: 1.5rem;
-            transition: transform 0.5s ease;
-        }
-        .review-card {
-            flex: 0 0 calc(100% - 1.5rem);
-        }
-        @media (min-width: 768px) {
-            .review-card { flex: 0 0 calc(50% - 0.75rem); }
-        }
-        
-        /* Reveal animations */
-        .reveal {
-            opacity: 0;
-            transform: translateY(30px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-        .reveal.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-        
-        /* Image loading */
-        img.loaded {
-            animation: fadeIn 0.5s ease;
-        }
-        
-        /* Stats counter glow */
-        .stat-glow {
-            text-shadow: 0 0 30px currentColor;
-        }
+        /* Animation delays */
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
+        .delay-400 { animation-delay: 0.4s; }
     </style>
 </head>
 
 <body class="bg-slate-950 font-sans">
     
     <!-- ==================== STICKY NAVBAR ==================== -->
-    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-500 bg-slate-950/95 backdrop-blur-md border-b border-white/10">
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-slate-950/95 backdrop-blur-md border-b border-white/10">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <!-- Logo / Brand -->
-                <a href="#hero" class="flex items-center space-x-3 group">
-                    <span class="font-sans text-2xl font-bold text-white group-hover:text-blue-400 transition-colors">
+                <a href="#hero" class="flex items-center space-x-3">
+                    <span class="font-sans text-2xl font-bold text-white">
                         Taller J.A Gonzalez
                     </span>
                 </a>
@@ -151,19 +118,15 @@
                     <a href="#hero" class="text-slate-300 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide uppercase">Inicio</a>
                     <a href="#services" class="text-slate-300 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide uppercase">Servicios</a>
                     <a href="#gallery" class="text-slate-300 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide uppercase">Galería</a>
-                    
                     <a href="#contact" class="text-slate-300 hover:text-blue-400 transition-colors text-sm font-medium tracking-wide uppercase">Contacto</a>
                     <a href="https://wa.me/+595983691396?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+Taller+J.A+Gonzalez" target="_blank" 
-                       class="px-6 py-2.5 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 hover:scale-105">
-                        <span class="flex items-center space-x-2">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
-                            <span>WhatsApp</span>
-                        </span>
+                       class="px-6 py-2.5 bg-blue-600 text-white font-semibold rounded-full hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                        WhatsApp
                     </a>
                 </div>
                 
                 <!-- Mobile Menu Button -->
-                <button id="mobile-menu-btn" class="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors">
+                <button id="mobile-menu-btn" class="md:hidden text-white">
                     <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
                     </svg>
@@ -174,13 +137,12 @@
         <!-- Mobile Menu -->
         <div id="mobile-menu" class="hidden md:hidden bg-slate-950 border-t border-white/10">
             <div class="px-6 py-4 space-y-4">
-                <a href="#hero" class="block text-slate-300 hover:text-blue-400 text-lg py-2">Inicio</a>
-                <a href="#services" class="block text-slate-300 hover:text-blue-400 text-lg py-2">Servicios</a>
-                <a href="#gallery" class="block text-slate-300 hover:text-blue-400 text-lg py-2">Galería</a>
-                
-                <a href="#contact" class="block text-slate-300 hover:text-blue-400 text-lg py-2">Contacto</a>
+                <a href="#hero" class="block text-slate-300 hover:text-blue-400 text-lg">Inicio</a>
+                <a href="#services" class="block text-slate-300 hover:text-blue-400 text-lg">Servicios</a>
+                <a href="#gallery" class="block text-slate-300 hover:text-blue-400 text-lg">Galería</a>
+                <a href="#contact" class="block text-slate-300 hover:text-blue-400 text-lg">Contacto</a>
                 <a href="https://wa.me/+595983691396?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+Taller+J.A+Gonzalez" target="_blank" 
-                   class="block w-full text-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-full mt-4">
+                   class="block w-full text-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-full">
                     WhatsApp
                 </a>
             </div>
@@ -188,103 +150,82 @@
     </nav>
     
     
-    <!-- ==================== HERO SECTION ==================== -->
-    <section id="hero" class="relative min-h-screen flex items-center justify-center overflow-hidden">
-        <!-- Background Image with Parallax -->
-        <div class="absolute inset-0" data-parallax="0.3">
+    <!-- ==================== HERO SECTION (Full Viewport) ==================== -->
+    <section id="hero" class="relative h-screen flex items-center justify-center overflow-hidden">
+        <!-- Background Image -->
+        <div class="absolute inset-0">
             <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=1920&amp;q=80" 
                  alt="Taller J.A Gonzalez" 
-                 class="w-full h-full object-cover scale-110"
+                 class="w-full h-full object-cover"
                  loading="eager">
+            <!-- Dark Overlay -->
             <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/80"></div>
-            <div class="absolute inset-0 bg-gradient-to-r from-black/50 via-transparent to-black/50"></div>
-        </div>
-        
-        <!-- Animated Background Elements -->
-        <div class="absolute inset-0 overflow-hidden pointer-events-none">
-            <div class="absolute top-1/4 left-1/4 w-64 h-64 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
-            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 1s;"></div>
         </div>
         
         <!-- Hero Content -->
-        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center pt-20">
+        <div class="relative z-10 max-w-5xl mx-auto px-6 text-center">
             <!-- Category Badge -->
-            <div class="inline-flex items-center px-4 py-2 rounded-full glass mb-8" data-aos="fade-down" data-aos-delay="100">
+            <div class="inline-flex items-center px-4 py-2 rounded-full glass mb-8 animate-fade-in">
                 <span class="text-blue-400 text-sm font-semibold tracking-widest uppercase">
                     Taller mecánico
                 </span>
             </div>
             
-            <!-- Main Headline -->
-            <h1 class="font-sans text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 leading-tight" data-aos="fade-up" data-aos-delay="200">
+            <!-- Main Headline - Massive Typography -->
+            <h1 class="font-sans text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 animate-slide-up leading-tight">
                 Donde la Calidad es Garantía
             </h1>
             
             <!-- Tagline -->
-            <p class="text-xl md:text-2xl text-white/80 mb-10 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="300">
-                Servicio automotriz integral donde la confianza se construye
+            <p class="text-xl md:text-2xl text-white/80 mb-10 max-w-2xl mx-auto animate-slide-up delay-100">
+                Mecánicos especializados, diagnóstico preciso y reparaciones garantizadas
             </p>
             
-            <!-- Stats Row -->
+            <!-- Rating Badge -->
             
-            <div class="flex flex-wrap items-center justify-center gap-8 mb-10" data-aos="fade-up" data-aos-delay="400">
-                
-                <div class="text-center">
-                    <div class="flex items-center justify-center space-x-1 mb-1">
-                        
-                        <svg class="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                        </svg>
-                        
-                        <svg class="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                        </svg>
-                        
-                        <svg class="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                        </svg>
-                        
-                        <svg class="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                        </svg>
-                        
-                        <svg class="w-6 h-6 text-white/30" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-                        </svg>
-                        
-                    </div>
-                    <span class="text-white font-bold text-2xl stat-glow" data-counter="4.5">4.5</span>
-                    <span class="text-white/60 text-sm block">Calificación</span>
+            <div class="flex items-center justify-center space-x-4 mb-10 animate-slide-up delay-200">
+                <div class="flex items-center space-x-1">
+                    
+                    <svg class="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    
+                    <svg class="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    
+                    <svg class="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    
+                    <svg class="w-6 h-6 text-amber-400" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    
+                    <svg class="w-6 h-6 text-white/30" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                    </svg>
+                    
                 </div>
-                
-                
-                
-                <div class="text-center">
-                    <span class="text-white font-bold text-3xl stat-glow" data-counter="17">17</span>
-                    <span class="text-white/60 text-sm block">Reseñas</span>
-                </div>
-                
-                
-                <div class="text-center">
-                    <span class="text-white font-bold text-3xl stat-glow">Capiatá</span>
-                    <span class="text-white/60 text-sm block">Ubicación</span>
-                </div>
+                <span class="text-white/80 font-medium">4.5 / 5</span>
+                <span class="text-white/50">•</span>
+                <span class="text-white/60">17 reseñas</span>
             </div>
             
             
             <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-4" data-aos="fade-up" data-aos-delay="500">
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 animate-slide-up delay-300">
                 <a href="https://wa.me/+595983691396?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+Taller+J.A+Gonzalez" target="_blank" 
-                   class="group flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold rounded-full shadow-2xl hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1 hover:scale-105">
-                    <svg class="w-6 h-6 group-hover:animate-bounce-slow" fill="currentColor" viewBox="0 0 24 24">
+                   class="group flex items-center space-x-3 px-8 py-4 bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold rounded-full shadow-2xl hover:shadow-blue-500/30 transition-all transform hover:-translate-y-1">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                     </svg>
                     <span>Pedir Presupuesto</span>
                 </a>
                 <a href="#contact" 
-                   class="flex items-center space-x-2 px-8 py-4 glass text-white font-semibold rounded-full hover:bg-white/10 transition-all group">
+                   class="flex items-center space-x-2 px-8 py-4 glass text-white font-semibold rounded-full hover:bg-white/10 transition-all">
                     <span>Ver Ubicación</span>
-                    <svg class="w-5 h-5 group-hover:translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
                     </svg>
                 </a>
@@ -293,12 +234,12 @@
         
         <!-- Scroll Indicator -->
         <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-float">
-            <a href="#services" class="flex flex-col items-center space-y-2 text-white/50 hover:text-white transition-colors">
-                <span class="text-sm tracking-widest uppercase">Descubrir</span>
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="flex flex-col items-center space-y-2">
+                <span class="text-white/50 text-sm tracking-widest uppercase">Scroll</span>
+                <svg class="w-6 h-6 text-white/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
                 </svg>
-            </a>
+            </div>
         </div>
     </section>
     
@@ -307,7 +248,7 @@
     <section id="services" class="py-24 lg:py-32 bg-slate-900">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <!-- Section Header -->
-            <div class="text-center mb-20" data-aos="fade-up">
+            <div class="text-center mb-20">
                 <span class="text-blue-400 text-sm font-bold tracking-widest uppercase mb-4 block">
                     Por Qué Elegirnos
                 </span>
@@ -319,21 +260,21 @@
                 </p>
             </div>
             
-            <!-- Service Cards -->
+            <!-- Service Cards (Rich Content) -->
             
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
                 
-                <div class="group relative p-8 bg-slate-900/80 rounded-3xl border border-blue-500/30 hover:border-blue-500/50 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                <div class="group relative p-8 bg-slate-900/80 rounded-3xl border border-blue-500/30 hover:border-blue-500/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 overflow-hidden">
                     <!-- Gradient Overlay on Hover -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-blue-600 to-cyan-600 opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-600 to-cyan-600 opacity-0 group-hover:opacity-5 transition-opacity"></div>
                     
                     <!-- Icon -->
-                    <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-600 text-white mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                    <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-600 text-white mb-6 group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path></svg>
                     </div>
                     
                     <!-- Title -->
-                    <h3 class="relative font-sans text-2xl font-bold text-white mb-4 group-hover:text-blue-400 transition-colors">
+                    <h3 class="relative font-sans text-2xl font-bold text-white mb-4">
                         Mantenimiento Preventivo
                     </h3>
                     
@@ -343,17 +284,17 @@
                     </p>
                 </div>
                 
-                <div class="group relative p-8 bg-slate-900/80 rounded-3xl border border-blue-500/30 hover:border-blue-500/50 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                <div class="group relative p-8 bg-slate-900/80 rounded-3xl border border-blue-500/30 hover:border-blue-500/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 overflow-hidden">
                     <!-- Gradient Overlay on Hover -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-blue-600 to-cyan-600 opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-600 to-cyan-600 opacity-0 group-hover:opacity-5 transition-opacity"></div>
                     
                     <!-- Icon -->
-                    <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-600 text-white mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                    <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-600 text-white mb-6 group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
                     </div>
                     
                     <!-- Title -->
-                    <h3 class="relative font-sans text-2xl font-bold text-white mb-4 group-hover:text-blue-400 transition-colors">
+                    <h3 class="relative font-sans text-2xl font-bold text-white mb-4">
                         Diagnóstico Computarizado
                     </h3>
                     
@@ -363,17 +304,17 @@
                     </p>
                 </div>
                 
-                <div class="group relative p-8 bg-slate-900/80 rounded-3xl border border-blue-500/30 hover:border-blue-500/50 transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+                <div class="group relative p-8 bg-slate-900/80 rounded-3xl border border-blue-500/30 hover:border-blue-500/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 overflow-hidden">
                     <!-- Gradient Overlay on Hover -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-blue-600 to-cyan-600 opacity-0 group-hover:opacity-5 transition-opacity duration-500"></div>
+                    <div class="absolute inset-0 bg-gradient-to-br from-blue-600 to-cyan-600 opacity-0 group-hover:opacity-5 transition-opacity"></div>
                     
                     <!-- Icon -->
-                    <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-600 text-white mb-6 group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300">
+                    <div class="relative w-16 h-16 flex items-center justify-center rounded-2xl bg-gradient-to-br from-blue-600 to-cyan-600 text-white mb-6 group-hover:scale-110 transition-transform">
                         <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"></path></svg>
                     </div>
                     
                     <!-- Title -->
-                    <h3 class="relative font-sans text-2xl font-bold text-white mb-4 group-hover:text-blue-400 transition-colors">
+                    <h3 class="relative font-sans text-2xl font-bold text-white mb-4">
                         Mecánica General
                     </h3>
                     
@@ -386,17 +327,14 @@
             </div>
             
             
-            <!-- Business Features Pills -->
+            <!-- Customer Promise / Social Proof -->
             
-            
-            <!-- Customer Promise -->
-            
-            <div class="mt-16 text-center" data-aos="fade-up">
+            <div class="mt-16 text-center">
                 <div class="inline-flex items-center px-8 py-4 rounded-full bg-slate-900/80 border border-blue-500/30">
                     <svg class="w-6 h-6 text-blue-400 mr-3" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>
-                    <span class="text-white font-medium text-lg">Más de 39 autos reparados avalan nuestra experiencia y honestidad</span>
+                    <span class="text-white font-medium text-lg">Con 4.5 estrellas, somos el taller de confianza de la zona</span>
                 </div>
             </div>
             
@@ -404,11 +342,12 @@
     </section>
     
     
-    <!-- ==================== GALLERY SECTION ==================== -->
+    <!-- ==================== GALLERY SECTION (Google Photos) ==================== -->
     
     <section id="gallery" class="py-24 lg:py-32 bg-slate-950">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center mb-16" data-aos="fade-up">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
                 <span class="text-blue-400 text-sm font-bold tracking-widest uppercase mb-4 block">
                     Nuestro Espacio
                 </span>
@@ -420,22 +359,17 @@
                 </p>
             </div>
             
-            <!-- Masonry Grid with Lightbox -->
+            <!-- Masonry Grid -->
             <div class="masonry-grid">
                 
-                <div class="masonry-item group relative overflow-hidden rounded-2xl shadow-xl cursor-pointer" data-aos="fade-up" data-aos-delay="50">
+                <div class="masonry-item group relative overflow-hidden rounded-2xl shadow-xl">
                     <img src="https://lh3.googleusercontent.com/gps-cs-s/AG0ilSwHZiee6P4q39KJG99HvaSxpC1tpfplXxH2N2_k63Xf_OutM3Rut_q8IshA1M3ZaXMs0aUibaE1ZvZq6HaFF4dH5mWNC1_kbOpNuBZJfXzsm1fZn_46JtsfSKnKE9D4WR1Cals0=w408-h725-k-no" 
                          alt="Taller J.A Gonzalez - Foto 1"
-                         class="w-full h-auto object-cover transition-transform duration-700 group-hover:scale-110"
-                         loading="lazy"
-                         data-lightbox>
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
-                        <span class="text-white font-medium flex items-center space-x-2">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7"/>
-                            </svg>
-                            <span>Ver más</span>
-                        </span>
+                         class="w-full h-auto object-cover transition-transform duration-500 group-hover:scale-110"
+                         loading="lazy">
+                    <!-- Overlay on hover -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                        <span class="text-white font-medium">Taller J.A Gonzalez</span>
                     </div>
                 </div>
                 
@@ -445,26 +379,27 @@
     
     
     
-    <!-- ==================== REVIEWS SECTION ==================== -->
-    
-    
-    
     <!-- ==================== FAQ SECTION ==================== -->
     
-    <section id="faq" class="py-24 lg:py-32 bg-slate-950">
+    <section id="faq" class="py-24 lg:py-32 bg-slate-900">
         <div class="max-w-4xl mx-auto px-6 lg:px-8">
-            <div class="text-center mb-16" data-aos="fade-up">
+            <!-- Section Header -->
+            <div class="text-center mb-16">
                 <span class="text-blue-400 text-sm font-bold tracking-widest uppercase mb-4 block">
                     Resolvemos tus Dudas
                 </span>
                 <h2 class="font-sans text-4xl md:text-5xl font-bold text-white mb-6">
                     Preguntas Frecuentes
                 </h2>
+                <p class="text-slate-300 text-lg">
+                    Encuentra respuestas a las consultas más comunes
+                </p>
             </div>
             
+            <!-- FAQ Accordion -->
             <div class="space-y-4">
                 
-                <div class="group bg-slate-900/80 rounded-2xl border border-blue-500/30 overflow-hidden" data-aos="fade-up" data-aos-delay="100">
+                <div class="group bg-slate-900/80 rounded-2xl border border-blue-500/30 overflow-hidden">
                     <details class="faq-item">
                         <summary class="flex items-center justify-between p-6 cursor-pointer text-white hover:text-blue-400 transition-colors">
                             <span class="font-semibold text-lg pr-4">¿Dan presupuesto sin compromiso?</span>
@@ -478,7 +413,7 @@
                     </details>
                 </div>
                 
-                <div class="group bg-slate-900/80 rounded-2xl border border-blue-500/30 overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                <div class="group bg-slate-900/80 rounded-2xl border border-blue-500/30 overflow-hidden">
                     <details class="faq-item">
                         <summary class="flex items-center justify-between p-6 cursor-pointer text-white hover:text-blue-400 transition-colors">
                             <span class="font-semibold text-lg pr-4">¿Cuánto tiempo toma el service?</span>
@@ -492,7 +427,7 @@
                     </details>
                 </div>
                 
-                <div class="group bg-slate-900/80 rounded-2xl border border-blue-500/30 overflow-hidden" data-aos="fade-up" data-aos-delay="300">
+                <div class="group bg-slate-900/80 rounded-2xl border border-blue-500/30 overflow-hidden">
                     <details class="faq-item">
                         <summary class="flex items-center justify-between p-6 cursor-pointer text-white hover:text-blue-400 transition-colors">
                             <span class="font-semibold text-lg pr-4">¿Tienen servicio de grúa?</span>
@@ -507,6 +442,18 @@
                 </div>
                 
             </div>
+            
+            <!-- Additional Help CTA -->
+            <div class="mt-12 text-center">
+                <p class="text-slate-400 mb-4">¿No encontraste lo que buscabas?</p>
+                <a href="https://wa.me/+595983691396?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+Taller+J.A+Gonzalez" target="_blank" 
+                   class="inline-flex items-center space-x-2 text-blue-400 hover:underline font-medium">
+                    <span>Escríbenos por WhatsApp</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/>
+                    </svg>
+                </a>
+            </div>
         </div>
     </section>
     
@@ -514,6 +461,7 @@
     
     <!-- ==================== CTA SECTION ==================== -->
     <section class="py-24 lg:py-32 bg-gradient-to-r from-blue-600 to-cyan-600 relative overflow-hidden">
+        <!-- Background Pattern -->
         <div class="absolute inset-0 opacity-10">
             <svg class="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
                 <defs>
@@ -525,7 +473,7 @@
             </svg>
         </div>
         
-        <div class="relative z-10 max-w-4xl mx-auto px-6 text-center" data-aos="zoom-in">
+        <div class="relative z-10 max-w-4xl mx-auto px-6 text-center">
             <h2 class="font-sans text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6">
                 ¿Listo para comenzar?
             </h2>
@@ -535,8 +483,8 @@
             
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a href="https://wa.me/+595983691396?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+Taller+J.A+Gonzalez" target="_blank" 
-                   class="group flex items-center space-x-3 px-10 py-5 bg-white text-slate-900 font-bold text-lg rounded-full shadow-2xl hover:shadow-white/30 transition-all transform hover:-translate-y-1 hover:scale-105">
-                    <svg class="w-7 h-7 text-green-600 group-hover:animate-bounce-slow" fill="currentColor" viewBox="0 0 24 24">
+                   class="group flex items-center space-x-3 px-10 py-5 bg-white text-slate-900 font-bold text-lg rounded-full shadow-2xl hover:shadow-white/30 transition-all transform hover:-translate-y-1">
+                    <svg class="w-7 h-7 text-green-600" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                     </svg>
                     <span>Escribir por WhatsApp</span>
@@ -559,7 +507,7 @@
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
                 
                 <!-- Contact Info -->
-                <div data-aos="fade-right">
+                <div>
                     <span class="text-blue-400 text-sm font-bold tracking-widest uppercase mb-4 block">
                         Encuéntranos
                     </span>
@@ -570,8 +518,8 @@
                     <div class="space-y-6">
                         <!-- Address -->
                         
-                        <div class="flex items-start space-x-4 group">
-                            <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 flex-shrink-0">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
@@ -588,15 +536,15 @@ Av. San Pedro, Capiatá 110244</p>
                         
                         <!-- Phone -->
                         
-                        <div class="flex items-start space-x-4 group">
-                            <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-blue-500/10 text-blue-400 flex-shrink-0">
                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                                 </svg>
                             </div>
                             <div>
                                 <h4 class="font-semibold text-white mb-1">Teléfono</h4>
-                                <a href="tel:+595983691396" class="text-blue-400 hover:underline text-lg font-medium" data-copy="0983 691396">
+                                <a href="tel:+595983691396" class="text-blue-400 hover:underline text-lg">
                                     0983 691396
                                 </a>
                             </div>
@@ -604,15 +552,15 @@ Av. San Pedro, Capiatá 110244</p>
                         
                         
                         <!-- WhatsApp -->
-                        <div class="flex items-start space-x-4 group">
-                            <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-green-500/10 text-green-500 flex-shrink-0 group-hover:scale-110 transition-transform">
+                        <div class="flex items-start space-x-4">
+                            <div class="w-12 h-12 flex items-center justify-center rounded-xl bg-green-500/10 text-green-500 flex-shrink-0">
                                 <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
                                     <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
                                 </svg>
                             </div>
                             <div>
                                 <h4 class="font-semibold text-white mb-1">WhatsApp</h4>
-                                <a href="https://wa.me/+595983691396?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+Taller+J.A+Gonzalez" target="_blank" class="text-green-500 hover:underline text-lg font-medium">
+                                <a href="https://wa.me/+595983691396?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+Taller+J.A+Gonzalez" target="_blank" class="text-green-500 hover:underline text-lg">
                                     Enviar mensaje
                                 </a>
                             </div>
@@ -621,17 +569,13 @@ Av. San Pedro, Capiatá 110244</p>
                     
                     <!-- Business Hours -->
                     <div class="mt-10 p-6 bg-slate-900/80 rounded-2xl border border-blue-500/30">
-                        <h4 class="font-semibold text-white mb-4 flex items-center justify-between">
-                            <span class="flex items-center space-x-2">
-                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                                </svg>
-                                <span>Horario de Atención</span>
-                            </span>
-                            
+                        <h4 class="font-semibold text-white mb-4 flex items-center space-x-2">
+                            <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span>Horario de Atención</span>
                         </h4>
                         <div class="space-y-2 text-slate-300">
-                            
                             <div class="flex justify-between">
                                 <span>Lunes - Viernes</span>
                                 <span class="text-white">08:00 - 18:00</span>
@@ -644,13 +588,12 @@ Av. San Pedro, Capiatá 110244</p>
                                 <span>Domingo</span>
                                 <span class="text-slate-400">Cerrado</span>
                             </div>
-                            
                         </div>
                     </div>
                 </div>
                 
                 <!-- Map -->
-                <div class="h-[500px] rounded-3xl overflow-hidden shadow-2xl border border-blue-500/30" data-aos="fade-left">
+                <div class="h-[500px] rounded-3xl overflow-hidden shadow-2xl border border-blue-500/30">
                     <iframe 
                         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3000!2d-57.5338836!3d-25.4225053!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2z-25.4225053!5e0!3m2!1ses!2spy!4v1"
                         width="100%" 
@@ -680,15 +623,15 @@ Av. San Pedro, Capiatá 110244</p>
                     </p>
                 </div>
                 
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center space-x-6">
                     <a href="https://wa.me/+595983691396?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+Taller+J.A+Gonzalez" target="_blank" 
-                       class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-900 text-slate-300 hover:text-blue-400 hover:scale-110 transition-all">
+                       class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-900 text-slate-300 hover:text-blue-400 transition-colors">
                         <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+                            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
                         </svg>
                     </a>
                     <a href="tel:+595983691396" 
-                       class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-900 text-slate-300 hover:text-blue-400 hover:scale-110 transition-all">
+                       class="w-12 h-12 flex items-center justify-center rounded-full bg-slate-900 text-slate-300 hover:text-blue-400 transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
                         </svg>
@@ -707,7 +650,7 @@ Av. San Pedro, Capiatá 110244</p>
     
     <!-- ==================== FLOATING WHATSAPP BUTTON ==================== -->
     <a href="https://wa.me/+595983691396?text=Hola%2C+vi+su+p%C3%A1gina+web+y+me+gustar%C3%ADa+m%C3%A1s+informaci%C3%B3n+sobre+Taller+J.A+Gonzalez" target="_blank" 
-       class="fixed bottom-6 right-6 z-50 w-16 h-16 flex items-center justify-center bg-green-500 text-white rounded-full shadow-2xl hover:bg-green-600 transition-all transform hover:scale-110 animate-float group">
+       class="fixed bottom-6 right-6 z-50 w-16 h-16 flex items-center justify-center bg-green-500 text-white rounded-full shadow-2xl hover:bg-green-600 transition-all transform hover:scale-110 animate-float">
         <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
         </svg>
@@ -719,18 +662,31 @@ Av. San Pedro, Capiatá 110244</p>
     
     
     <!-- ==================== SCRIPTS ==================== -->
-    <!-- AOS Animation Library -->
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({
-            duration: 800,
-            easing: 'ease-out-cubic',
-            once: true,
-            offset: 50
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+        
+        // Navbar background on scroll
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 100) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
         });
     </script>
-    
-    <!-- Main JavaScript -->
-    <script src="main.js"></script>
 </body>
 </html>

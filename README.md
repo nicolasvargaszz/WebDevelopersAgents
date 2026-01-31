@@ -13,7 +13,7 @@
 
 | Metric | Value |
 |--------|-------|
-| 🏢 **Businesses Discovered** | 580+ |
+| 🏢 **Businesses Discovered** | 1480+ |
 | 🎯 **Qualified Leads** | 462 |
 | 📍 **Locations Covered** | 13 cities |
 | 📂 **Categories Scraped** | 25+ |

@@ -1,0 +1,159 @@
+{# ============================================== #}
+{# HERO SECTION - Clean & Luminous Design       #}
+{# Premium gradient overlay, drop-shadow text   #}
+{# ============================================== #}
+
+<section id="hero" class="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
+    
+    {# Background Image with Scale Effect #}
+    <div class="absolute inset-0 z-0">
+        <img src="{{ business.hero_image }}" 
+             alt="{{ business.name }}"
+             class="w-full h-full object-cover scale-105 transition-transform duration-[3000ms] ease-out"
+             loading="eager">
+        
+        {# Premium Gradient Overlay - Fades from color to transparent #}
+        <div class="absolute inset-0 {{ theme.bg_hero_overlay }}"></div>
+        
+        {# Secondary soft overlay for text contrast #}
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
+        
+        {# Bottom fade to page background #}
+        <div class="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
+    </div>
+    
+    {# Subtle Decorative Orbs (Light & Clean) #}
+    <div class="absolute top-1/4 -left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-1/4 -right-20 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
+    
+    {# Main Content #}
+    <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-16">
+        
+        {# Category Badge - Clean Pill #}
+        <div data-aos="fade-down" data-aos-delay="100">
+            <span class="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-semibold 
+                         bg-white/95 backdrop-blur-sm text-slate-800 
+                         shadow-lg shadow-black/10 border border-white/20 mb-8">
+                <span class="w-2 h-2 rounded-full bg-{{ theme.primary }} mr-2.5 animate-pulse"></span>
+                {{ business.category }}
+            </span>
+        </div>
+        
+        {# Main Headline - Extra Bold with Drop Shadow #}
+        <h1 data-aos="fade-up" data-aos-delay="200" 
+            class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl 
+                   font-extrabold tracking-tight text-white mb-6 leading-[0.95]
+                   drop-shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+            {{ business.headline | default(business.name) }}
+        </h1>
+        
+        {# Tagline - Elegant and Light #}
+        <p data-aos="fade-up" data-aos-delay="300" 
+           class="text-xl sm:text-2xl md:text-3xl text-white/90 max-w-3xl mx-auto mb-10 font-light
+                  drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)]">
+            {{ business.tagline }}
+        </p>
+        
+        {# Rating Badge - Crisp White Card #}
+        {% if business.rating %}
+        <div data-aos="fade-up" data-aos-delay="400" class="flex items-center justify-center space-x-4 mb-12">
+            <div class="flex items-center space-x-3 px-6 py-3.5 rounded-2xl 
+                        bg-white shadow-xl shadow-black/10 border border-gray-100">
+                {# Stars #}
+                <div class="flex items-center space-x-0.5 {{ theme.star_color }}">
+                    {% for i in range(5) %}
+                        {% if i < business.rating | int %}
+                            <i class="fas fa-star text-lg"></i>
+                        {% elif i < business.rating %}
+                            <i class="fas fa-star-half-alt text-lg"></i>
+                        {% else %}
+                            <i class="far fa-star text-lg opacity-30"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <span class="text-slate-900 font-bold text-xl">{{ business.rating }}</span>
+                <span class="text-slate-500 text-sm font-medium">({{ business.review_count }} reseñas)</span>
+            </div>
+            
+            {# Google Verified Badge #}
+            <div class="hidden sm:flex items-center space-x-2 px-4 py-2.5 rounded-xl 
+                        bg-white shadow-lg shadow-black/10 border border-gray-100">
+                <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" alt="Google" class="w-5 h-5">
+                <span class="text-slate-600 text-sm font-medium">Verificado</span>
+            </div>
+        </div>
+        {% endif %}
+        
+        {# CTA Buttons - Gradient Primary + Clean Secondary #}
+        <div data-aos="fade-up" data-aos-delay="500" class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            {% if business.phone %}
+            <a href="https://wa.me/{{ business.phone | replace('+', '') | replace(' ', '') | replace('-', '') }}?text={{ 'Hola! Vi su página web y me gustaría más información.' | urlencode }}" 
+               class="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl
+                      {{ theme.btn_primary }}
+                      text-lg font-semibold
+                      transform transition-all duration-300 
+                      hover:scale-105 hover:-translate-y-0.5
+                      focus:outline-none focus:ring-4 focus:ring-white/30">
+                <i class="fab fa-whatsapp text-xl group-hover:scale-110 transition-transform"></i>
+                <span>Contactar por WhatsApp</span>
+                <i class="fas fa-arrow-right text-sm opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300"></i>
+            </a>
+            {% endif %}
+            {% if business.google_maps_url %}
+            <a href="{{ business.google_maps_url }}" target="_blank" rel="noopener"
+               class="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl
+                      bg-white/95 backdrop-blur-sm text-slate-800
+                      shadow-lg shadow-black/10 border border-white
+                      text-lg font-semibold
+                      transform transition-all duration-300 
+                      hover:bg-white hover:shadow-xl hover:-translate-y-0.5
+                      focus:outline-none focus:ring-4 focus:ring-white/30">
+                <i class="fas fa-directions text-xl text-{{ theme.primary }} group-hover:scale-110 transition-transform"></i>
+                <span>¿Cómo llegar?</span>
+                <i class="fas fa-external-link-alt text-sm opacity-60 ml-2"></i>
+            </a>
+            {% endif %}
+            <a href="#servicios" 
+               class="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl
+                      bg-white/95 backdrop-blur-sm text-slate-800
+                      shadow-lg shadow-black/10 border border-white
+                      text-lg font-semibold
+                      transform transition-all duration-300 
+                      hover:bg-white hover:shadow-xl hover:-translate-y-0.5
+                      focus:outline-none focus:ring-4 focus:ring-white/30">
+                <span>Ver Servicios</span>
+                <i class="fas fa-chevron-down text-sm group-hover:translate-y-0.5 transition-transform"></i>
+            </a>
+        </div>
+        
+        {# Trust Indicators - Below CTAs #}
+        <div data-aos="fade-up" data-aos-delay="600" class="mt-12 flex flex-wrap items-center justify-center gap-6 text-white/70">
+            {% if business.years_in_business %}
+            <div class="flex items-center gap-2">
+                <i class="fas fa-award text-white/50"></i>
+                <span class="text-sm font-medium">{{ business.years_in_business }}+ años de experiencia</span>
+            </div>
+            {% endif %}
+            <div class="flex items-center gap-2">
+                <i class="fas fa-map-marker-alt text-white/50"></i>
+                <span class="text-sm font-medium">{{ business.city }}</span>
+            </div>
+            {% if business.phone %}
+            <div class="flex items-center gap-2">
+                <i class="fas fa-phone text-white/50"></i>
+                <span class="text-sm font-medium">{{ business.phone }}</span>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
+    {# Scroll Indicator #}
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10" data-aos="fade-up" data-aos-delay="700">
+        <a href="#servicios" class="flex flex-col items-center text-white/60 hover:text-white transition-colors">
+            <span class="text-xs font-medium uppercase tracking-wider mb-2">Descubrir</span>
+            <div class="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-1.5">
+                <div class="w-1.5 h-3 rounded-full bg-white/60 animate-bounce"></div>
+            </div>
+        </a>
+    </div>
+</section>

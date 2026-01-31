@@ -1,0 +1,200 @@
+{# ============================================== #}
+{# CORRECCIÓN DE ESTRUCTURA                       #}
+{# 1. SECCIÓN DE CONTACTO (Fondo Blanco)          #}
+{# ============================================== #}
+<section id="contacto" class="w-full bg-white py-24 lg:py-32 relative overflow-hidden">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold {{ theme.primary_light }} {{ theme.primary_light_text }} mb-6">
+                <i class="fas fa-map-marker-alt mr-2 opacity-70"></i>
+                Ubicación y Contacto
+            </span>
+            <h2 class="font-display text-4xl md:text-5xl font-bold {{ theme.text_primary }} mb-6 tracking-tight">
+                Visítanos o <span class="{{ theme.primary_text }}">Contáctanos</span>
+            </h2>
+            <p class="text-lg {{ theme.text_secondary }}">Estamos listos para atenderte. ¡Te esperamos!</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+            {# Columna Izquierda: Datos #}
+            <div class="space-y-8 text-left">
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl {{ theme.icon_bg }} flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-map-marker-alt {{ theme.icon_text }} text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold {{ theme.text_primary }} mb-1">Dirección</h3>
+                        <p class="{{ theme.text_secondary }}">{{ business.address }}</p>
+                        <p class="{{ theme.text_muted }} text-sm">{{ business.city }}, Paraguay</p>
+                        {% if business.plus_code %}
+                        <p class="{{ theme.text_muted }} text-xs">Plus Code: {{ business.plus_code }}</p>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% if business.phone %}
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl {{ theme.icon_bg }} flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-phone-alt {{ theme.icon_text }} text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold {{ theme.text_primary }} mb-1">Teléfono</h3>
+                        <a href="tel:{{ business.phone }}" class="{{ theme.text_secondary }} hover:{{ theme.primary_text }} font-medium transition-colors">{{ business.phone }}</a>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fab fa-whatsapp text-green-600 text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold {{ theme.text_primary }} mb-1">WhatsApp</h3>
+                        <a href="https://wa.me/{{ business.phone | replace('+', '') | replace(' ', '') | replace('-', '') }}?text={{ 'Hola! Vi su página web y me gustaría más información.' | urlencode }}" target="_blank" class="text-green-600 hover:text-green-500 font-medium transition-colors">Chatear ahora</a>
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if business.opening_hours or business.hours %}
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl {{ theme.icon_bg }} flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-clock {{ theme.icon_text }} text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold {{ theme.text_primary }} mb-1">Horario de Atención</h3>
+                        <div class="space-y-1 {{ theme.text_secondary }} text-sm">
+                            {% if business.opening_hours %}
+                                {% for day, hours in business.opening_hours.items() %}
+                                <div class="flex justify-between w-48"><span>{{ day|capitalize }}</span><span class="font-medium">{{ hours }}</span></div>
+                                {% endfor %}
+                            {% elif business.hours %}
+                                {% for day, hours in business.hours.items() %}
+                                <div class="flex justify-between w-48"><span>{{ day }}</span><span class="font-medium">{{ hours }}</span></div>
+                                {% endfor %}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+            {# Columna Derecha: Branding/Social #}
+            <div class="flex flex-col items-center justify-center w-full h-full">
+                {% if business.logo_url %}
+                <img src="{{ business.logo_url }}" alt="{{ business.name }}" class="h-20 w-20 rounded-full object-cover mb-6">
+                {% endif %}
+                <span class="font-display text-2xl font-bold {{ theme.text_primary }} mb-2">{{ business.name }}</span>
+                <p class="{{ theme.text_secondary }} max-w-xs text-center mb-4">{{ business.tagline }}</p>
+                {% if business.social_links %}
+                <div class="flex items-center justify-center space-x-4 mb-4">
+                    {% if business.social_links.facebook %}
+                    <a href="{{ business.social_links.facebook }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center {{ theme.text_secondary }} hover:bg-white/20 hover:{{ theme.text_primary }} transition-all"><i class="fab fa-facebook-f"></i></a>
+                    {% endif %}
+                    {% if business.social_links.instagram %}
+                    <a href="{{ business.social_links.instagram }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center {{ theme.text_secondary }} hover:bg-white/20 hover:{{ theme.text_primary }} transition-all"><i class="fab fa-instagram"></i></a>
+                    {% endif %}
+                    {% if business.social_links.tiktok %}
+                    <a href="{{ business.social_links.tiktok }}" target="_blank" rel="noopener" class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center {{ theme.text_secondary }} hover:bg-white/20 hover:{{ theme.text_primary }} transition-all"><i class="fab fa-tiktok"></i></a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ============================================== #}
+{# 2. FOOTER REAL (Fondo Oscuro)                  #}
+{# ============================================== #}
+<footer class="w-full {{ theme.footer_bg }} py-12 lg:py-16 relative overflow-hidden text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+            {# Brand Column #}
+            <div class="lg:col-span-2">
+                <div class="flex items-center space-x-3 mb-6">
+                    {% if business.logo_url %}
+                    <img src="{{ business.logo_url }}" alt="{{ business.name }}" class="h-10 w-10 rounded-full object-cover">
+                    {% else %}
+                    <div class="h-10 w-10 rounded-xl {{ theme.primary_bg }} flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">{{ business.name[0] }}</span>
+                    </div>
+                    {% endif %}
+                    <span class="font-display text-xl font-bold text-white">{{ business.name }}</span>
+                </div>
+                <p class="{{ theme.footer_text }} max-w-md leading-relaxed mb-6">
+                    {{ business.tagline }}
+                </p>
+                
+                {# Social Links Footer #}
+                {% if business.social_links %}
+                <div class="flex items-center space-x-4">
+                    {% if business.social_links.facebook %}
+                    <a href="{{ business.social_links.facebook }}" target="_blank" rel="noopener"
+                       class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-white/20 hover:text-white transition-all">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    {% endif %}
+                    {% if business.social_links.instagram %}
+                    <a href="{{ business.social_links.instagram }}" target="_blank" rel="noopener"
+                       class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-white/20 hover:text-white transition-all">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    {% endif %}
+                    {% if business.social_links.tiktok %}
+                    <a href="{{ business.social_links.tiktok }}" target="_blank" rel="noopener"
+                       class="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-white/70 hover:bg-white/20 hover:text-white transition-all">
+                        <i class="fab fa-tiktok"></i>
+                    </a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            
+            {# Quick Links #}
+            <div>
+                <h4 class="text-white font-semibold mb-6">Enlaces Rápidos</h4>
+                <ul class="space-y-3">
+                    <li><a href="#hero" class="{{ theme.footer_text }} hover:text-white transition-colors">Inicio</a></li>
+                    <li><a href="#servicios" class="{{ theme.footer_text }} hover:text-white transition-colors">Servicios</a></li>
+                    {% if business.gallery_images %}
+                    <li><a href="#galeria" class="{{ theme.footer_text }} hover:text-white transition-colors">Galería</a></li>
+                    {% endif %}
+                    {% if business.reviews %}
+                    <li><a href="#resenas" class="{{ theme.footer_text }} hover:text-white transition-colors">Reseñas</a></li>
+                    {% endif %}
+                    <li><a href="#contacto" class="{{ theme.footer_text }} hover:text-white transition-colors">Contacto</a></li>
+                </ul>
+            </div>
+            
+            {# Contact Info Footer #}
+            <div>
+                <h4 class="text-white font-semibold mb-6">Contacto</h4>
+                <ul class="space-y-4">
+                    <li class="flex items-start space-x-3">
+                        <i class="fas fa-map-marker-alt {{ theme.footer_text }} mt-1"></i>
+                        <span class="{{ theme.footer_text }}">{{ business.address }}<br>{{ business.city }}</span>
+                    </li>
+                    {% if business.phone %}
+                    <li class="flex items-center space-x-3">
+                        <i class="fas fa-phone-alt {{ theme.footer_text }}"></i>
+                        <a href="tel:{{ business.phone }}" class="{{ theme.footer_text }} hover:text-white transition-colors">{{ business.phone }}</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        
+        {# Divider #}
+        <div class="border-t border-white/10 pt-8">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <p class="{{ theme.footer_text }} text-sm">
+                    © 2025 {{ business.name }}. Todos los derechos reservados.
+                </p>
+                <div class="flex items-center space-x-2 text-sm {{ theme.footer_text }}">
+                    <span>Diseñado con</span>
+                    <i class="fas fa-heart text-red-400 animate-pulse"></i>
+                    <span>para tu negocio</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>

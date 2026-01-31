@@ -1,0 +1,287 @@
+{# ============================================== #}
+{# SERVICES SECTION - Clean & Luminous Design   #}
+{# Hover-Lift Cards with Subtle Shadows         #}
+{# ============================================== #}
+
+<section id="servicios" class="{{ theme.bg_primary }} py-24 lg:py-32 relative overflow-hidden">
+    
+    {# Subtle Background Pattern #}
+    <div class="absolute inset-0 opacity-50" style="background-image: radial-gradient(circle at 1px 1px, rgb(0 0 0 / 0.03) 1px, transparent 0); background-size: 24px 24px;"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        {# Section Header - Clean & Centered #}
+        <div class="text-center max-w-3xl mx-auto mb-20" data-aos="fade-up">
+            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold 
+                         {{ theme.primary_light }} {{ theme.primary_light_text }} mb-6">
+                <i class="fas fa-sparkles mr-2 opacity-70"></i>
+                Nuestros Servicios
+            </span>
+            <h2 class="font-display text-4xl md:text-5xl font-bold {{ theme.text_primary }} mb-6 tracking-tight">
+                {% if business.services_title %}
+                    {{ business.services_title }}
+                {% else %}
+                    Lo que <span class="{{ theme.primary_text }}">Ofrecemos</span>
+                {% endif %}
+            </h2>
+            <p class="text-lg {{ theme.text_secondary }} leading-relaxed">
+                {{ business.services_subtitle | default('Descubre por qué somos la mejor opción para ti. Calidad, experiencia y dedicación en cada servicio.') }}
+            </p>
+        </div>
+        
+        {# Services Grid - Hover-Lift Cards #}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% for feature in business.features[:6] %}
+            <div data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}"
+                 class="group {{ theme.bg_card }} rounded-2xl p-8 
+                        {{ theme.card_border }} {{ theme.shadow }}
+                        transition-all duration-300 ease-out
+                        {{ theme.card_hover }}">
+                
+                {# Icon with Colored Circle Background #}
+                <div class="mb-6">
+                    <div class="w-14 h-14 rounded-xl {{ theme.icon_bg }} 
+                                flex items-center justify-center
+                                group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas {{ feature.icon | default('fa-star') }} text-xl {{ theme.icon_text }}"></i>
+                    </div>
+                </div>
+                
+                {# Content #}
+                <h3 class="font-display text-xl font-bold {{ theme.text_primary }} mb-3 
+                           group-hover:{{ theme.primary_text }} transition-colors duration-300">
+                    {{ feature.title }}
+                </h3>
+                
+                <p class="{{ theme.text_secondary }} leading-relaxed text-[15px]">
+                    {{ feature.desc }}
+                </p>
+                
+                {# Price Tag (if available) #}
+                {% if feature.price %}
+                <div class="flex items-center justify-between pt-5 mt-5 border-t {{ theme.divider }}">
+                    <span class="{{ theme.text_muted }} text-sm">Desde</span>
+                    <span class="{{ theme.primary_text }} font-bold text-lg">{{ feature.price }}</span>
+                </div>
+                {% endif %}
+                
+                {# Hover Arrow #}
+                <div class="mt-5 flex items-center {{ theme.primary_text }} opacity-0 group-hover:opacity-100 
+                            transform translate-x-[-8px] group-hover:translate-x-0 transition-all duration-300">
+                    <span class="text-sm font-medium">Más información</span>
+                    <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                </div>
+                {# Mostrar amenities y accessibility si existen #}
+                {% if business.amenities or business.accessibility %}
+                <div class="mt-4">
+                  {% if business.amenities %}
+                  <div class="text-xs {{ theme.text_secondary }} mb-1"><b>Amenidades:</b> {{ business.amenities | join(', ') }}</div>
+                  {% endif %}
+                  {% if business.accessibility %}
+                  <div class="text-xs {{ theme.text_secondary }}"><b>Accesibilidad:</b> {{ business.accessibility | join(', ') }}</div>
+                  {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        
+        {# CTA Below Services #}
+        <div class="text-center mt-20" data-aos="fade-up">
+            <p class="{{ theme.text_secondary }} mb-8 text-lg">¿Tienes alguna pregunta sobre nuestros servicios?</p>
+            {% if business.phone %}
+            <a href="https://wa.me/{{ business.phone | replace('+', '') | replace(' ', '') | replace('-', '') }}?text={{ 'Hola! Me gustaría consultar sobre sus servicios.' | urlencode }}" 
+               target="_blank"
+               class="inline-flex items-center px-8 py-4 rounded-xl
+                      {{ theme.btn_primary }}
+                      text-lg font-semibold
+                      transform transition-all duration-300 
+                      hover:scale-105 hover:-translate-y-0.5">
+                <i class="fab fa-whatsapp text-xl mr-3"></i>
+                Consultar Disponibilidad
+            </a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+{# ============================================== #}
+{# ABOUT / STORY SECTION                         #}
+{# Clean Card Layout with Stats                  #}
+{# ============================================== #}
+{% if business.description or business.backstory or business.about_summary %}
+<section id="nosotros" class="{{ theme.bg_secondary }} py-24 lg:py-32 relative overflow-hidden">
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            
+            {# Image Side with Stats Card #}
+            <div class="relative" data-aos="fade-right">
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl shadow-gray-300/30">
+                    <img src="{{ business.gallery_images[0] if business.gallery_images else business.hero_image }}" 
+                         alt="{{ business.name }}"
+                         class="w-full h-96 lg:h-[500px] object-cover"
+                         loading="lazy">
+                    
+                    {# Floating Stats Card #}
+                    <div class="absolute bottom-6 right-6 lg:bottom-8 lg:right-8 
+                                bg-white rounded-2xl p-6 shadow-xl shadow-gray-300/40 border border-gray-100">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-14 h-14 rounded-xl {{ theme.primary_bg }} flex items-center justify-center">
+                                <i class="fas fa-trophy text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <div class="text-3xl font-bold {{ theme.text_primary }}">{{ business.rating }}</div>
+                                <div class="text-sm {{ theme.text_muted }}">Calificación Google</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {# Decorative border element #}
+                <div class="absolute -z-10 top-6 -left-6 w-full h-full rounded-2xl border-2 border-{{ theme.primary }}/20"></div>
+            </div>
+            
+            {# Content Side #}
+            <div data-aos="fade-left">
+                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold 
+                             {{ theme.primary_light }} {{ theme.primary_light_text }} mb-6">
+                    <i class="fas fa-building mr-2 opacity-70"></i>
+                    Sobre Nosotros
+                </span>
+                
+                <h2 class="font-display text-3xl md:text-4xl font-bold {{ theme.text_primary }} mb-6 tracking-tight">
+                    Conoce nuestra <span class="{{ theme.primary_text }}">Historia</span>
+                </h2>
+                
+                <p class="{{ theme.text_secondary }} text-lg leading-relaxed mb-8">
+                    {% if business.about_summary %}
+                      <b>Sobre el negocio:</b> {{ business.about_summary }}<br>
+                    {% endif %}
+                    {{ business.backstory | default(business.description) }}
+                </p>
+                
+                {# Quick Stats Row #}
+                <div class="grid grid-cols-2 gap-6 mb-8">
+                    {% if business.years_in_business %}
+                    <div class="p-4 rounded-xl {{ theme.bg_card }} {{ theme.card_border }} {{ theme.shadow }}">
+                        <div class="text-3xl font-bold {{ theme.primary_text }}">{{ business.years_in_business }}+</div>
+                        <div class="text-sm {{ theme.text_muted }}">Años de Experiencia</div>
+                    </div>
+                    {% endif %}
+                    
+                    {% if business.review_count %}
+                    <div class="p-4 rounded-xl {{ theme.bg_card }} {{ theme.card_border }} {{ theme.shadow }}">
+                        <div class="text-3xl font-bold {{ theme.primary_text }}">{{ business.review_count }}+</div>
+                        <div class="text-sm {{ theme.text_muted }}">Clientes Satisfechos</div>
+                    </div>
+                    {% endif %}
+                    {% if business.price_range %}
+                    <div class="p-4 rounded-xl {{ theme.bg_card }} {{ theme.card_border }} {{ theme.shadow }}">
+                        <div class="text-3xl font-bold {{ theme.primary_text }}">{{ business.price_range }}</div>
+                        <div class="text-sm {{ theme.text_muted }}">Rango de Precios</div>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                {# CTA Button #}
+                {% if business.phone %}
+                <a href="https://wa.me/{{ business.phone | replace('+', '') | replace(' ', '') | replace('-', '') }}" 
+                   target="_blank"
+                   class="inline-flex items-center px-6 py-3 rounded-xl
+                          {{ theme.btn_primary }}
+                          font-semibold
+                          transform transition-all duration-300 
+                          hover:scale-105">
+                    <i class="fab fa-whatsapp text-lg mr-2"></i>
+                    Contáctanos
+                </a>
+                {% endif %}
+                {# Mostrar website_url y plus_code si existen #}
+                {% if business.website_url %}
+                <div class="mt-4">
+                  <a href="{{ business.website_url }}" target="_blank" class="text-blue-600 underline">Sitio Web Oficial</a>
+                </div>
+                {% endif %}
+                {% if business.plus_code %}
+                <div class="mt-2 text-xs {{ theme.text_secondary }}">Plus Code: {{ business.plus_code }}</div>
+                {% endif %}
+                {# Mostrar links de menú, reservas, pedidos #}
+                <div class="mt-2 space-x-2">
+                  {% if business.menu_link %}<a href="{{ business.menu_link }}" target="_blank" class="text-blue-600 underline">Ver Menú</a>{% endif %}
+                  {% if business.reserve_link %}<a href="{{ business.reserve_link }}" target="_blank" class="text-blue-600 underline">Reservar</a>{% endif %}
+                  {% if business.order_link %}<a href="{{ business.order_link }}" target="_blank" class="text-blue-600 underline">Pedir Online</a>{% endif %}
+                </div>
+                {# Mostrar social_media si existe #}
+                {% if business.social_media %}
+                <div class="mt-2 text-xs {{ theme.text_secondary }}">
+                  <b>Redes Sociales:</b>
+                  {% for key, value in business.social_media.items() %}
+                    <a href="{{ value }}" target="_blank" class="text-blue-600 underline">{{ key|capitalize }}</a>{% if not loop.last %}, {% endif %}
+                  {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{# ============================================== #}
+{# WHY CHOOSE US - Trust Indicators               #}
+{# ============================================== #}
+<section class="{{ theme.bg_primary }} py-24 relative overflow-hidden">
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {# Section Header #}
+        <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+            <h2 class="font-display text-3xl md:text-4xl font-bold {{ theme.text_primary }} mb-4 tracking-tight">
+                ¿Por qué <span class="{{ theme.primary_text }}">Elegirnos</span>?
+            </h2>
+            <p class="{{ theme.text_secondary }} text-lg">
+                La confianza de nuestros clientes nos respalda
+            </p>
+        </div>
+        
+        {# Benefits Grid - Compact Cards #}
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            {% set benefits = [
+                {"icon": "fa-medal", "title": "Calidad Premium", "desc": "Productos y servicios de primera"},
+                {"icon": "fa-clock", "title": "Puntualidad", "desc": "Respetamos tu tiempo"},
+                {"icon": "fa-heart", "title": "Atención Dedicada", "desc": "Cada cliente es único"},
+                {"icon": "fa-shield-halved", "title": "Garantía", "desc": "Satisfacción asegurada"}
+            ] %}
+            
+            {% for benefit in benefits %}
+            <div data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}"
+                 class="text-center p-6 rounded-2xl {{ theme.bg_card }} {{ theme.card_border }} {{ theme.shadow }}
+                        transition-all duration-300 {{ theme.card_hover }}">
+                <div class="w-12 h-12 rounded-xl {{ theme.icon_bg }} mx-auto mb-4
+                            flex items-center justify-center">
+                    <i class="fas {{ benefit.icon }} text-lg {{ theme.icon_text }}"></i>
+                </div>
+                <h3 class="font-semibold {{ theme.text_primary }} mb-1">{{ benefit.title }}</h3>
+                <p class="text-sm {{ theme.text_muted }}">{{ benefit.desc }}</p>
+                                {# Mostrar topics y rating_distribution #}
+                                {% if business.review_topics %}
+                                <div class="mt-2 text-xs {{ theme.text_secondary }}">
+                                    <b>Temas frecuentes:</b>
+                                    {% for topic, count in business.review_topics.items() %}
+                                        {{ topic }} ({{ count }}){% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                {% if business.rating_distribution %}
+                                <div class="mt-2 text-xs {{ theme.text_secondary }}">
+                                    <b>Distribución de calificaciones:</b>
+                                    {% for star, count in business.rating_distribution.items() %}
+                                        {{ star }}★: {{ count }}{% if not loop.last %}, {% endif %}
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>

@@ -1,0 +1,54 @@
+{
+  "business_name": "Maison Mint",
+  "business_id": "0x945da8a06a8b2473:0",
+  "category": "Peluquería",
+  "brand_colors": {
+    "primary": "#2563eb",
+    "secondary": "#7c3aed",
+    "accent": "#f59e0b",
+    "background": "#ffffff",
+    "text": "#1f2937"
+  },
+  "business_identity": {
+    "vision": "",
+    "mission": "",
+    "values": [],
+    "founding_year": null,
+    "founding_story": "",
+    "unique_selling_points": []
+  },
+  "media_assets": {
+    "logo_url": "https://www.crunchyroll.com/es/series/GRGGPG93R/fullmetal-alchemist-brotherhood",
+    "custom_photos": [],
+    "video_url": null,
+    "instagram_handle": "@nicoolasvargas",
+    "facebook_page": null,
+    "tiktok_handle": "@nosoynicolas"
+  },
+  "special_offers": {
+    "current_promotions": [
+      {
+        "title": "20% de desucento dia del amor",
+        "description": "20% de descuento dia de los enamorados",
+        "valid_until": ""
+      },
+      {
+        "title": "14 de febrero",
+        "description": "descuento en todos los productos",
+        "valid_until": ""
+      }
+    ],
+    "loyalty_program": "tarjeta de regalo",
+    "seasonal_offers": []
+  },
+  "contact_preferences": {
+    "preferred_contact_method": "whatsapp",
+    "whatsapp_number": "0981301077",
+    "email": null,
+    "response_time": "20 minutis",
+    "booking_enabled": true,
+    "booking_url": null
+  },
+  "custom_services": [],
+  "completed_at": "2026-01-29T15:49:13.662459"
+}

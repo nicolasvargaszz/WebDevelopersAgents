@@ -1,0 +1,212 @@
+{# ============================================== #}
+{# SOCIAL PROOF - Reviews & Gallery              #}
+{# Clean & Luminous Design                       #}
+{# ============================================== #}
+
+{# ============================================== #}
+{# GALLERY SECTION                               #}
+{# ============================================== #}
+{% if business.gallery_images %}
+<section id="galeria" class="{{ theme.bg_secondary }} py-24 lg:py-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        {# Section Header #}
+        <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold 
+                         {{ theme.primary_light }} {{ theme.primary_light_text }} mb-6">
+                <i class="fas fa-images mr-2 opacity-70"></i>
+                Nuestra Galería
+            </span>
+            <h2 class="font-display text-4xl md:text-5xl font-bold {{ theme.text_primary }} mb-6 tracking-tight">
+                Descubre nuestro <span class="{{ theme.primary_text }}">Trabajo</span>
+            </h2>
+            <p class="text-lg {{ theme.text_secondary }}">
+                Cada imagen refleja nuestra dedicación y pasión por lo que hacemos
+            </p>
+        </div>
+        
+        {# Gallery Grid - Masonry Style #}
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            {% for image in business.gallery_images[:9] %}
+            <div data-aos="fade-up" data-aos-delay="{{ loop.index0 * 50 }}"
+                 class="{% if loop.index in [1, 5] %}md:row-span-2{% endif %} group relative rounded-2xl overflow-hidden 
+                        shadow-lg shadow-gray-200/50 {{ theme.card_hover }} transition-all duration-300">
+                <img src="{{ image }}" 
+                     alt="{{ business.name }} - Imagen {{ loop.index }}"
+                     class="w-full h-full object-cover aspect-square {% if loop.index in [1, 5] %}md:aspect-[3/4]{% endif %}
+                            transform group-hover:scale-105 transition-transform duration-500"
+                     loading="lazy">
+                
+                {# Hover Overlay #}
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent 
+                            opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                            flex items-end justify-center pb-6">
+                    <span class="text-white font-medium text-sm px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm">
+                        <i class="fas fa-expand-alt mr-2"></i>
+                        Ver imagen
+                    </span>
+                </div>
+            </div>
+            {% endfor %}
+                        {# Mostrar fotos de reseñas si existen #}
+                        {% if business.reviews %}
+                            {% for review in business.reviews %}
+                                {% if review.photos %}
+                                    {% for photo in review.photos %}
+                                    <div class="group relative rounded-2xl overflow-hidden shadow-lg shadow-gray-200/50 {{ theme.card_hover }} transition-all duration-300">
+                                        <img src="{{ photo }}" alt="Foto de reseña de {{ review.author }}" class="w-full h-full object-cover aspect-square transform group-hover:scale-105 transition-transform duration-500" loading="lazy">
+                                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-6">
+                                            <span class="text-white font-medium text-xs px-3 py-1 rounded-full bg-white/20 backdrop-blur-sm">Foto de cliente</span>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+        </div>
+        
+        {# View More Button (if more than 9 images) #}
+        {% if business.gallery_images | length > 9 %}
+        <div class="text-center mt-12" data-aos="fade-up">
+            <button class="inline-flex items-center px-6 py-3 rounded-xl {{ theme.btn_secondary }}
+                          font-semibold transition-all duration-300 hover:scale-105">
+                <i class="fas fa-th-large mr-2"></i>
+                Ver todas las fotos ({{ business.gallery_images | length }})
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}
+
+{# ============================================== #}
+{# REVIEWS / TESTIMONIALS SECTION                #}
+{# ============================================== #}
+{% if business.reviews %}
+<section id="resenas" class="{{ theme.bg_primary }} py-24 lg:py-32 relative overflow-hidden">
+    
+    {# Background Pattern #}
+    <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(circle at 1px 1px, rgb(0 0 0 / 0.03) 1px, transparent 0); background-size: 32px 32px;"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        {# Section Header #}
+        <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold 
+                         {{ theme.primary_light }} {{ theme.primary_light_text }} mb-6">
+                <i class="fas fa-star mr-2 opacity-70"></i>
+                Testimonios
+            </span>
+            <h2 class="font-display text-4xl md:text-5xl font-bold {{ theme.text_primary }} mb-6 tracking-tight">
+                Lo que dicen nuestros <span class="{{ theme.primary_text }}">Clientes</span>
+            </h2>
+            
+            {# Overall Rating Summary #}
+            <div class="flex items-center justify-center space-x-4 mt-8">
+                <div class="flex items-center space-x-1 {{ theme.star_color }} text-2xl">
+                    {% for i in range(5) %}
+                        {% if i < business.rating | int %}
+                            <i class="fas fa-star"></i>
+                        {% elif i < business.rating %}
+                            <i class="fas fa-star-half-alt"></i>
+                        {% else %}
+                            <i class="far fa-star opacity-30"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <span class="text-3xl font-bold {{ theme.text_primary }}">{{ business.rating }}</span>
+                <span class="{{ theme.text_muted }}">de {{ business.review_count }} reseñas</span>
+                <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" alt="Google" class="w-6 h-6 ml-2">
+            </div>
+        </div>
+        
+        {# Reviews Grid - Cards #}
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for review in business.reviews[:6] %}
+            <div data-aos="fade-up" data-aos-delay="{{ loop.index0 * 100 }}"
+                 class="group {{ theme.bg_card }} rounded-2xl p-6 {{ theme.card_border }} {{ theme.shadow }} transition-all duration-300 {{ theme.card_hover }}">
+                {# Review Header #}
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center space-x-3">
+                        {# Avatar #}
+                        {% if review.profile_photo_url or review.author_avatar %}
+                        <img src="{{ review.profile_photo_url | default(review.author_avatar) }}" 
+                             alt="{{ review.author_name | default(review.author) }}"
+                             class="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100">
+                        {% else %}
+                        <div class="w-12 h-12 rounded-full {{ theme.primary_bg }} flex items-center justify-center">
+                            <span class="text-white font-bold text-lg">{{ review.author_name[0] | default(review.author[0]) }}</span>
+                        </div>
+                        {% endif %}
+                        <div>
+                            <h4 class="font-semibold {{ theme.text_primary }}">{{ review.author_name | default(review.author) }}</h4>
+                            <p class="text-sm {{ theme.text_muted }}">{{ review.relative_time_description | default(review.date) | default('Cliente verificado') }}</p>
+                        </div>
+                    </div>
+                    {# Google Icon #}
+                    <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" alt="Google" class="w-5 h-5 opacity-60">
+                </div>
+                {# Star Rating #}
+                <div class="flex items-center space-x-1 {{ theme.star_color }} mb-4">
+                    {% for i in range(5) %}
+                        {% if i < review.rating %}
+                            <i class="fas fa-star text-sm"></i>
+                        {% else %}
+                            <i class="far fa-star text-sm opacity-30"></i>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                {# Review Text #}
+                <p class="{{ theme.text_secondary }} text-[15px] leading-relaxed line-clamp-4">
+                    "{{ review.text | default('Excelente servicio, muy recomendado!') }}"
+                </p>
+                {# Mostrar fotos de la reseña si existen #}
+                {% if review.photos %}
+                <div class="mt-2 flex flex-wrap gap-2">
+                  {% for photo in review.photos %}
+                  <img src="{{ photo }}" alt="Foto de reseña" class="w-16 h-16 object-cover rounded-lg border">
+                  {% endfor %}
+                </div>
+                {% endif %}
+                {# Mostrar link al perfil del autor si existe #}
+                {% if review.author_profile_url %}
+                <div class="mt-2 text-xs"><a href="{{ review.author_profile_url }}" target="_blank" class="text-blue-600 underline">Ver perfil de {{ review.author_name | default(review.author) }}</a></div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+        {# Mostrar rating_distribution y review_topics si existen #}
+        <div class="mt-8 flex flex-wrap gap-6 justify-center">
+          {% if business.rating_distribution %}
+          <div class="text-xs {{ theme.text_secondary }}">
+            <b>Distribución de calificaciones:</b>
+            {% for star, count in business.rating_distribution.items() %}
+              {{ star }}★: {{ count }}{% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </div>
+          {% endif %}
+          {% if business.review_topics %}
+          <div class="text-xs {{ theme.text_secondary }}">
+            <b>Temas frecuentes:</b>
+            {% for topic, count in business.review_topics.items() %}
+              {{ topic }} ({{ count }}){% if not loop.last %}, {% endif %}
+            {% endfor %}
+          </div>
+          {% endif %}
+        </div>
+        
+        {# See All Reviews CTA #}
+        {% if business.google_maps_url %}
+        <div class="text-center mt-12" data-aos="fade-up">
+            <a href="{{ business.google_maps_url }}" target="_blank" rel="noopener"
+               class="inline-flex items-center px-6 py-3 rounded-xl {{ theme.btn_secondary }}
+                      font-semibold transition-all duration-300 hover:scale-105">
+                <i class="fab fa-google mr-2"></i>
+                Ver todas las reseñas en Google
+                <i class="fas fa-external-link-alt ml-2 text-xs"></i>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endif %}

@@ -1,0 +1,1409 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    
+    <!-- SEO Meta Tags -->
+    <title>Taller Circuito II | Taller mecánico en Asunción</title>
+    <meta name="description" content="Mecánicos especializados, diagnóstico preciso y reparaciones garantizadas">
+    <meta name="keywords" content="Taller mecánico, Asunción, Paraguay, Taller Circuito II">
+    <meta name="author" content="Taller Circuito II">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="#">
+    
+    <!-- Open Graph / Facebook (WhatsApp Preview) -->
+    <meta property="og:type" content="business.business">
+    <meta property="og:url" content="#">
+    <meta property="og:title" content="Taller Circuito II - Mecánicos especializados, diagnóstico preciso y reparaciones garantizadas">
+    <meta property="og:description" content="Somos más que un taller mecánico; somos tu aliado en el cuidado de tu vehículo. Diagnóstico preciso, reparaciones garantizadas y el trato que mereces.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=1920&amp;h=1080&amp;fit=crop&amp;q=80">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:locale" content="es_PY">
+    <meta property="og:site_name" content="Taller Circuito II">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Taller Circuito II">
+    <meta name="twitter:description" content="Mecánicos especializados, diagnóstico preciso y reparaciones garantizadas">
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=1920&amp;h=1080&amp;fit=crop&amp;q=80">
+    
+    <!-- Business Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "LocalBusiness",
+        "name": "Taller Circuito II",
+        "description": "Somos más que un taller mecánico; somos tu aliado en el cuidado de tu vehículo. Diagnóstico preciso, reparaciones garantizadas y el trato que mereces.",
+        "image": "https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=1920&amp;h=1080&amp;fit=crop&amp;q=80",
+        "telephone": "0981 480321",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "Tte. 1ro. Adalberto Ramírez Franco, Asunción 001427",
+            "addressLocality": "Asunción",
+            "addressCountry": "PY"
+        },
+        
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.7",
+            "reviewCount": "48"
+        },
+        
+        "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": "-25.3328549",
+            "longitude": "-57.5895133"
+        }
+    }
+    </script>
+    
+    <!-- Preconnect for Performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    
+    <!-- Google Fonts: Plus Jakarta Sans (UI) + Inter (Body) -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,200;0,300;0,400;0,500;0,600;0,700;0,800;1,300;1,400;1,500;1,600&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    
+    <!-- AOS Animations -->
+    <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+    
+    <!-- Tailwind Configuration - Clean & Luminous -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+                        'display': ['Plus Jakarta Sans', 'Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 3s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'bounce-slow': 'bounce 2s infinite',
+                        'fade-in': 'fadeIn 0.5s ease-out',
+                        'slide-up': 'slideUp 0.5s ease-out',
+                        'slide-down': 'slideDown 0.3s ease-out',
+                        'scale-in': 'scaleIn 0.3s ease-out',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        slideDown: {
+                            '0%': { opacity: '0', transform: 'translateY(-10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        scaleIn: {
+                            '0%': { opacity: '0', transform: 'scale(0.9)' },
+                            '100%': { opacity: '1', transform: 'scale(1)' },
+                        },
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom Styles - Clean & Luminous Theme -->
+    <style>
+        /* Smooth Scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        /* Custom Scrollbar - Light Theme */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        
+        /* Typography Enhancement */
+        body {
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        /* Glassmorphism - Light Version */
+        .glass-light {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        /* WhatsApp Button Pulse */
+        .whatsapp-pulse {
+            animation: whatsappPulse 2s infinite;
+        }
+        @keyframes whatsappPulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5);
+            }
+            70% {
+                box-shadow: 0 0 0 15px rgba(37, 211, 102, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+            }
+        }
+        
+        /* Image Zoom on Hover */
+        .img-zoom {
+            overflow: hidden;
+        }
+        .img-zoom img {
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .img-zoom:hover img {
+            transform: scale(1.05);
+        }
+        
+        /* Star Rating */
+        .star-rating {
+            color: #fbbf24;
+        }
+        
+        /* Navbar Scroll Effect - Light Background */
+        .navbar-scrolled {
+            background: rgba(255, 255, 255, 0.95) !important;
+            backdrop-filter: blur(20px) !important;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 4px 20px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        
+        /* Masonry Layout */
+        .masonry {
+            column-count: 1;
+            column-gap: 1.5rem;
+        }
+        @media (min-width: 640px) {
+            .masonry { column-count: 2; }
+        }
+        @media (min-width: 1024px) {
+            .masonry { column-count: 3; }
+        }
+        .masonry-item {
+            break-inside: avoid;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Card Lift Animation */
+        .card-lift {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-lift:hover {
+            transform: translateY(-4px);
+        }
+        
+        /* Custom Theme Variables */
+        
+    </style>
+</head>
+
+<body class="bg-slate-50 font-sans text-slate-800 antialiased overflow-x-hidden">
+    
+    <!-- ========================================== -->
+    <!-- CLEAN NAVBAR - Light Background           -->
+    <!-- ========================================== -->
+    <nav id="navbar" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-gray-200">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Logo / Brand -->
+                <a href="#hero" class="flex items-center space-x-3 group">
+                    
+                    <div class="h-10 w-10 rounded-xl bg-blue-700 flex items-center justify-center shadow-lg shadow-blue-700/20">
+                        <span class="text-white font-bold text-lg">T</span>
+                    </div>
+                    
+                    <span class="font-display text-xl font-bold text-slate-700 group-hover:text-blue-700 transition-colors">
+                        Taller Circuito II
+                    </span>
+                </a>
+                
+                <!-- Desktop Navigation -->
+                <div class="hidden md:flex items-center space-x-1">
+                    <a href="#hero" class="nav-link px-4 py-2 rounded-lg text-slate-700 hover:text-blue-700 hover:bg-gray-100 transition-all text-sm font-medium">Inicio</a>
+                    <a href="#servicios" class="nav-link px-4 py-2 rounded-lg text-slate-700 hover:text-blue-700 hover:bg-gray-100 transition-all text-sm font-medium">Servicios</a>
+                    
+                    <a href="#galeria" class="nav-link px-4 py-2 rounded-lg text-slate-700 hover:text-blue-700 hover:bg-gray-100 transition-all text-sm font-medium">Galería</a>
+                    
+                    
+                    <a href="#resenas" class="nav-link px-4 py-2 rounded-lg text-slate-700 hover:text-blue-700 hover:bg-gray-100 transition-all text-sm font-medium">Reseñas</a>
+                    
+                    <a href="#contacto" class="nav-link px-4 py-2 rounded-lg text-slate-700 hover:text-blue-700 hover:bg-gray-100 transition-all text-sm font-medium">Contacto</a>
+                </div>
+                
+                <!-- CTA Button -->
+                <div class="hidden md:flex items-center space-x-4">
+                    
+                    <a href="tel:0981 480321" class="text-slate-700 hover:text-blue-700 transition-colors flex items-center">
+                        <i class="fas fa-phone-alt mr-2 text-sm"></i>
+                        <span class="text-sm font-medium">0981 480321</span>
+                    </a>
+                    
+                    <a href="https://wa.me/0981480321?text=Hola%21" 
+                       target="_blank" 
+                       class="px-5 py-2.5 bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 text-white shadow-lg shadow-blue-500/30 font-semibold rounded-xl transform hover:scale-105 transition-all duration-300 text-sm">
+                        <i class="fab fa-whatsapp mr-2"></i>
+                        WhatsApp
+                    </a>
+                </div>
+                
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg text-slate-700 hover:bg-gray-100 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path id="menu-icon-open" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        <path id="menu-icon-close" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white/95 backdrop-blur-lg border-t border-gray-100 shadow-lg">
+            <div class="px-4 py-6 space-y-2">
+                <a href="#hero" class="block px-4 py-3 rounded-xl text-slate-700 hover:bg-gray-100 transition-all font-medium">Inicio</a>
+                <a href="#servicios" class="block px-4 py-3 rounded-xl text-slate-700 hover:bg-gray-100 transition-all font-medium">Servicios</a>
+                
+                <a href="#galeria" class="block px-4 py-3 rounded-xl text-slate-700 hover:bg-gray-100 transition-all font-medium">Galería</a>
+                
+                
+                <a href="#resenas" class="block px-4 py-3 rounded-xl text-slate-700 hover:bg-gray-100 transition-all font-medium">Reseñas</a>
+                
+                <a href="#contacto" class="block px-4 py-3 rounded-xl text-slate-700 hover:bg-gray-100 transition-all font-medium">Contacto</a>
+                
+                <div class="pt-4 border-t border-gray-100">
+                    <a href="https://wa.me/0981480321" 
+                       target="_blank" 
+                       class="flex items-center justify-center w-full px-6 py-3 bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 text-white shadow-lg shadow-blue-500/30 font-semibold rounded-xl">
+                        <i class="fab fa-whatsapp mr-2"></i>
+                        Contactar por WhatsApp
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+    
+    <!-- ========================================== -->
+    <!-- MAIN CONTENT                              -->
+    <!-- ========================================== -->
+    <main>
+        
+
+
+
+
+
+
+
+<section id="hero" class="relative min-h-[100vh] flex items-center justify-center overflow-hidden">
+    
+    
+    <div class="absolute inset-0 z-0">
+        <img src="https://images.unsplash.com/photo-1619642751034-765dfdf7c58e?w=1920&amp;h=1080&amp;fit=crop&amp;q=80" 
+             alt="Taller Circuito II"
+             class="w-full h-full object-cover scale-105 transition-transform duration-[3000ms] ease-out"
+             loading="eager">
+        
+        
+        <div class="absolute inset-0 bg-gradient-to-r from-blue-950/90 via-slate-900/75 to-blue-900/50"></div>
+        
+        
+        <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent"></div>
+        
+        
+        <div class="absolute bottom-0 left-0 right-0 h-48 bg-gradient-to-t from-white via-white/80 to-transparent"></div>
+    </div>
+    
+    
+    <div class="absolute top-1/4 -left-20 w-96 h-96 bg-white/10 rounded-full blur-3xl"></div>
+    <div class="absolute bottom-1/4 -right-20 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
+    
+    
+    <div class="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center pt-16">
+        
+        
+        <div data-aos="fade-down" data-aos-delay="100">
+            <span class="inline-flex items-center px-5 py-2.5 rounded-full text-sm font-semibold 
+                         bg-white/95 backdrop-blur-sm text-slate-800 
+                         shadow-lg shadow-black/10 border border-white/20 mb-8">
+                <span class="w-2 h-2 rounded-full bg-blue-700 mr-2.5 animate-pulse"></span>
+                Taller mecánico
+            </span>
+        </div>
+        
+        
+        <h1 data-aos="fade-up" data-aos-delay="200" 
+            class="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl 
+                   font-extrabold tracking-tight text-white mb-6 leading-[0.95]
+                   drop-shadow-[0_4px_24px_rgba(0,0,0,0.4)]">
+            Confianza Sobre Ruedas
+        </h1>
+        
+        
+        <p data-aos="fade-up" data-aos-delay="300" 
+           class="text-xl sm:text-2xl md:text-3xl text-white/90 max-w-3xl mx-auto mb-10 font-light
+                  drop-shadow-[0_2px_12px_rgba(0,0,0,0.3)]">
+            Mecánicos especializados, diagnóstico preciso y reparaciones garantizadas
+        </p>
+        
+        
+        
+        <div data-aos="fade-up" data-aos-delay="400" class="flex items-center justify-center space-x-4 mb-12">
+            <div class="flex items-center space-x-3 px-6 py-3.5 rounded-2xl 
+                        bg-white shadow-xl shadow-black/10 border border-gray-100">
+                
+                <div class="flex items-center space-x-0.5 text-amber-400">
+                    
+                        
+                            <i class="fas fa-star text-lg"></i>
+                        
+                    
+                        
+                            <i class="fas fa-star text-lg"></i>
+                        
+                    
+                        
+                            <i class="fas fa-star text-lg"></i>
+                        
+                    
+                        
+                            <i class="fas fa-star text-lg"></i>
+                        
+                    
+                        
+                            <i class="fas fa-star-half-alt text-lg"></i>
+                        
+                    
+                </div>
+                <span class="text-slate-900 font-bold text-xl">4.7</span>
+                <span class="text-slate-500 text-sm font-medium">(48 reseñas)</span>
+            </div>
+            
+            
+            <div class="hidden sm:flex items-center space-x-2 px-4 py-2.5 rounded-xl 
+                        bg-white shadow-lg shadow-black/10 border border-gray-100">
+                <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" alt="Google" class="w-5 h-5">
+                <span class="text-slate-600 text-sm font-medium">Verificado</span>
+            </div>
+        </div>
+        
+        
+        
+        <div data-aos="fade-up" data-aos-delay="500" class="flex flex-col sm:flex-row items-center justify-center gap-4">
+            
+            <a href="https://wa.me/0981480321?text=Hola%21%20Vi%20su%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." 
+               class="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl
+                      bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 text-white shadow-lg shadow-blue-500/30
+                      text-lg font-semibold
+                      transform transition-all duration-300 
+                      hover:scale-105 hover:-translate-y-0.5
+                      focus:outline-none focus:ring-4 focus:ring-white/30">
+                <i class="fab fa-whatsapp text-xl group-hover:scale-110 transition-transform"></i>
+                <span>Contactar por WhatsApp</span>
+                <i class="fas fa-arrow-right text-sm opacity-0 -ml-2 group-hover:opacity-100 group-hover:ml-0 transition-all duration-300"></i>
+            </a>
+            
+            
+            <a href="https://www.google.com/maps/search/?api=1&amp;query=MCGJ%2BFQ+Asunci%C3%B3n" target="_blank" rel="noopener"
+               class="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl
+                      bg-white/95 backdrop-blur-sm text-slate-800
+                      shadow-lg shadow-black/10 border border-white
+                      text-lg font-semibold
+                      transform transition-all duration-300 
+                      hover:bg-white hover:shadow-xl hover:-translate-y-0.5
+                      focus:outline-none focus:ring-4 focus:ring-white/30">
+                <i class="fas fa-directions text-xl text-blue-700 group-hover:scale-110 transition-transform"></i>
+                <span>¿Cómo llegar?</span>
+                <i class="fas fa-external-link-alt text-sm opacity-60 ml-2"></i>
+            </a>
+            
+            <a href="#servicios" 
+               class="group inline-flex items-center justify-center gap-3 px-8 py-4 rounded-xl
+                      bg-white/95 backdrop-blur-sm text-slate-800
+                      shadow-lg shadow-black/10 border border-white
+                      text-lg font-semibold
+                      transform transition-all duration-300 
+                      hover:bg-white hover:shadow-xl hover:-translate-y-0.5
+                      focus:outline-none focus:ring-4 focus:ring-white/30">
+                <span>Ver Servicios</span>
+                <i class="fas fa-chevron-down text-sm group-hover:translate-y-0.5 transition-transform"></i>
+            </a>
+        </div>
+        
+        
+        <div data-aos="fade-up" data-aos-delay="600" class="mt-12 flex flex-wrap items-center justify-center gap-6 text-white/70">
+            
+            <div class="flex items-center gap-2">
+                <i class="fas fa-map-marker-alt text-white/50"></i>
+                <span class="text-sm font-medium">Asunción</span>
+            </div>
+            
+            <div class="flex items-center gap-2">
+                <i class="fas fa-phone text-white/50"></i>
+                <span class="text-sm font-medium">0981 480321</span>
+            </div>
+            
+        </div>
+    </div>
+    
+    
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10" data-aos="fade-up" data-aos-delay="700">
+        <a href="#servicios" class="flex flex-col items-center text-white/60 hover:text-white transition-colors">
+            <span class="text-xs font-medium uppercase tracking-wider mb-2">Descubrir</span>
+            <div class="w-6 h-10 rounded-full border-2 border-white/30 flex items-start justify-center p-1.5">
+                <div class="w-1.5 h-3 rounded-full bg-white/60 animate-bounce"></div>
+            </div>
+        </a>
+    </div>
+</section>
+
+
+
+
+
+
+
+<section id="servicios" class="bg-gray-100 py-24 lg:py-32 relative overflow-hidden">
+    
+    
+    <div class="absolute inset-0 opacity-50" style="background-image: radial-gradient(circle at 1px 1px, rgb(0 0 0 / 0.03) 1px, transparent 0); background-size: 24px 24px;"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        
+        <div class="text-center max-w-3xl mx-auto mb-20" data-aos="fade-up">
+            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold 
+                         bg-blue-50 text-blue-800 mb-6">
+                <i class="fas fa-sparkles mr-2 opacity-70"></i>
+                Nuestros Servicios
+            </span>
+            <h2 class="font-display text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
+                
+                    Lo que <span class="text-blue-700">Ofrecemos</span>
+                
+            </h2>
+            <p class="text-lg text-slate-600 leading-relaxed">
+                Descubre por qué somos la mejor opción para ti. Calidad, experiencia y dedicación en cada servicio.
+            </p>
+        </div>
+        
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            
+            <div data-aos="fade-up" data-aos-delay="0"
+                 class="group bg-white rounded-2xl p-8 
+                        border border-gray-200 shadow-lg shadow-gray-300/50
+                        transition-all duration-300 ease-out
+                        hover:shadow-2xl hover:-translate-y-1">
+                
+                
+                <div class="mb-6">
+                    <div class="w-14 h-14 rounded-xl bg-blue-100 
+                                flex items-center justify-center
+                                group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-star text-xl text-blue-700"></i>
+                    </div>
+                </div>
+                
+                
+                <h3 class="font-display text-xl font-bold text-slate-900 mb-3 
+                           group-hover:text-blue-700 transition-colors duration-300">
+                    Mantenimiento Preventivo
+                </h3>
+                
+                <p class="text-slate-600 leading-relaxed text-[15px]">
+                    Cambio de aceite, filtros, revisión de frenos, líquidos y más. Seguimos las especificaciones del fab
+                </p>
+                
+                
+                
+                
+                
+                <div class="mt-5 flex items-center text-blue-700 opacity-0 group-hover:opacity-100 
+                            transform translate-x-[-8px] group-hover:translate-x-0 transition-all duration-300">
+                    <span class="text-sm font-medium">Más información</span>
+                    <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                </div>
+                
+                
+            </div>
+            
+            <div data-aos="fade-up" data-aos-delay="100"
+                 class="group bg-white rounded-2xl p-8 
+                        border border-gray-200 shadow-lg shadow-gray-300/50
+                        transition-all duration-300 ease-out
+                        hover:shadow-2xl hover:-translate-y-1">
+                
+                
+                <div class="mb-6">
+                    <div class="w-14 h-14 rounded-xl bg-blue-100 
+                                flex items-center justify-center
+                                group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-magnifying-glass text-xl text-blue-700"></i>
+                    </div>
+                </div>
+                
+                
+                <h3 class="font-display text-xl font-bold text-slate-900 mb-3 
+                           group-hover:text-blue-700 transition-colors duration-300">
+                    Diagnóstico Computarizado
+                </h3>
+                
+                <p class="text-slate-600 leading-relaxed text-[15px]">
+                    Scanner de última generación para detectar fallas en todos los sistemas electrónicos. Identificamos 
+                </p>
+                
+                
+                
+                
+                
+                <div class="mt-5 flex items-center text-blue-700 opacity-0 group-hover:opacity-100 
+                            transform translate-x-[-8px] group-hover:translate-x-0 transition-all duration-300">
+                    <span class="text-sm font-medium">Más información</span>
+                    <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                </div>
+                
+                
+            </div>
+            
+            <div data-aos="fade-up" data-aos-delay="200"
+                 class="group bg-white rounded-2xl p-8 
+                        border border-gray-200 shadow-lg shadow-gray-300/50
+                        transition-all duration-300 ease-out
+                        hover:shadow-2xl hover:-translate-y-1">
+                
+                
+                <div class="mb-6">
+                    <div class="w-14 h-14 rounded-xl bg-blue-100 
+                                flex items-center justify-center
+                                group-hover:scale-110 transition-transform duration-300">
+                        <i class="fas fa-star text-xl text-blue-700"></i>
+                    </div>
+                </div>
+                
+                
+                <h3 class="font-display text-xl font-bold text-slate-900 mb-3 
+                           group-hover:text-blue-700 transition-colors duration-300">
+                    Mecánica General
+                </h3>
+                
+                <p class="text-slate-600 leading-relaxed text-[15px]">
+                    Reparación de motor, caja, suspensión, dirección y más. Repuestos originales y alternativos de calid
+                </p>
+                
+                
+                
+                
+                
+                <div class="mt-5 flex items-center text-blue-700 opacity-0 group-hover:opacity-100 
+                            transform translate-x-[-8px] group-hover:translate-x-0 transition-all duration-300">
+                    <span class="text-sm font-medium">Más información</span>
+                    <i class="fas fa-arrow-right ml-2 text-xs"></i>
+                </div>
+                
+                
+            </div>
+            
+        </div>
+        
+        
+        <div class="text-center mt-20" data-aos="fade-up">
+            <p class="text-slate-600 mb-8 text-lg">¿Tienes alguna pregunta sobre nuestros servicios?</p>
+            
+            <a href="https://wa.me/0981480321?text=Hola%21%20Me%20gustar%C3%ADa%20consultar%20sobre%20sus%20servicios." 
+               target="_blank"
+               class="inline-flex items-center px-8 py-4 rounded-xl
+                      bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 text-white shadow-lg shadow-blue-500/30
+                      text-lg font-semibold
+                      transform transition-all duration-300 
+                      hover:scale-105 hover:-translate-y-0.5">
+                <i class="fab fa-whatsapp text-xl mr-3"></i>
+                Consultar Disponibilidad
+            </a>
+            
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+<section id="nosotros" class="bg-white py-24 lg:py-32 relative overflow-hidden">
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            
+            
+            <div class="relative" data-aos="fade-right">
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl shadow-gray-300/30">
+                    <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweqHhRMadkald5HgpZK9kiiZm5EjjR0bw5n_8bb3dhMkRAspmI3i2j5n8g_uFgqkQJU-6vrRxC8BC9DiIN_M6EZ16TK8ZN3lbPS1odp_oldZyzvMQ-NDa_WN3_PBTr2BldA2wNO5T20AvyY=w1200-h800-k-no-no" 
+                         alt="Taller Circuito II"
+                         class="w-full h-96 lg:h-[500px] object-cover"
+                         loading="lazy">
+                    
+                    
+                    <div class="absolute bottom-6 right-6 lg:bottom-8 lg:right-8 
+                                bg-white rounded-2xl p-6 shadow-xl shadow-gray-300/40 border border-gray-100">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-14 h-14 rounded-xl bg-blue-700 flex items-center justify-center">
+                                <i class="fas fa-trophy text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <div class="text-3xl font-bold text-slate-900">4.7</div>
+                                <div class="text-sm text-slate-500">Calificación Google</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="absolute -z-10 top-6 -left-6 w-full h-full rounded-2xl border-2 border-blue-700/20"></div>
+            </div>
+            
+            
+            <div data-aos="fade-left">
+                <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold 
+                             bg-blue-50 text-blue-800 mb-6">
+                    <i class="fas fa-building mr-2 opacity-70"></i>
+                    Sobre Nosotros
+                </span>
+                
+                <h2 class="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-6 tracking-tight">
+                    Conoce nuestra <span class="text-blue-700">Historia</span>
+                </h2>
+                
+                <p class="text-slate-600 text-lg leading-relaxed mb-8">
+                    
+                    Somos más que un taller mecánico; somos tu aliado en el cuidado de tu vehículo. Diagnóstico preciso, reparaciones garantizadas y el trato que mereces.
+                </p>
+                
+                
+                <div class="grid grid-cols-2 gap-6 mb-8">
+                    
+                    
+                    
+                    <div class="p-4 rounded-xl bg-white border border-gray-200 shadow-lg shadow-gray-300/50">
+                        <div class="text-3xl font-bold text-blue-700">48+</div>
+                        <div class="text-sm text-slate-500">Clientes Satisfechos</div>
+                    </div>
+                    
+                    
+                </div>
+                
+                
+                
+                <a href="https://wa.me/0981480321" 
+                   target="_blank"
+                   class="inline-flex items-center px-6 py-3 rounded-xl
+                          bg-gradient-to-r from-blue-700 to-blue-800 hover:from-blue-800 hover:to-blue-900 text-white shadow-lg shadow-blue-500/30
+                          font-semibold
+                          transform transition-all duration-300 
+                          hover:scale-105">
+                    <i class="fab fa-whatsapp text-lg mr-2"></i>
+                    Contáctanos
+                </a>
+                
+                
+                
+                
+                <div class="mt-2 text-xs text-slate-600">Plus Code: MCGJ+FQ Asunción</div>
+                
+                
+                <div class="mt-2 space-x-2">
+                  
+                  
+                  
+                </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+<section class="bg-gray-100 py-24 relative overflow-hidden">
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        
+        <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+            <h2 class="font-display text-3xl md:text-4xl font-bold text-slate-900 mb-4 tracking-tight">
+                ¿Por qué <span class="text-blue-700">Elegirnos</span>?
+            </h2>
+            <p class="text-slate-600 text-lg">
+                La confianza de nuestros clientes nos respalda
+            </p>
+        </div>
+        
+        
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            
+            
+            <div data-aos="fade-up" data-aos-delay="0"
+                 class="text-center p-6 rounded-2xl bg-white border border-gray-200 shadow-lg shadow-gray-300/50
+                        transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                <div class="w-12 h-12 rounded-xl bg-blue-100 mx-auto mb-4
+                            flex items-center justify-center">
+                    <i class="fas fa-medal text-lg text-blue-700"></i>
+                </div>
+                <h3 class="font-semibold text-slate-900 mb-1">Calidad Premium</h3>
+                <p class="text-sm text-slate-500">Productos y servicios de primera</p>
+                                
+                                
+                                
+                                <div class="mt-2 text-xs text-slate-600">
+                                    <b>Distribución de calificaciones:</b>
+                                    
+                                        5★: 41, 
+                                    
+                                        4★: 5, 
+                                    
+                                        3★: 0, 
+                                    
+                                        2★: 0, 
+                                    
+                                        1★: 2
+                                    
+                                </div>
+                                
+            </div>
+            
+            <div data-aos="fade-up" data-aos-delay="100"
+                 class="text-center p-6 rounded-2xl bg-white border border-gray-200 shadow-lg shadow-gray-300/50
+                        transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                <div class="w-12 h-12 rounded-xl bg-blue-100 mx-auto mb-4
+                            flex items-center justify-center">
+                    <i class="fas fa-clock text-lg text-blue-700"></i>
+                </div>
+                <h3 class="font-semibold text-slate-900 mb-1">Puntualidad</h3>
+                <p class="text-sm text-slate-500">Respetamos tu tiempo</p>
+                                
+                                
+                                
+                                <div class="mt-2 text-xs text-slate-600">
+                                    <b>Distribución de calificaciones:</b>
+                                    
+                                        5★: 41, 
+                                    
+                                        4★: 5, 
+                                    
+                                        3★: 0, 
+                                    
+                                        2★: 0, 
+                                    
+                                        1★: 2
+                                    
+                                </div>
+                                
+            </div>
+            
+            <div data-aos="fade-up" data-aos-delay="200"
+                 class="text-center p-6 rounded-2xl bg-white border border-gray-200 shadow-lg shadow-gray-300/50
+                        transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                <div class="w-12 h-12 rounded-xl bg-blue-100 mx-auto mb-4
+                            flex items-center justify-center">
+                    <i class="fas fa-heart text-lg text-blue-700"></i>
+                </div>
+                <h3 class="font-semibold text-slate-900 mb-1">Atención Dedicada</h3>
+                <p class="text-sm text-slate-500">Cada cliente es único</p>
+                                
+                                
+                                
+                                <div class="mt-2 text-xs text-slate-600">
+                                    <b>Distribución de calificaciones:</b>
+                                    
+                                        5★: 41, 
+                                    
+                                        4★: 5, 
+                                    
+                                        3★: 0, 
+                                    
+                                        2★: 0, 
+                                    
+                                        1★: 2
+                                    
+                                </div>
+                                
+            </div>
+            
+            <div data-aos="fade-up" data-aos-delay="300"
+                 class="text-center p-6 rounded-2xl bg-white border border-gray-200 shadow-lg shadow-gray-300/50
+                        transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                <div class="w-12 h-12 rounded-xl bg-blue-100 mx-auto mb-4
+                            flex items-center justify-center">
+                    <i class="fas fa-shield-halved text-lg text-blue-700"></i>
+                </div>
+                <h3 class="font-semibold text-slate-900 mb-1">Garantía</h3>
+                <p class="text-sm text-slate-500">Satisfacción asegurada</p>
+                                
+                                
+                                
+                                <div class="mt-2 text-xs text-slate-600">
+                                    <b>Distribución de calificaciones:</b>
+                                    
+                                        5★: 41, 
+                                    
+                                        4★: 5, 
+                                    
+                                        3★: 0, 
+                                    
+                                        2★: 0, 
+                                    
+                                        1★: 2
+                                    
+                                </div>
+                                
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+<section id="galeria" class="bg-white py-24 lg:py-32">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        
+        <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold 
+                         bg-blue-50 text-blue-800 mb-6">
+                <i class="fas fa-images mr-2 opacity-70"></i>
+                Nuestra Galería
+            </span>
+            <h2 class="font-display text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
+                Descubre nuestro <span class="text-blue-700">Trabajo</span>
+            </h2>
+            <p class="text-lg text-slate-600">
+                Cada imagen refleja nuestra dedicación y pasión por lo que hacemos
+            </p>
+        </div>
+        
+        
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            
+            <div data-aos="fade-up" data-aos-delay="0"
+                 class="md:row-span-2 group relative rounded-2xl overflow-hidden 
+                        shadow-lg shadow-gray-200/50 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                <img src="https://lh3.googleusercontent.com/gps-cs-s/AHVAweqHhRMadkald5HgpZK9kiiZm5EjjR0bw5n_8bb3dhMkRAspmI3i2j5n8g_uFgqkQJU-6vrRxC8BC9DiIN_M6EZ16TK8ZN3lbPS1odp_oldZyzvMQ-NDa_WN3_PBTr2BldA2wNO5T20AvyY=w1200-h800-k-no-no" 
+                     alt="Taller Circuito II - Imagen 1"
+                     class="w-full h-full object-cover aspect-square md:aspect-[3/4]
+                            transform group-hover:scale-105 transition-transform duration-500"
+                     loading="lazy">
+                
+                
+                <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent 
+                            opacity-0 group-hover:opacity-100 transition-opacity duration-300
+                            flex items-end justify-center pb-6">
+                    <span class="text-white font-medium text-sm px-4 py-2 rounded-full bg-white/20 backdrop-blur-sm">
+                        <i class="fas fa-expand-alt mr-2"></i>
+                        Ver imagen
+                    </span>
+                </div>
+            </div>
+            
+                        
+                        
+                            
+                                
+                            
+                        
+        </div>
+        
+        
+        
+    </div>
+</section>
+
+
+
+
+
+
+<section id="resenas" class="bg-gray-100 py-24 lg:py-32 relative overflow-hidden">
+    
+    
+    <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(circle at 1px 1px, rgb(0 0 0 / 0.03) 1px, transparent 0); background-size: 32px 32px;"></div>
+    
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        
+        
+        <div class="text-center max-w-3xl mx-auto mb-16" data-aos="fade-up">
+            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold 
+                         bg-blue-50 text-blue-800 mb-6">
+                <i class="fas fa-star mr-2 opacity-70"></i>
+                Testimonios
+            </span>
+            <h2 class="font-display text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
+                Lo que dicen nuestros <span class="text-blue-700">Clientes</span>
+            </h2>
+            
+            
+            <div class="flex items-center justify-center space-x-4 mt-8">
+                <div class="flex items-center space-x-1 text-amber-400 text-2xl">
+                    
+                        
+                            <i class="fas fa-star"></i>
+                        
+                    
+                        
+                            <i class="fas fa-star"></i>
+                        
+                    
+                        
+                            <i class="fas fa-star"></i>
+                        
+                    
+                        
+                            <i class="fas fa-star"></i>
+                        
+                    
+                        
+                            <i class="fas fa-star-half-alt"></i>
+                        
+                    
+                </div>
+                <span class="text-3xl font-bold text-slate-900">4.7</span>
+                <span class="text-slate-500">de 48 reseñas</span>
+                <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" alt="Google" class="w-6 h-6 ml-2">
+            </div>
+        </div>
+        
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <div data-aos="fade-up" data-aos-delay="0"
+                 class="group bg-white rounded-2xl p-6 border border-gray-200 shadow-lg shadow-gray-300/50 transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
+                
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex items-center space-x-3">
+                        
+                        
+                        <img src="https://lh3.googleusercontent.com/a/ACg8ocIJcZQNefdUZus30uOvnuwPscsjPCawFhp_RcnBIA06fpwga8w=w120-h120-p-rp-mo-ba2-br100" 
+                             alt="Daniel Doldán"
+                             class="w-12 h-12 rounded-full object-cover ring-2 ring-gray-100">
+                        
+                        <div>
+                            <h4 class="font-semibold text-slate-900">Daniel Doldán</h4>
+                            <p class="text-sm text-slate-500">Hace 7 años</p>
+                        </div>
+                    </div>
+                    
+                    <img src="https://www.gstatic.com/images/branding/product/1x/googleg_48dp.png" alt="Google" class="w-5 h-5 opacity-60">
+                </div>
+                
+                <div class="flex items-center space-x-1 text-amber-400 mb-4">
+                    
+                        
+                            <i class="fas fa-star text-sm"></i>
+                        
+                    
+                        
+                            <i class="fas fa-star text-sm"></i>
+                        
+                    
+                        
+                            <i class="fas fa-star text-sm"></i>
+                        
+                    
+                        
+                            <i class="fas fa-star text-sm"></i>
+                        
+                    
+                        
+                            <i class="fas fa-star text-sm"></i>
+                        
+                    
+                </div>
+                
+                <p class="text-slate-600 text-[15px] leading-relaxed line-clamp-4">
+                    "Excelente servicio, atendido por el propio dueño."
+                </p>
+                
+                
+                
+                
+                <div class="mt-2 text-xs"><a href="https://www.google.com/maps/contrib/110723387483066834444/reviews?hl=es" target="_blank" class="text-blue-600 underline">Ver perfil de Daniel Doldán</a></div>
+                
+            </div>
+            
+        </div>
+        
+        <div class="mt-8 flex flex-wrap gap-6 justify-center">
+          
+          <div class="text-xs text-slate-600">
+            <b>Distribución de calificaciones:</b>
+            
+              5★: 41, 
+            
+              4★: 5, 
+            
+              3★: 0, 
+            
+              2★: 0, 
+            
+              1★: 2
+            
+          </div>
+          
+          
+        </div>
+        
+        
+        
+        <div class="text-center mt-12" data-aos="fade-up">
+            <a href="https://www.google.com/maps/search/?api=1&amp;query=MCGJ%2BFQ+Asunci%C3%B3n" target="_blank" rel="noopener"
+               class="inline-flex items-center px-6 py-3 rounded-xl bg-white text-slate-700 border-2 border-slate-200 hover:border-red-500 hover:text-red-600
+                      font-semibold transition-all duration-300 hover:scale-105">
+                <i class="fab fa-google mr-2"></i>
+                Ver todas las reseñas en Google
+                <i class="fas fa-external-link-alt ml-2 text-xs"></i>
+            </a>
+        </div>
+        
+    </div>
+</section>
+
+
+
+
+
+
+
+<section id="contacto" class="w-full bg-white py-24 lg:py-32 relative overflow-hidden">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center mb-12">
+            <span class="inline-flex items-center px-4 py-2 rounded-full text-sm font-semibold bg-blue-50 text-blue-800 mb-6">
+                <i class="fas fa-map-marker-alt mr-2 opacity-70"></i>
+                Ubicación y Contacto
+            </span>
+            <h2 class="font-display text-4xl md:text-5xl font-bold text-slate-900 mb-6 tracking-tight">
+                Visítanos o <span class="text-blue-700">Contáctanos</span>
+            </h2>
+            <p class="text-lg text-slate-600">Estamos listos para atenderte. ¡Te esperamos!</p>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+            
+            <div class="space-y-8 text-left">
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-map-marker-alt text-blue-700 text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-900 mb-1">Dirección</h3>
+                        <p class="text-slate-600">Tte. 1ro. Adalberto Ramírez Franco, Asunción 001427</p>
+                        <p class="text-slate-500 text-sm">Asunción, Paraguay</p>
+                        
+                        <p class="text-slate-500 text-xs">Plus Code: MCGJ+FQ Asunción</p>
+                        
+                    </div>
+                </div>
+
+                
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-phone-alt text-blue-700 text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-900 mb-1">Teléfono</h3>
+                        <a href="tel:0981 480321" class="text-slate-600 hover:text-blue-700 font-medium transition-colors">0981 480321</a>
+                    </div>
+                </div>
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-green-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fab fa-whatsapp text-green-600 text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-900 mb-1">WhatsApp</h3>
+                        <a href="https://wa.me/0981480321?text=Hola%21%20Vi%20su%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." target="_blank" class="text-green-600 hover:text-green-500 font-medium transition-colors">Chatear ahora</a>
+                    </div>
+                </div>
+                
+
+                
+                <div class="flex items-start space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                        <i class="fas fa-clock text-blue-700 text-lg"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-slate-900 mb-1">Horario de Atención</h3>
+                        <div class="space-y-1 text-slate-600 text-sm">
+                            
+                                
+                                <div class="flex justify-between w-48"><span>Saturday</span><span class="font-medium">closed</span></div>
+                                
+                                <div class="flex justify-between w-48"><span>Sunday</span><span class="font-medium">closed</span></div>
+                                
+                                <div class="flex justify-between w-48"><span>Monday</span><span class="font-medium">07:30-18:00</span></div>
+                                
+                                <div class="flex justify-between w-48"><span>Tuesday</span><span class="font-medium">07:30-18:00</span></div>
+                                
+                                <div class="flex justify-between w-48"><span>Wednesday</span><span class="font-medium">07:30-18:00</span></div>
+                                
+                                <div class="flex justify-between w-48"><span>Thursday</span><span class="font-medium">07:30-18:00</span></div>
+                                
+                                <div class="flex justify-between w-48"><span>Friday</span><span class="font-medium">07:30-18:00</span></div>
+                                
+                            
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            
+            <div class="flex flex-col items-center justify-center w-full h-full">
+                
+                <span class="font-display text-2xl font-bold text-slate-900 mb-2">Taller Circuito II</span>
+                <p class="text-slate-600 max-w-xs text-center mb-4">Mecánicos especializados, diagnóstico preciso y reparaciones garantizadas</p>
+                
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<footer class="w-full bg-slate-900 py-12 lg:py-16 relative overflow-hidden text-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
+            
+            <div class="lg:col-span-2">
+                <div class="flex items-center space-x-3 mb-6">
+                    
+                    <div class="h-10 w-10 rounded-xl bg-blue-700 flex items-center justify-center">
+                        <span class="text-white font-bold text-lg">T</span>
+                    </div>
+                    
+                    <span class="font-display text-xl font-bold text-white">Taller Circuito II</span>
+                </div>
+                <p class="text-slate-300 max-w-md leading-relaxed mb-6">
+                    Mecánicos especializados, diagnóstico preciso y reparaciones garantizadas
+                </p>
+                
+                
+                
+            </div>
+            
+            
+            <div>
+                <h4 class="text-white font-semibold mb-6">Enlaces Rápidos</h4>
+                <ul class="space-y-3">
+                    <li><a href="#hero" class="text-slate-300 hover:text-white transition-colors">Inicio</a></li>
+                    <li><a href="#servicios" class="text-slate-300 hover:text-white transition-colors">Servicios</a></li>
+                    
+                    <li><a href="#galeria" class="text-slate-300 hover:text-white transition-colors">Galería</a></li>
+                    
+                    
+                    <li><a href="#resenas" class="text-slate-300 hover:text-white transition-colors">Reseñas</a></li>
+                    
+                    <li><a href="#contacto" class="text-slate-300 hover:text-white transition-colors">Contacto</a></li>
+                </ul>
+            </div>
+            
+            
+            <div>
+                <h4 class="text-white font-semibold mb-6">Contacto</h4>
+                <ul class="space-y-4">
+                    <li class="flex items-start space-x-3">
+                        <i class="fas fa-map-marker-alt text-slate-300 mt-1"></i>
+                        <span class="text-slate-300">Tte. 1ro. Adalberto Ramírez Franco, Asunción 001427<br>Asunción</span>
+                    </li>
+                    
+                    <li class="flex items-center space-x-3">
+                        <i class="fas fa-phone-alt text-slate-300"></i>
+                        <a href="tel:0981 480321" class="text-slate-300 hover:text-white transition-colors">0981 480321</a>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        
+        
+        <div class="border-t border-white/10 pt-8">
+            <div class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+                <p class="text-slate-300 text-sm">
+                    © 2025 Taller Circuito II. Todos los derechos reservados.
+                </p>
+                <div class="flex items-center space-x-2 text-sm text-slate-300">
+                    <span>Diseñado con</span>
+                    <i class="fas fa-heart text-red-400 animate-pulse"></i>
+                    <span>para tu negocio</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    </main>
+    
+    <!-- ========================================== -->
+    <!-- FLOATING WHATSAPP BUTTON                  -->
+    <!-- ========================================== -->
+    
+    <a href="https://wa.me/0981480321?text=Hola%21%20Vi%20su%20p%C3%A1gina%20web%20y%20me%20gustar%C3%ADa%20m%C3%A1s%20informaci%C3%B3n." 
+       target="_blank"
+       class="fixed bottom-6 right-6 z-50 group"
+       aria-label="Contactar por WhatsApp">
+        <div class="relative">
+            <!-- Pulse Ring -->
+            <div class="absolute inset-0 bg-green-500 rounded-full whatsapp-pulse"></div>
+            
+            <!-- Button -->
+            <div class="relative flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full shadow-lg shadow-green-500/30 transform group-hover:scale-110 transition-transform duration-300">
+                <i class="fab fa-whatsapp text-white text-3xl"></i>
+            </div>
+            
+            <!-- Tooltip -->
+            <div class="absolute right-20 top-1/2 transform -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                <div class="bg-slate-800 text-white text-sm font-medium px-4 py-2 rounded-lg whitespace-nowrap shadow-lg">
+                    ¡Escríbenos!
+                    <div class="absolute right-0 top-1/2 transform translate-x-1 -translate-y-1/2 border-8 border-transparent border-l-slate-800"></div>
+                </div>
+            </div>
+        </div>
+    </a>
+    
+    
+    <!-- ========================================== -->
+    <!-- SCRIPTS                                   -->
+    <!-- ========================================== -->
+    
+    <!-- AOS Animation Library -->
+    <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 800,
+            easing: 'ease-out-cubic',
+            once: true,
+            offset: 50,
+        });
+        
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        let lastScrollY = window.scrollY;
+        
+        window.addEventListener('scroll', () => {
+            const currentScrollY = window.scrollY;
+            
+            if (currentScrollY > 100) {
+                navbar.classList.add('navbar-scrolled');
+            } else {
+                navbar.classList.remove('navbar-scrolled');
+            }
+            
+            lastScrollY = currentScrollY;
+        });
+        
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIconOpen = document.getElementById('menu-icon-open');
+        const menuIconClose = document.getElementById('menu-icon-close');
+        
+        if (mobileMenuBtn && mobileMenu) {
+            mobileMenuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                menuIconOpen.classList.toggle('hidden');
+                menuIconClose.classList.toggle('hidden');
+            });
+            
+            // Close menu when clicking a link
+            mobileMenu.querySelectorAll('a').forEach(link => {
+                link.addEventListener('click', () => {
+                    mobileMenu.classList.add('hidden');
+                    menuIconOpen.classList.remove('hidden');
+                    menuIconClose.classList.add('hidden');
+                });
+            });
+        }
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // Active nav link highlighting
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                const sectionHeight = section.clientHeight;
+                if (scrollY >= sectionTop - 200) {
+                    current = section.getAttribute('id');
+                }
+            });
+            
+            navLinks.forEach(link => {
+                link.classList.remove('text-blue-700', 'font-semibold');
+                if (link.getAttribute('href') === '#' + current) {
+                    link.classList.add('text-blue-700', 'font-semibold');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

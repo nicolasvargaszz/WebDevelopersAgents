@@ -1,6 +1,6 @@
 # 🚀 WebDevelopers Agents
 
-> **Automated Lead Generation System** — Discovers local businesses without websites, generates personalized previews, and sends outreach proposals. Built with Python, Playwright, and AI.
+> **Automated Lead Generation System** — Discovers local businesses without websites, generates personalized previews, and sends outreach proposals. Built with Python, Playwright, and AI. 
 
 [![Python](https://img.shields.io/badge/Python-3.11+-blue?logo=python&logoColor=white)](https://python.org)
 [![Playwright](https://img.shields.io/badge/Playwright-Automation-green?logo=playwright&logoColor=white)](https://playwright.dev)

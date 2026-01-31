@@ -11,7 +11,7 @@ from datetime import datetime
 
 def load_businesses():
     """Load businesses from JSON file"""
-    json_path = Path("discovered_businesses.json")
+    json_path = Path("datos_definitivos_final.json")
     if json_path.exists():
         with open(json_path, 'r', encoding='utf-8') as f:
             return json.load(f)

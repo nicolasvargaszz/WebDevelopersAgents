@@ -146,6 +146,7 @@ class ScrapedBusiness:
     neighborhood: Optional[str] = None
     phone: Optional[str] = None
     rating: float = 0.0
+    review_count: int = 0  # FIX: Track review count explicitly
     photo_urls: list = field(default_factory=list)
     photo_count: int = 0
     
@@ -153,6 +154,9 @@ class ScrapedBusiness:
     has_website: bool = False
     website_url: Optional[str] = None
     website_status: str = "none"  # none, social_only, dead, active
+    
+    # FIX 5: About/Description from Google
+    about_summary: Optional[str] = None  # Business description from "About" section
     
     # Price Data
     price_range: Optional[str] = None  # e.g., "₲ 20.000-40.000"
@@ -224,11 +228,14 @@ class ScrapedBusiness:
             "neighborhood": self.neighborhood,
             "phone": self.phone,
             "rating": self.rating,
+            "review_count": self.review_count,  # FIX: Include review count
             "photo_urls": self.photo_urls,
             "photo_count": self.photo_count,
             "has_website": self.has_website,
             "website_url": self.website_url,
             "website_status": self.website_status,
+            # About/Description
+            "about_summary": self.about_summary,  # FIX 5: About section
             # Price Data
             "price_range": self.price_range,
             "price_level": self.price_level,
@@ -709,8 +716,28 @@ class MapsScraper:
             return []
     
     async def _scroll_and_collect_results(self, target_count: int) -> list:
-        """Scroll through results to load more businesses"""
-        results_container = await self.page.query_selector('div[role="feed"], div.m6QErb.DxyBCb')
+        """Scroll through results to load more businesses
+        
+        Google Maps loads results lazily as you scroll. We need to:
+        1. Scroll down in the results panel
+        2. Wait for new results to load
+        3. Repeat until we have enough results or hit the end
+        """
+        # Try multiple selectors for the scrollable container
+        results_container = None
+        container_selectors = [
+            'div[role="feed"]',
+            'div.m6QErb.DxyBCb.kA9KIf.dS8AEf.XiKgde',
+            'div.m6QErb.DxyBCb',
+            'div.m6QErb.WNBkOb',
+            'div.m6QErb',
+        ]
+        
+        for selector in container_selectors:
+            results_container = await self.page.query_selector(selector)
+            if results_container:
+                logger.debug(f"Found results container with selector: {selector}")
+                break
         
         if not results_container:
             logger.warning("Results container not found")
@@ -720,8 +747,12 @@ class MapsScraper:
         seen_hrefs = set()
         last_count = 0
         no_change_count = 0
+        max_no_change = 8  # Increased: Allow more attempts before giving up
+        scroll_amount = 800  # Increased: Scroll more pixels at once
         
-        while len(collected) < target_count and no_change_count < 3:
+        logger.info(f"📜 Starting scroll to collect up to {target_count} businesses...")
+        
+        while len(collected) < target_count and no_change_count < max_no_change:
             # Get current results - links to places
             items = await self.page.query_selector_all('a.hfpxzc')
             
@@ -732,96 +763,218 @@ class MapsScraper:
                     seen_hrefs.add(href)
                     collected.append(item)
             
-            if len(collected) == last_count:
+            current_count = len(collected)
+            
+            if current_count == last_count:
                 no_change_count += 1
+                # If stuck, try scrolling more aggressively
+                if no_change_count >= 3:
+                    scroll_amount = 1500  # Scroll even more
             else:
                 no_change_count = 0
-                last_count = len(collected)
+                last_count = current_count
             
-            # Scroll down
-            await results_container.evaluate("el => el.scrollBy(0, 300)")
-            await self._random_delay(0.4)
+            # Check if we've reached the end of results (look for "end of list" indicators)
+            end_marker = await self.page.query_selector('span.HlvSq, div.PbZDve')
+            if end_marker:
+                end_text = await end_marker.inner_text() if end_marker else ""
+                if "fin" in end_text.lower() or "end" in end_text.lower() or "no hay más" in end_text.lower():
+                    logger.info(f"📍 Reached end of results at {current_count} businesses")
+                    break
             
-            logger.debug(f"Scrolling... found {len(collected)} unique results")
+            # Scroll down in the container
+            try:
+                await results_container.evaluate(f"el => el.scrollBy(0, {scroll_amount})")
+            except Exception:
+                # If scrolling fails, try scrolling the whole page
+                await self.page.evaluate(f"window.scrollBy(0, {scroll_amount})")
+            
+            # Wait for new content to load (important!)
+            await self._random_delay(0.6)
+            
+            # Every 5 scrolls, wait a bit longer to let more content load
+            if no_change_count > 0 and no_change_count % 2 == 0:
+                await self._random_delay(1.0)
+            
+            logger.debug(f"📜 Scrolling... found {current_count} unique results (attempt {no_change_count}/{max_no_change})")
         
+        logger.info(f"✅ Collected {len(collected)} business links (target was {target_count})")
         return collected[:target_count]
     
     async def _extract_business_details(self, element, location: str) -> Optional[ScrapedBusiness]:
-        """Extract details from a business listing - ULTRA DEEP DATA VERSION"""
+        """Extract details from a business listing - ULTRA DEEP DATA VERSION
+        
+        CRITICAL FIXES (2025 Overhaul):
+        1. Isolation Logic - Wait for correct business panel before extraction
+        2. High-Resolution Images - Extract w1200-h800 instead of thumbnails
+        3. 5-Star Review Filtering - Only extract quality reviews > 40 chars
+        4. ARIA-Label Rating Extraction - Most accurate source for ratings
+        5. Deep Location Attributes - Plus Code, About section, etc.
+        """
         try:
-            # Click on the business to open details panel
-            await element.click()
-            await self._random_delay(1.0)
+            # ========================================
+            # FIX 1: ISOLATION LOGIC - PREVENT DATA MISALIGNMENT
+            # ========================================
+            # CRITICAL: We must wait for the NEW business panel to fully load
+            # before extracting ANY data. Otherwise we get stale data from previous business.
             
-            # Wait for details panel to load
-            await self.page.wait_for_selector('div.m6QErb.DxyBCb, div[role="main"]', timeout=10000)
+            # Step 1: Get expected business name from the listing BEFORE clicking
+            expected_name = None
+            try:
+                aria_label = await element.get_attribute("aria-label")
+                if aria_label:
+                    expected_name = aria_label.strip()
+                    logger.info(f"🎯 Clicking on: {expected_name}")
+            except Exception:
+                pass
+            
+            # Step 2: Get CURRENT h1 text (so we know when it changes)
+            old_h1_text = ""
+            try:
+                old_h1 = await self.page.query_selector('h1.DUwDvf')
+                if old_h1:
+                    old_h1_text = (await old_h1.inner_text()).strip()
+            except Exception:
+                pass
+            
+            # Step 3: Click on the business to open details panel
+            await element.click()
             await self._random_delay(0.5)
             
-            # Extract name - try multiple selectors
+            # Step 4: WAIT for h1 to CHANGE (this is the key isolation!)
+            # Poll until h1 changes OR matches expected name
+            max_wait = 8  # seconds
+            poll_interval = 0.3
+            waited = 0
             name = "Unknown"
-            for name_sel in ['h1.DUwDvf', 'div.qBF1Pd.fontHeadlineSmall', 'h2.qBF1Pd', 'div.fontHeadlineSmall span']:
-                name_el = await self.page.query_selector(name_sel)
-                if name_el:
-                    name = await name_el.inner_text()
-                    if name and name != "Resultados" and len(name) > 1:
-                        break
+            
+            while waited < max_wait:
+                try:
+                    h1_el = await self.page.query_selector('h1.DUwDvf')
+                    if h1_el:
+                        current_h1 = (await h1_el.inner_text()).strip()
+                        
+                        # Success conditions:
+                        # 1. h1 changed from old value AND is not empty
+                        # 2. h1 matches expected name (if we have one)
+                        if current_h1 and current_h1 != old_h1_text:
+                            name = current_h1
+                            logger.info(f"✅ Panel loaded: {name}")
+                            break
+                        elif expected_name and current_h1 == expected_name:
+                            name = current_h1
+                            logger.info(f"✅ Panel loaded (matched expected): {name}")
+                            break
+                except Exception:
+                    pass
+                
+                await asyncio.sleep(poll_interval)
+                waited += poll_interval
+            
+            # If h1 never changed, try harder
+            if name == "Unknown":
+                logger.warning(f"⚠️ h1 didn't change after {max_wait}s. Trying fallbacks...")
+                await self._random_delay(1.0)
+                
+                name_selectors = ['h1.DUwDvf', 'div.qBF1Pd.fontHeadlineSmall', 'h2.qBF1Pd']
+                for name_sel in name_selectors:
+                    name_el = await self.page.query_selector(name_sel)
+                    if name_el:
+                        name = (await name_el.inner_text()).strip()
+                        if name and name != "Resultados" and len(name) > 1:
+                            break
+            
+            # Final validation
+            if name == "Unknown" or not name.strip():
+                logger.error(f"❌ Failed to load panel for: {expected_name}")
+                return None
+            
+            # Step 5: Additional wait to ensure all panel content loads
+            await self._random_delay(0.8)
             
             # Extract place ID from URL
             current_url = self.page.url
             place_id = self._extract_place_id(current_url)
             
-            # Extract rating and review count from aria-label (most reliable)
+            # ========================================
+            # FIX 4: ACCURATE RATINGS VIA ARIA-LABELS
+            # ========================================
+            # Based on actual Google Maps HTML structure:
+            # Rating: <div class="F7nice"><span><span aria-hidden="true">4,6</span>...
+            # Reviews: <span role="img" aria-label="228 reseñas">(228)</span>
+            
             rating = 0.0
             review_count = 0
             
-            # Try to get from aria-label "4,6 estrellas 206 reseñas" - use FIRST match only
-            # The key is to get the rating element that's inside the main panel, not sidebar
-            rating_el = await self.page.query_selector('div[role="main"] span.ZkP5Je')
-            if not rating_el:
-                rating_el = await self.page.query_selector('span.ZkP5Je')
+            # STRATEGY 1: Get rating from aria-hidden span inside F7nice div
+            # This is the most reliable as it's the visible rating number
+            try:
+                rating_span = await self.page.query_selector('div.F7nice span[aria-hidden="true"]')
+                if rating_span:
+                    rating_text = await rating_span.inner_text()
+                    rating = self._parse_rating(rating_text.strip())
+                    logger.debug(f"Rating from aria-hidden: {rating_text} -> {rating}")
+            except Exception as e:
+                logger.debug(f"Rating extraction method 1 failed: {e}")
             
-            if rating_el:
-                aria_label = await rating_el.get_attribute("aria-label") or ""
-                rating_match = re.search(r'([\d,\.]+)\s*estrellas?', aria_label)
-                if rating_match:
-                    rating = self._parse_rating(rating_match.group(1))
-                # Clean the string and extract review count
-                clean_label = aria_label.replace(".", "").replace(",", "")
-                review_match = re.search(r'(\d+)\s*rese\u00f1as?', clean_label)
-                if review_match:
-                    review_count = int(review_match.group(1))
+            # STRATEGY 2: Get review count from the span with role="img" and aria-label containing "reseñas"
+            try:
+                review_span = await self.page.query_selector('div.F7nice span[role="img"][aria-label*="reseña"]')
+                if review_span:
+                    # The aria-label has the count: "228 reseñas"
+                    aria_label = await review_span.get_attribute("aria-label") or ""
+                    # Extract number from "228 reseñas"
+                    count_match = re.search(r'([\d\.]+)\s*reseñas?', aria_label.replace(".", ""), re.IGNORECASE)
+                    if count_match:
+                        review_count = int(count_match.group(1))
+                        logger.debug(f"Reviews from aria-label: {aria_label} -> {review_count}")
+                    else:
+                        # Try getting from the visible text "(228)"
+                        review_text = await review_span.inner_text()
+                        review_count = self._parse_review_count(review_text)
+                        logger.debug(f"Reviews from text: {review_text} -> {review_count}")
+            except Exception as e:
+                logger.debug(f"Review count extraction method 1 failed: {e}")
             
-            # Fallback to individual elements - prefer main panel
+            # FALLBACK STRATEGY 3: Try aria-label on star rating element
             if rating == 0:
-                rating_val = await self.page.query_selector('div[role="main"] span.MW4etd')
-                if not rating_val:
-                    rating_val = await self.page.query_selector('span.MW4etd')
-                if rating_val:
-                    rating = self._parse_rating(await rating_val.inner_text())
+                try:
+                    star_span = await self.page.query_selector('span.ceNzKf[role="img"]')
+                    if star_span:
+                        aria_label = await star_span.get_attribute("aria-label") or ""
+                        # "4,6 estrellas"
+                        rating_match = re.search(r'([\d,\.]+)\s*estrellas?', aria_label, re.IGNORECASE)
+                        if rating_match:
+                            rating = self._parse_rating(rating_match.group(1))
+                            logger.debug(f"Rating from star aria-label: {aria_label} -> {rating}")
+                except Exception as e:
+                    logger.debug(f"Rating extraction method 2 failed: {e}")
             
-            # Better review count extraction - ONLY from main panel
-            if review_count == 0:
-                # Try the reviews button which has exact count
-                review_btn = await self.page.query_selector('div[role="main"] button[jsaction*="reviews"]')
-                if review_btn:
-                    btn_text = await review_btn.inner_text()
-                    review_count = self._parse_review_count(btn_text)
+            # FALLBACK STRATEGY 4: Traditional selectors
+            if rating == 0:
+                for rating_sel in ['span.MW4etd', 'div.skqShb span.MW4etd']:
+                    try:
+                        rating_el = await self.page.query_selector(rating_sel)
+                        if rating_el:
+                            rating = self._parse_rating(await rating_el.inner_text())
+                            if rating > 0:
+                                break
+                    except:
+                        pass
             
             if review_count == 0:
-                review_divs = await self.page.query_selector_all('div[role="main"] div.fontBodySmall')
-                for div in review_divs:
-                    text = await div.inner_text()
-                    if 'rese\u00f1a' in text.lower():
-                        review_count = self._parse_review_count(text)
-                        if review_count > 0:
-                            break
+                for review_sel in ['span.UY7F9', 'div.skqShb span.UY7F9']:
+                    try:
+                        review_el = await self.page.query_selector(review_sel)
+                        if review_el:
+                            review_text = await review_el.inner_text()
+                            review_count = self._parse_review_count(review_text)
+                            if review_count > 0:
+                                break
+                    except:
+                        pass
             
-            # Fallback to span.UY7F9
-            if review_count == 0:
-                review_el = await self.page.query_selector('span.UY7F9')
-                if review_el:
-                    review_text = await review_el.inner_text()
-                    review_count = self._parse_review_count(review_text)
+            logger.info(f"📊 {name}: ⭐{rating} ({review_count} reviews)")
             
             # Extract category
             category = None
@@ -984,13 +1137,68 @@ class MapsScraper:
             if reserve_el:
                 reserve_link = await reserve_el.get_attribute("href")
             
-            # 9. PLUS CODE
-            plus_code = None
-            plus_el = await self.page.query_selector('button[data-item-id="oloc"] div.Io6YTe')
-            if plus_el:
-                plus_code = await plus_el.inner_text()
+            # ========================================
+            # FIX 5: DEEP LOCATION & ABOUT ATTRIBUTES
+            # ========================================
             
-            # 10. WEBSITE & SOCIAL MEDIA
+            # 9. PLUS CODE (enhanced extraction)
+            plus_code = None
+            plus_code_selectors = [
+                'button[data-item-id="oloc"] div.Io6YTe',
+                'button[data-item-id="oloc"]',
+                'div[data-item-id="oloc"] span',
+            ]
+            for plus_sel in plus_code_selectors:
+                plus_el = await self.page.query_selector(plus_sel)
+                if plus_el:
+                    plus_text = await plus_el.inner_text()
+                    # Plus codes look like "MCX9+73 Asunción" - validate format
+                    if plus_text and '+' in plus_text and len(plus_text) < 50:
+                        plus_code = plus_text.strip()
+                        break
+            
+            # 10. ABOUT SECTION / BUSINESS SUMMARY
+            # Google shows "From the business" or "Acerca de" with a description
+            about_summary = None
+            about_selectors = [
+                'div[aria-label*="About"] div.WeS02d',  # English
+                'div[aria-label*="Acerca"] div.WeS02d',  # Spanish  
+                'div.WeS02d.fontBodyMedium',  # Generic description div
+                'div.PYvSYb span',  # Alternative description location
+                'div[data-attrid="kc:/local:editorial_summary"] span',
+            ]
+            for about_sel in about_selectors:
+                about_el = await self.page.query_selector(about_sel)
+                if about_el:
+                    about_text = await about_el.inner_text()
+                    # Only keep if it's a real description (> 20 chars, not a label)
+                    if about_text and len(about_text.strip()) > 20:
+                        about_summary = about_text.strip()[:500]  # Limit to 500 chars
+                        break
+            
+            # Also try clicking "About" tab for more info
+            try:
+                about_tab = await self.page.query_selector('button[aria-label*="Acerca de"], button[data-tab-index="1"]')
+                if about_tab and not about_summary:
+                    await about_tab.click()
+                    await self._random_delay(0.5)
+                    
+                    # Look for description in about panel
+                    about_content = await self.page.query_selector('div.WeS02d, div.PYvSYb')
+                    if about_content:
+                        about_text = await about_content.inner_text()
+                        if about_text and len(about_text.strip()) > 20:
+                            about_summary = about_text.strip()[:500]
+                    
+                    # Go back to overview
+                    overview_tab = await self.page.query_selector('button[data-tab-index="0"]')
+                    if overview_tab:
+                        await overview_tab.click()
+                        await self._random_delay(0.3)
+            except Exception as e:
+                logger.debug(f"Could not extract About section: {e}")
+            
+            # 11. WEBSITE & SOCIAL MEDIA
             website_url = None
             website_status = "none"
             has_website = False
@@ -1009,7 +1217,7 @@ class MapsScraper:
                         website_status = "active"
                         has_website = True
             
-            # 11. PHOTO CATEGORIES
+            # 12. PHOTO CATEGORIES
             photo_categories = []
             photo_cat_els = await self.page.query_selector_all('div.fp2VUc button.K4UgGe')
             for el in photo_cat_els:
@@ -1044,19 +1252,121 @@ class MapsScraper:
                 if stars > 0:
                     rating_distribution[str(stars)] = count
             
-            # 14. TOP REVIEWS (max 10 for rich content)
+            # ========================================
+            # FIX 3: 5-STAR REVIEW EXTRACTION (TEXT > 40 CHARS)
+            # ========================================
+            # CRITICAL: We need to click the reviews tab/button to load reviews
+            # The main panel only shows a preview, not the full reviews list
+            # 
+            # HTML STRUCTURE FOR REVIEWS (from Google Maps):
+            # - Each review is in: <div class="jftiEf fontBodyMedium" data-review-id="...">
+            # - Reviewer name: <div class="d4r55 fontTitleMedium">
+            # - Review date: <span class="rsqaWe">Hace una semana</span>
+            # - Rating: <span class="kvMYJc" role="img" aria-label="5 estrellas">
+            # - Review text: <div class="MyEned" lang="es"><span class="wiI7pd">text</span>
+            # - Review photos: <button class="Tya61d" style="background-image: url(...)">
+            # - Author info: <div class="RfnDt">Local Guide · 92 reseñas · 524 fotos</div>
+            
             reviews = []
-            review_cards = await self.page.query_selector_all('div.jftiEf[data-review-id]')
-            for card in review_cards[:10]:
+            
+            # Step 1: Try to click on "Reviews" tab or "Ver todas las reseñas" button
+            try:
+                # Try various selectors for the reviews button/tab
+                reviews_button_selectors = [
+                    'button[aria-label*="reseña"]',  # "Ver todas las reseñas" button
+                    'button[aria-label*="review"]',
+                    'div.RWPxGd button',  # Reviews section button
+                    'button[jsaction*="pane.reviewChart.moreReviews"]',
+                    'a[href*="reviews"]',
+                ]
+                
+                clicked_reviews = False
+                for selector in reviews_button_selectors:
+                    try:
+                        review_btn = await self.page.query_selector(selector)
+                        if review_btn:
+                            await review_btn.click()
+                            await self._random_delay(1.5)
+                            clicked_reviews = True
+                            logger.debug(f"Clicked reviews button with selector: {selector}")
+                            break
+                    except Exception:
+                        continue
+                
+                # If we clicked, wait for review cards to appear and scroll to load more
+                if clicked_reviews:
+                    await self.page.wait_for_selector('div.jftiEf[data-review-id]', timeout=5000)
+                    
+                    # Scroll down in the reviews panel to load more reviews
+                    reviews_panel = await self.page.query_selector('div.m6QErb.DxyBCb')
+                    if reviews_panel:
+                        for _ in range(3):  # Scroll 3 times to load more
+                            await reviews_panel.evaluate('el => el.scrollTop += 500')
+                            await self._random_delay(0.5)
+                    
+            except Exception as e:
+                logger.debug(f"Could not click reviews tab: {e}")
+            
+            # Step 2: Now extract review cards using the correct HTML structure
+            # Each review: <div class="jftiEf fontBodyMedium" aria-label="..." data-review-id="...">
+            review_cards = await self.page.query_selector_all('div.jftiEf.fontBodyMedium[data-review-id]')
+            
+            # Fallback selector if the above doesn't work
+            if len(review_cards) == 0:
+                review_cards = await self.page.query_selector_all('div.jftiEf[data-review-id]')
+            
+            logger.debug(f"Found {len(review_cards)} review cards to process")
+            
+            for card in review_cards[:20]:  # Process more cards to find quality 5-star reviews
                 try:
-                    # Get review ID
+                    # First check rating - ONLY keep 5-star reviews
+                    # Rating: <span class="kvMYJc" role="img" aria-label="5 estrellas">
+                    rating_el = await card.query_selector('span.kvMYJc[role="img"]')
+                    review_rating = 0
+                    if rating_el:
+                        aria = await rating_el.get_attribute("aria-label") or ""
+                        stars_match = re.search(r'(\d+)\s*estrellas?', aria)
+                        if stars_match:
+                            review_rating = int(stars_match.group(1))
+                    
+                    # Skip non-5-star reviews
+                    if review_rating != 5:
+                        continue
+                    
+                    # IMPORTANT: Click "Ver más" / "Más" button to expand full review text FIRST
+                    try:
+                        expand_btn = await card.query_selector('button.w8nwRe.kyuRq')
+                        if expand_btn:
+                            await expand_btn.click()
+                            await self._random_delay(0.3)
+                    except Exception:
+                        pass
+                    
+                    # Review text from: <div class="MyEned" lang="es"><span class="wiI7pd">text</span>
+                    text_container = await card.query_selector('div.MyEned')
+                    review_text = ""
+                    if text_container:
+                        text_el = await text_container.query_selector('span.wiI7pd')
+                        review_text = await text_el.inner_text() if text_el else ""
+                    else:
+                        # Fallback: try direct span
+                        text_el = await card.query_selector('span.wiI7pd')
+                        review_text = await text_el.inner_text() if text_el else ""
+                    
+                    # FIX 3: Only keep reviews with meaningful text (> 40 chars)
+                    if len(review_text.strip()) < 40:
+                        continue
+                    
+                    # Now extract full details for this quality review
                     review_id = await card.get_attribute("data-review-id") or ""
                     
-                    # Author name
-                    author_el = await card.query_selector('div.d4r55')
+                    # Author name from: <div class="d4r55 fontTitleMedium">
+                    author_el = await card.query_selector('div.d4r55.fontTitleMedium')
+                    if not author_el:
+                        author_el = await card.query_selector('div.d4r55')
                     author = await author_el.inner_text() if author_el else "Anónimo"
                     
-                    # Author profile info: "Local Guide · 70 reseñas · 519 fotos"
+                    # Author profile info: <div class="RfnDt">Local Guide · 92 reseñas · 524 fotos</div>
                     author_info_el = await card.query_selector('div.RfnDt')
                     author_info = await author_info_el.inner_text() if author_info_el else ""
                     
@@ -1073,43 +1383,47 @@ class MapsScraper:
                     if photos_match:
                         author_photos = int(photos_match.group(1))
                     
-                    # Author profile URL
+                    # Author profile URL from: <button class="al6Kxe" data-href="https://...">
                     profile_btn = await card.query_selector('button.al6Kxe[data-href]')
                     author_profile_url = ""
                     if profile_btn:
                         author_profile_url = await profile_btn.get_attribute("data-href") or ""
                     
-                    # Author avatar photo
+                    # Author avatar photo: <img class="NBa7we" src="https://lh3.googleusercontent.com/...">
                     avatar_el = await card.query_selector('img.NBa7we')
                     author_avatar = ""
                     if avatar_el:
-                        author_avatar = await avatar_el.get_attribute("src") or ""
+                        avatar_src = await avatar_el.get_attribute("src") or ""
+                        # Upgrade avatar to higher quality (w72-h72 -> w120-h120)
+                        if avatar_src:
+                            author_avatar = re.sub(r'=w\d+-h\d+-', '=w120-h120-', avatar_src)
+                            if author_avatar == avatar_src:  # If pattern didn't match, try old pattern
+                                author_avatar = re.sub(r'=s\d+-', '=s120-', avatar_src)
                     
-                    # Rating stars
-                    rating_el = await card.query_selector('span.kvMYJc')
-                    review_rating = 0
-                    if rating_el:
-                        aria = await rating_el.get_attribute("aria-label") or ""
-                        stars_match = re.search(r'(\d+)\s*estrellas?', aria)
-                        if stars_match:
-                            review_rating = int(stars_match.group(1))
-                    
-                    # Date
+                    # Date from: <span class="rsqaWe">Hace una semana</span>
                     date_el = await card.query_selector('span.rsqaWe')
                     review_date = await date_el.inner_text() if date_el else ""
                     
-                    # Review text
-                    text_el = await card.query_selector('span.wiI7pd')
-                    review_text = await text_el.inner_text() if text_el else ""
-                    
-                    # Review photos (up to 5)
+                    # Review photos (up to 5) - UPGRADED TO HIGH-RES
+                    # Photo buttons: <button class="Tya61d" style="background-image: url(&quot;https://...w600-h450-p&quot;)">
+                    # We want to upgrade URLs like: w600-h450 -> w1200-h900 for high quality
                     review_photos = []
                     photo_btns = await card.query_selector_all('button.Tya61d')
                     for btn in photo_btns[:5]:
                         style = await btn.get_attribute("style") or ""
-                        url_match = re.search(r'url\(["\']?([^"\']+)["\']?\)', style)
+                        # Extract URL from: background-image: url("https://...w600-h450-p")
+                        url_match = re.search(r'url\(["\']?([^"\'&;]+)["\']?\)', style)
                         if url_match:
-                            review_photos.append(url_match.group(1))
+                            photo_url = url_match.group(1)
+                            # Clean up HTML entities if any
+                            photo_url = photo_url.replace('&quot;', '').replace('&amp;', '&')
+                            
+                            # FIX 2: Upgrade review photos to high-res
+                            # Replace w600-h450 with w1200-h900 for better quality
+                            high_res_photo = re.sub(r'=w\d+-h\d+-', '=w1200-h900-', photo_url)
+                            if high_res_photo == photo_url:  # If pattern didn't match
+                                high_res_photo = _upgrade_to_high_res(photo_url)
+                            review_photos.append(high_res_photo)
                     
                     reviews.append({
                         "review_id": review_id,
@@ -1119,14 +1433,30 @@ class MapsScraper:
                         "is_local_guide": is_local_guide,
                         "author_reviews_count": author_reviews,
                         "author_photos_count": author_photos,
-                        "rating": review_rating,
+                        "rating": review_rating,  # Will always be 5 due to filter above
                         "date": review_date,
-                        "text": review_text[:800],  # More text for richer content
+                        "text": review_text[:800],  # Quality text > 40 chars
                         "photos": review_photos
                     })
+                    
+                    # Stop after getting 10 quality 5-star reviews
+                    if len(reviews) >= 10:
+                        break
+                        
                 except Exception as e:
                     logger.debug(f"Error parsing review: {e}")
                     continue
+            
+            logger.info(f"💬 Extracted {len(reviews)} quality 5-star reviews with photos")
+            
+            # Step 3: Go back to main panel if we navigated away
+            try:
+                back_btn = await self.page.query_selector('button[aria-label="Atrás"], button[aria-label="Back"]')
+                if back_btn:
+                    await back_btn.click()
+                    await self._random_delay(0.5)
+            except Exception:
+                pass
             
             # 15. CUSTOMER UPDATES
             customer_updates = []
@@ -1223,11 +1553,31 @@ class MapsScraper:
                 logger.debug(f"Could not extract Info tab: {e}")
             
             # ========================================
-            # EXTRACT PHOTOS AND COORDINATES - ENHANCED
+            # FIX 2: HIGH-RESOLUTION IMAGE EXTRACTION (w1200-h800)
             # ========================================
             
             photo_count = 0
             photo_urls = []
+            
+            def _upgrade_to_high_res(url: str) -> str:
+                """Convert Google image URL to high resolution (1200x800)"""
+                if not url:
+                    return url
+                # Remove all size parameters first to avoid partial replacements
+                high_res = re.sub(r'=w\d+-h\d+-[a-z]+', '=w1200-h800-k-no', url)
+                high_res = re.sub(r'=w\d+-h\d+', '=w1200-h800', high_res)
+                high_res = re.sub(r'=s\d+-', '=s1200-', high_res)
+                # Individual size replacements for edge cases
+                high_res = high_res.replace('=w80-', '=w1200-')
+                high_res = high_res.replace('=w100-', '=w1200-')
+                high_res = high_res.replace('=w200-', '=w1200-')
+                high_res = high_res.replace('=w400-', '=w1200-')
+                high_res = high_res.replace('=w800-', '=w1200-')
+                high_res = high_res.replace('-h100-', '-h800-')
+                high_res = high_res.replace('-h200-', '-h800-')
+                high_res = high_res.replace('-h400-', '-h800-')
+                high_res = high_res.replace('-h600-', '-h800-')
+                return high_res
             
             # Get total photo count from button
             photos_btn = await self.page.query_selector('button[jsaction*="photos"]')
@@ -1269,9 +1619,8 @@ class MapsScraper:
                                 src = await img.get_attribute("src")
                             
                             if src and "googleusercontent" in src and src not in seen_urls:
-                                # Convert to higher resolution
-                                high_res = src.replace('=w80-', '=w800-').replace('=w100-', '=w800-').replace('=w200-', '=w800-')
-                                high_res = re.sub(r'=w\d+-h\d+', '=w800-h600', high_res)
+                                # FIX 2: Upgrade to HIGH RESOLUTION (1200x800)
+                                high_res = _upgrade_to_high_res(src)
                                 seen_urls.add(high_res)
                                 photo_urls.append(high_res)
                                 
@@ -1293,18 +1642,17 @@ class MapsScraper:
             except Exception as e:
                 logger.debug(f"Could not extract photo gallery: {e}")
             
-            # Fallback: Get photos from main view
+            # Fallback: Get photos from main view (also use high-res)
             if len(photo_urls) < 3:
                 img_elements = await self.page.query_selector_all('button[jsaction*="heroHeaderImage"] img, img[decoding="async"][src*="googleusercontent"], div.p0Jrsd img')
                 for img in img_elements[:10]:
                     src = await img.get_attribute("src")
                     if src and "googleusercontent" in src and src not in [p for p in photo_urls]:
-                        # Convert to higher resolution
-                        high_res = src.replace('=w80-', '=w800-').replace('=w100-', '=w800-').replace('=w200-', '=w800-')
-                        high_res = re.sub(r'=w\d+-h\d+', '=w800-h600', high_res)
+                        # FIX 2: Upgrade to HIGH RESOLUTION (1200x800)
+                        high_res = _upgrade_to_high_res(src)
                         photo_urls.append(high_res)
             
-            # Also get photos from reviews
+            # Also get photos from reviews (high-res)
             review_photo_btns = await self.page.query_selector_all('button.Tya61d')
             for btn in review_photo_btns[:5]:
                 style = await btn.get_attribute("style") or ""
@@ -1312,8 +1660,8 @@ class MapsScraper:
                 if url_match:
                     src = url_match.group(1)
                     if src not in photo_urls:
-                        high_res = src.replace('=w80-', '=w800-').replace('=w100-', '=w800-').replace('=w200-', '=w800-')
-                        high_res = re.sub(r'=w\d+-h\d+', '=w800-h600', high_res)
+                        # FIX 2: Upgrade to HIGH RESOLUTION (1200x800)
+                        high_res = _upgrade_to_high_res(src)
                         photo_urls.append(high_res)
             
             # Coordinates from URL
@@ -1336,11 +1684,14 @@ class MapsScraper:
                 neighborhood=location.split(",")[0].strip() if "," in location else None,
                 phone=phone,
                 rating=rating,
+                review_count=review_count,  # FIX: Include review count
                 photo_urls=photo_urls,
                 photo_count=photo_count or len(photo_urls),
                 has_website=has_website,
                 website_url=website_url,
                 website_status=website_status,
+                # FIX 5: About/Description
+                about_summary=about_summary,
                 # Price Data
                 price_range=price_range,
                 price_level=price_level,
@@ -1854,9 +2205,13 @@ async def main():
         ("minimarket", "Fernando de la Mora, Paraguay"),
     ]
     
-    # Track new results
-    new_results = []
+    # Track all results (including updates to existing)
+    all_results = []
+    all_results_dict = {}  # name -> business dict for deduplication
     searches_completed = 0
+    
+    # OPTION: Set to True to RE-SCRAPE all businesses (update existing data)
+    RESCRAPE_ALL = True  # Change to False to skip existing businesses
     
     try:
         await scraper.initialize()
@@ -1873,31 +2228,48 @@ async def main():
                     max_results=20  # Get 20 results per search
                 )
                 
-                # Only add truly new businesses
+                # Add/update businesses
                 added_count = 0
+                updated_count = 0
                 for r in results:
-                    phone_clean = (r.phone or '').strip()
-                    is_duplicate = (
-                        r.name in seen_names or 
-                        (phone_clean and phone_clean in seen_phones)
-                    )
+                    r_dict = r.to_dict()
                     
-                    if not is_duplicate:
-                        seen_names.add(r.name)
-                        if phone_clean:
-                            seen_phones.add(phone_clean)
-                        new_results.append(r)
-                        added_count += 1
+                    if RESCRAPE_ALL:
+                        # Always add/update - overwrite existing with new data
+                        if r.name in all_results_dict:
+                            all_results_dict[r.name] = r_dict
+                            updated_count += 1
+                        else:
+                            all_results_dict[r.name] = r_dict
+                            added_count += 1
+                    else:
+                        # Only add truly new businesses (old behavior)
+                        phone_clean = (r.phone or '').strip()
+                        is_duplicate = (
+                            r.name in seen_names or 
+                            (phone_clean and phone_clean in seen_phones)
+                        )
+                        
+                        if not is_duplicate:
+                            seen_names.add(r.name)
+                            if phone_clean:
+                                seen_phones.add(phone_clean)
+                            all_results_dict[r.name] = r_dict
+                            added_count += 1
                 
-                logger.info(f"Added {added_count} NEW businesses (skipped {len(results) - added_count} duplicates)")
+                if RESCRAPE_ALL:
+                    logger.info(f"Scraped {len(results)} businesses ({added_count} new, {updated_count} updated)")
+                else:
+                    logger.info(f"Added {added_count} NEW businesses (skipped {len(results) - added_count} duplicates)")
+                
                 searches_completed += 1
                 
                 # Save progress every 5 searches
                 if searches_completed % 5 == 0:
-                    combined = existing_data + [r.to_dict() for r in new_results]
+                    all_results = list(all_results_dict.values())
                     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-                        json.dump(combined, f, ensure_ascii=False, indent=2)
-                    logger.info(f"💾 Progress saved: {len(combined)} total businesses")
+                        json.dump(all_results, f, ensure_ascii=False, indent=2)
+                    logger.info(f"💾 Progress saved: {len(all_results)} total businesses")
                 
             except Exception as e:
                 logger.error(f"Error searching {query} in {location}: {e}")
@@ -1907,20 +2279,22 @@ async def main():
             await asyncio.sleep(random.uniform(3, 5))
         
         # Final save
-        combined = existing_data + [r.to_dict() for r in new_results]
+        all_results = list(all_results_dict.values())
         with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
-            json.dump(combined, f, ensure_ascii=False, indent=2)
+            json.dump(all_results, f, ensure_ascii=False, indent=2)
         
         # Summary
-        no_website = [b for b in new_results if not b.has_website]
+        no_website = [b for b in all_results if not b.get('has_website', True)]
         
         print(f"\n{'='*60}")
         print(f"DISCOVERY COMPLETE")
         print(f"{'='*60}")
-        print(f"Previous businesses: {len(existing_data)}")
-        print(f"NEW businesses found: {len(new_results)}")
-        print(f"NEW without website: {len(no_website)}")
-        print(f"TOTAL in database: {len(combined)}")
+        if RESCRAPE_ALL:
+            print(f"RE-SCRAPE MODE: All businesses updated with new data")
+        else:
+            print(f"Previous businesses: {len(existing_data)}")
+        print(f"Total businesses scraped: {len(all_results)}")
+        print(f"Businesses without website: {len(no_website)}")
         print(f"{'='*60}\n")
         
     finally:
@@ -1929,3 +2303,4 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
